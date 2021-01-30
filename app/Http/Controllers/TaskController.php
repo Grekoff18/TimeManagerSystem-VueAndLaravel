@@ -17,7 +17,7 @@ class TaskController extends Controller
 
   public function create()
   {
-      //
+
   }
 
   public function store(Request $request)
@@ -35,11 +35,17 @@ class TaskController extends Controller
 
   }
 
-
-  public function edit($id)
+  public function edit(Request $request, $id)
   {
+    $selecting_task = Task::find($id);
+    if ($selecting_task) {
+      $selecting_task->description = $request->task["description"];
+      $selecting_task->save();
 
+      return $selecting_task;
+    }
 
+    return "Task desc not found";
   }
 
 

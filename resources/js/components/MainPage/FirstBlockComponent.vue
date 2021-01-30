@@ -6,13 +6,13 @@
       </div>
     </div>
     <div class="first_task-block">
-      <div class="info_btn">
-        X
+      <div class="info_btn material-icons">
+        error_outline
       </div>
       <div class="fields-section">
         <div class="input_section">
           <input type="text" placeholder="Type your task here">
-          <button type="button" class="task_btn">Enter</button>
+          <button type="button" class="task_btn material-icons">add_task</button>
         </div>
         <div class="select_section">
           <select name="" id="">

@@ -10,68 +10,21 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap'
 
-/** Main block **/
-.app_body
-  height: 100vh
-  display: flex
+// Components
+@import "components-styles/main_app"
+@import "components-styles/first_block_component"
+@import "components-styles/second_block_component"
 
-/** First block **/
-.first
-  width: 50%
-  height: 100%
-  background-color: $dark-blue
-  display: flex
-  flex-direction: column
-  justify-content: flex-end
-  padding-bottom: 70px
+input
+  border: none
+  outline: none
 
-  &_header
-    width: 50%
-    max-height: 70px
-    background-color: $sky
-    text-align: center
-    position: fixed
-    top: 0
-    left: 0
+input::placeholder
+  color: white
 
-  &_header-title
-    padding-top: 10px
-    font-family: $press_start_2p
-    color: $dark-blue
-    text-shadow: 2px 2px #ffffff
-
-  &_header-title:hover
-    cursor: pointer
-    transition: 0.3s
-    text-shadow: 6px 6px #ffffff
-
-  &_task-block
-    width: 85%
-    min-height: 81%
-    background-color: $sky
-    position: relative
-
-    .info_btn
-      color: white
-      text-align: center
-      position: absolute
-      top: 10px
-      right: 10px
-      background-color: $dark-blue
+input:focus
+  border: none !important
 
 
-/** Second block **/
-.second
-  width: 50%
-  height: 100%
-  background-color: $sky
-
-  &_footer
-    width: 50%
-    height: 70px
-    position: fixed
-    bottom: 0
-    right: 0
-    background-color: $dark-blue
-
-
+button
+  border: none

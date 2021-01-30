@@ -37632,7 +37632,9 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "first_task-block" }, [
-        _c("div", { staticClass: "info_btn" }, [_vm._v("\n        X\n      ")]),
+        _c("div", { staticClass: "info_btn material-icons" }, [
+          _vm._v("\n        error_outline\n      ")
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "fields-section" }, [
           _c("div", { staticClass: "input_section" }, [
@@ -37642,8 +37644,11 @@ var staticRenderFns = [
             _vm._v(" "),
             _c(
               "button",
-              { staticClass: "task_btn", attrs: { type: "button" } },
-              [_vm._v("Enter")]
+              {
+                staticClass: "task_btn material-icons",
+                attrs: { type: "button" }
+              },
+              [_vm._v("add_task")]
             )
           ]),
           _vm._v(" "),
