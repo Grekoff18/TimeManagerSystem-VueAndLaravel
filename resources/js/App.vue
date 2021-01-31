@@ -1,19 +1,19 @@
 <template>
-	<div class="app_body">
-		<FirstBlockComponent/>
-    <SecondBlockComponent/>
+	<div class="mps-1">
+		<LeftSideComponent/>
+    <RightSideComponent/>
 	</div>
 </template>
 
 <script>
-import FirstBlockComponent from "./components/MainPage/FirstBlockComponent";
-import SecondBlockComponent from "./components/MainPage/SecondBlockComponent";
+import LeftSideComponent from "./components/MainPage/LeftSideComponent";
+import RightSideComponent from "./components/MainPage/RightSideComponent";
 
 export default {
   name: "App",
   components: {
-    FirstBlockComponent,
-    SecondBlockComponent
+    LeftSideComponent,
+    RightSideComponent
   },
   data() {
     return {

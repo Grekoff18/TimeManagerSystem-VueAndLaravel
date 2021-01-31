@@ -1,0 +1,130 @@
+/** First block **/
+.left-side-container
+  width: 50%
+  height: 100vh
+  background-color: $dark-blue
+  display: flex
+  flex-direction: column
+  justify-content: flex-start
+  padding-top: 15vh
+
+  &_header
+    width: 50%
+    max-height: 7.376185458377239vh
+    background-color: $sky
+    position: fixed
+    top: 0
+    left: 0
+    z-index: 200
+
+  &_header-title > h2
+    display: inline-block
+    padding-top: 10px
+    margin-left: 25px
+    font-family: $press_start_2p
+    color: $dark-blue
+    text-shadow: 2px 2px $cyan-lighten-4
+
+  &_header-title > h2:hover
+    cursor: pointer
+    transition: 0.3s
+    text-shadow: 6px 6px $cyan-lighten-4
+
+  &_task-block
+    width: 85%
+    min-height: 77.5vh
+    padding: 25px
+    background-color: $sky
+    position: relative
+
+    .info-btn
+      font-size: 30px
+      color: $cyan-lighten-4
+      text-align: center
+      position: absolute
+      top: 5px
+      right: 5px
+      background-color: $dark-blue
+      cursor: pointer
+      border-radius: 50%
+
+    .info-btn:hover
+      padding: 3px
+      border-radius: unset
+      transition: 0.3s
+      color: white
+
+.task-list-title
+
+  h3
+    font-family: $press_start_2p
+    color: $dark-blue
+    text-shadow: 2px 2px $cyan-lighten-4
+    margin: 0
+
+.add-task
+  &_field
+    height: 40px
+    margin-top: 25px
+    padding: 0 10px
+    border-bottom: 2px solid $cyan-lighten-4
+    border-radius: 5px
+    background-color: $dark-blue
+    display: flex
+    justify-content: space-between
+
+    input[type="text"]
+      width: 90%
+      height: 100%
+      background-color: transparent
+      color: white
+
+    input[type="text"]::placeholder
+        color: $cyan-lighten-4
+
+    input[type="text"]:focus
+      border: none
+
+    button
+      background-color: transparent
+      color: $cyan-lighten-4
+
+    button:hover
+      transition: 0.3s
+      color: white
+      font-size: 30px
+
+.task-list
+  margin-top: 20px
+
+  p
+    word-break: break-all
+    margin: 0
+
+  ul > li
+    margin: 10px 0
+    padding: 5px 10px
+    color: $dark-blue
+    background-color: $cyan-lighten-4
+    border-radius: 5px
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+  &_btn-section
+    display: flex
+    align-items: center
+
+    button
+      color: $dark-blue
+      background-color: transparent
+
+    button:hover
+      transition: 0.3s
+      color: $sky
+
+
+
+
+
+

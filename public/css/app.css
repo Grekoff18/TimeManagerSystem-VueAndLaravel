@@ -10949,14 +10949,14 @@ a.text-dark:focus {
 
 /** Main block **/
 
-.app_body {
+.mps-1 {
   height: 200vh;
   display: flex;
 }
 
 /** First block **/
 
-.first {
+.left-side-container {
   width: 50%;
   height: 100vh;
   background-color: #27363B;
@@ -10966,31 +10966,32 @@ a.text-dark:focus {
   padding-top: 15vh;
 }
 
-.first_header {
+.left-side-container_header {
   width: 50%;
   max-height: 7.3761854584vh;
   background-color: #309B94;
-  text-align: center;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 200;
 }
 
-.first_header-title {
+.left-side-container_header-title > h2 {
+  display: inline-block;
   padding-top: 10px;
+  margin-left: 25px;
   font-family: "Press Start 2P", cursive;
   color: #27363B;
-  text-shadow: 2px 2px #ffffff;
+  text-shadow: 2px 2px #B2EBF2;
 }
 
-.first_header-title:hover {
+.left-side-container_header-title > h2:hover {
   cursor: pointer;
   transition: 0.3s;
-  text-shadow: 6px 6px #ffffff;
+  text-shadow: 6px 6px #B2EBF2;
 }
 
-.first_task-block {
+.left-side-container_task-block {
   width: 85%;
   min-height: 77.5vh;
   padding: 25px;
@@ -10998,59 +10999,153 @@ a.text-dark:focus {
   position: relative;
 }
 
-.first_task-block .info_btn {
-  color: white;
+.left-side-container_task-block .info-btn {
+  font-size: 30px;
+  color: #B2EBF2;
   text-align: center;
   position: absolute;
-  border-bottom: 2px solid white;
   top: 5px;
   right: 5px;
   background-color: #27363B;
-  padding: 4px 8px;
   cursor: pointer;
+  border-radius: 50%;
 }
 
-.input_section {
+.left-side-container_task-block .info-btn:hover {
+  padding: 3px;
+  border-radius: unset;
+  transition: 0.3s;
+  color: white;
+}
+
+.task-list-title h3 {
+  font-family: "Press Start 2P", cursive;
+  color: #27363B;
+  text-shadow: 2px 2px #B2EBF2;
+  margin: 0;
+}
+
+.add-task_field {
   height: 40px;
-  margin-top: 40px;
+  margin-top: 25px;
   padding: 0 10px;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid #B2EBF2;
+  border-radius: 5px;
   background-color: #27363B;
   display: flex;
   justify-content: space-between;
 }
 
-.input_section input[type=text] {
+.add-task_field input[type=text] {
   width: 90%;
   height: 100%;
   background-color: transparent;
   color: white;
 }
 
-.input_section input[type=text]:focus {
+.add-task_field input[type=text]::-moz-placeholder {
+  color: #B2EBF2;
+}
+
+.add-task_field input[type=text]:-ms-input-placeholder {
+  color: #B2EBF2;
+}
+
+.add-task_field input[type=text]::placeholder {
+  color: #B2EBF2;
+}
+
+.add-task_field input[type=text]:focus {
   border: none;
 }
 
-.input_section button {
+.add-task_field button {
   background-color: transparent;
+  color: #B2EBF2;
+}
+
+.add-task_field button:hover {
+  transition: 0.3s;
   color: white;
+  font-size: 30px;
+}
+
+.task-list {
+  margin-top: 20px;
+}
+
+.task-list p {
+  word-break: break-all;
+  margin: 0;
+}
+
+.task-list ul > li {
+  margin: 10px 0;
+  padding: 5px 10px;
+  color: #27363B;
+  background-color: #B2EBF2;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-list_btn-section {
+  display: flex;
+  align-items: center;
+}
+
+.task-list_btn-section button {
+  color: #27363B;
+  background-color: transparent;
+}
+
+.task-list_btn-section button:hover {
+  transition: 0.3s;
+  color: #309B94;
 }
 
 /** Second block **/
 
-.second {
+.right-side-container {
   width: 50%;
   height: 100vh;
   background-color: #309B94;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.second_footer {
+.right-side-container_clock-block {
+  width: 85%;
+  max-height: 77.5vh;
+  margin-top: 7.0351758794vh;
+  background-color: #27363B;
+}
+
+.right-side-container_footer {
   width: 50%;
   height: 7.3761854584vh;
   position: fixed;
   bottom: 0;
   right: 0;
+  text-align: end;
   background-color: #27363B;
+}
+
+.right-side-container_footer-title > h2 {
+  display: inline-block;
+  padding-top: 10px;
+  font-family: "Press Start 2P", cursive;
+  color: #B2EBF2;
+  text-shadow: 2px 2px #309B94;
+  margin: 0;
+  margin-right: 25px;
+}
+
+.right-side-container_footer-title > h2:hover {
+  cursor: pointer;
+  transition: 0.3s;
+  text-shadow: 6px 6px #309B94;
 }
 
 input {
@@ -11058,24 +11153,27 @@ input {
   outline: none;
 }
 
-input::-moz-placeholder {
-  color: white;
-}
-
-input:-ms-input-placeholder {
-  color: white;
-}
-
-input::placeholder {
-  color: white;
-}
-
-input:focus {
-  border: none !important;
-}
-
 button {
   border: none;
+}
+
+ul,
+li,
+ol {
+  list-style: none;
+  padding: 0 0;
+  margin: 0 0;
+}
+
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  word-break: break-all;
 }
 
 
