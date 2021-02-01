@@ -10950,7 +10950,13 @@ a.text-dark:focus {
 /** Main block **/
 
 .mps-1 {
+  width: 100%;
   height: 200vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-container {
   display: flex;
 }
 
@@ -10993,7 +10999,7 @@ a.text-dark:focus {
 
 .left-side-container_task-block {
   width: 85%;
-  min-height: 77.5vh;
+  min-height: 77.9vh;
   padding: 25px;
   background-color: #309B94;
   position: relative;
@@ -11124,7 +11130,7 @@ a.text-dark:focus {
 
 .right-side-container_footer {
   width: 50%;
-  height: 7.3761854584vh;
+  height: 7.0351758794vh;
   position: fixed;
   bottom: 0;
   right: 0;
@@ -11146,6 +11152,79 @@ a.text-dark:focus {
   cursor: pointer;
   transition: 0.3s;
   text-shadow: 6px 6px #309B94;
+}
+
+.bottom-block {
+  width: 100%;
+  height: 100vh;
+  background-color: #27363B;
+}
+
+.bottom-block_main-container {
+  width: 90%;
+  min-height: 84.9296842412vh;
+  margin: 7.0351758794vh auto;
+  background-color: #27363B;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bottom-title {
+  text-align: center;
+}
+
+.bottom-title > h2 {
+  display: inline-block;
+  font-family: "Press Start 2P", cursive;
+  color: #309B94;
+  text-shadow: 2px 2px #B2EBF2;
+  margin-top: 10px;
+}
+
+.history-table {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 20px;
+  box-shadow: 0 0 10px #309B94;
+}
+
+.history-table_title {
+  text-align: center;
+  background-color: #B2EBF2;
+  margin: 2px;
+  padding: 10px;
+}
+
+.history-table_structure {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.history-table_structure li {
+  margin: 2px;
+  padding: 5px;
+  width: calc(100% / 8);
+  min-height: 8vh;
+  background-color: #309B94;
+  flex-grow: 1;
+}
+
+.history-table_days-names {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.history-table_days-names li {
+  color: #27363B;
+  text-align: center;
+  margin: 2px;
+  padding: 5px;
+  width: calc(100% / 8);
+  background-color: #B2EBF2;
+  flex-grow: 1;
 }
 
 input {
