@@ -1,0 +1,82 @@
+.task-list-title
+
+  h3
+    font-family: $press_start_2p
+    color: $dark-blue
+    text-shadow: 2px 2px $cyan-lighten-4
+    margin: 0
+
+.add-task
+  &_field
+    height: 40px
+    margin-top: 25px
+    padding: 0 10px
+    border-bottom: 2px solid $cyan-lighten-4
+    border-radius: 5px
+    background-color: $dark-blue
+    display: flex
+    justify-content: space-between
+
+    input[type="text"]
+      width: 90%
+      height: 100%
+      background-color: transparent
+      color: white
+
+    input[type="text"]::placeholder
+        color: $cyan-lighten-4
+
+    input[type="text"]:focus
+      border: none
+
+    button
+      background-color: transparent
+      color: $cyan-lighten-4
+
+    button:hover
+      transition: 0.3s
+      color: white
+      font-size: 30px
+
+.task-list
+  margin-top: 20px
+
+  p
+    word-break: break-all
+    margin: 0
+
+  ul > li
+    margin: 10px 0
+    padding: 5px 10px
+    color: $dark-blue
+    background-color: $cyan-lighten-4
+    border-radius: 5px
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+
+  &_item:hover
+    background-color: purple 
+    transition: 11s
+
+
+  &_btn-section
+    display: flex
+    align-items: center
+
+    button
+      color: $dark-blue
+      background-color: transparent
+
+    button:hover
+      transition: 0.3s
+      color: $sky
+
+
+.task-enter
+  opacity: 0
+
+.task-enter-to 
+  opacity: 1
+  transition: 1s

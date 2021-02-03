@@ -2053,8 +2053,80 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "TaskList"
+  name: "TaskList",
+  data: function data() {
+    return {
+      taskData: {
+        description: ""
+      },
+      taskList: []
+    };
+  },
+  methods: {
+    addTask: function addTask() {
+      var _this = this;
+
+      axios.post("/api/task/store", {
+        "task": this.taskData
+      }).then(function (res) {
+        _this.showListTasks();
+
+        _this.taskData.description = "";
+      })["catch"](function (e) {
+        return console.log(e);
+      });
+    },
+    showListTasks: function showListTasks() {
+      var _this2 = this;
+
+      axios.get("api/tasks").then(function (response) {
+        _this2.taskList = response.data;
+      })["catch"](function (e) {
+        return console.log(e);
+      });
+    },
+    deleteTask: function deleteTask(id) {
+      var _this3 = this;
+
+      axios["delete"]("api/task/".concat(id)).then(function (response) {
+        if (response.status === 200) {
+          _this3.showListTasks();
+        }
+      })["catch"](function (e) {
+        return console.log(e);
+      });
+    }
+  },
+  created: function created() {
+    this.showListTasks();
+  }
 });
 
 /***/ }),
@@ -38037,60 +38109,105 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "left-side-container_task-block" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "info-btn material-icons" }, [
+      _vm._v("\n    error_outline\n  ")
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "add-task" }, [
+      _c("div", { staticClass: "add-task_field" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.taskData.description,
+              expression: "taskData.description"
+            }
+          ],
+          attrs: {
+            type: "text",
+            name: "added_task",
+            placeholder: "Type your task here"
+          },
+          domProps: { value: _vm.taskData.description },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.taskData, "description", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "task_btn material-icons",
+            attrs: { type: "button" },
+            on: { click: _vm.addTask }
+          },
+          [_vm._v("\n        add_task\n      ")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "task-list" },
+      [
+        _c(
+          "transition-group",
+          { attrs: { appear: "", name: "task", tag: "ul" } },
+          _vm._l(_vm.taskList, function(task, indx) {
+            return _c("li", { key: indx }, [
+              _c("p", [
+                _vm._v(
+                  _vm._s(indx + 1) + ". " + _vm._s(task["description"]) + " "
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "task-list_btn-section" }, [
+                _c("button", { staticClass: "material-icons" }, [
+                  _vm._v("keyboard_arrow_down")
+                ]),
+                _vm._v(" "),
+                _c("button", { staticClass: "material-icons" }, [
+                  _vm._v("edit")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "material-icons",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteTask(task.id)
+                      }
+                    }
+                  },
+                  [_vm._v("\n            clear\n          ")]
+                )
+              ])
+            ])
+          }),
+          0
+        )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "left-side-container_task-block" }, [
-      _c("div", { staticClass: "task-list-title" }, [
-        _c("h3", [_vm._v("TaskList")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "info-btn material-icons" }, [
-        _vm._v("\n    error_outline\n  ")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "add-task" }, [
-        _c("div", { staticClass: "add-task_field" }, [
-          _c("input", {
-            attrs: {
-              type: "text",
-              name: "added_task",
-              placeholder: "Type your task here"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "task_btn material-icons",
-              attrs: { type: "button" }
-            },
-            [_vm._v("add_task")]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "task-list" }, [
-        _c("ul", [
-          _c("li", [
-            _c("p", [_vm._v("Task 1")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "task-list_btn-section" }, [
-              _c("button", { staticClass: "material-icons" }, [
-                _vm._v("keyboard_arrow_down")
-              ]),
-              _vm._v(" "),
-              _c("button", { staticClass: "material-icons" }, [_vm._v("edit")]),
-              _vm._v(" "),
-              _c("button", { staticClass: "material-icons" }, [_vm._v("clear")])
-            ])
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "task-list-title" }, [
+      _c("h3", [_vm._v("TaskList")])
     ])
   }
 ]

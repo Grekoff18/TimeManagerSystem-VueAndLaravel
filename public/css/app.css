@@ -11096,6 +11096,11 @@ a.text-dark:focus {
   align-items: center;
 }
 
+.task-list_item:hover {
+  background-color: purple;
+  transition: 11s;
+}
+
 .task-list_btn-section {
   display: flex;
   align-items: center;
@@ -11109,6 +11114,15 @@ a.text-dark:focus {
 .task-list_btn-section button:hover {
   transition: 0.3s;
   color: #309B94;
+}
+
+.task-enter {
+  opacity: 0;
+}
+
+.task-enter-to {
+  opacity: 1;
+  transition: 1s;
 }
 
 /** Second block **/
