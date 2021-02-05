@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import TaskList from "./TaskList"
+import TaskList from "./TaskList/TaskList"
 
 export default {
   name: "LeftSideComponent",

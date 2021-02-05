@@ -11076,6 +11076,11 @@ a.text-dark:focus {
   font-size: 30px;
 }
 
+.add-task_field:hover {
+  transition: 0.3s;
+  box-shadow: 0 0 10px #27363B;
+}
+
 .task-list {
   margin-top: 20px;
 }
@@ -11092,28 +11097,31 @@ a.text-dark:focus {
   background-color: #B2EBF2;
   border-radius: 5px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
-.task-list_item:hover {
-  background-color: purple;
-  transition: 11s;
+.task-list_item > input {
+  width: 65%;
 }
 
 .task-list_btn-section {
+  width: 100%;
   display: flex;
+  justify-content: space-around;
   align-items: center;
 }
 
 .task-list_btn-section button {
-  color: #27363B;
+  font-size: 25px;
+  border-collapse: collapse;
+  width: calc(100% / 4);
+  color: #309B94;
   background-color: transparent;
 }
 
 .task-list_btn-section button:hover {
   transition: 0.3s;
-  color: #309B94;
+  color: #B2EBF2;
 }
 
 .task-enter {

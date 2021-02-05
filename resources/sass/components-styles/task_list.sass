@@ -38,6 +38,10 @@
       color: white
       font-size: 30px
 
+.add-task_field:hover
+  transition: 0.3s
+  box-shadow: 0 0 10px $dark-blue
+
 .task-list
   margin-top: 20px
 
@@ -52,26 +56,28 @@
     background-color: $cyan-lighten-4
     border-radius: 5px
     display: flex
-    justify-content: space-between
     align-items: center
 
-
-  &_item:hover
-    background-color: purple 
-    transition: 11s
-
+  &_item>input
+    width: 65%
 
   &_btn-section
+    width: 100%
     display: flex
+    justify-content: space-around
     align-items: center
 
     button
-      color: $dark-blue
+      font-size: 25px
+      border-collapse: collapse
+      width: calc(100% / 4)
+      color: $sky
       background-color: transparent
+      
 
     button:hover
       transition: 0.3s
-      color: $sky
+      color: $cyan-lighten-4
 
 
 .task-enter
