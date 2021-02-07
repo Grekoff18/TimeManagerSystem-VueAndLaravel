@@ -9,12 +9,15 @@
       error_outline
     </div>
     <div class="add-task">
-      <div class="add-task_field">
+      <div
+        class="add-task_field"
+        :class="{'invalid': $v.description.$error}"
+      >
         <input
-         type="text"
-         name="added_task"
-         placeholder="Type your task here"
-         v-model="taskData.description"
+          type="text"
+          name="added_task"
+          placeholder="Type your task here"
+          v-model.trim="$v.description.$model"
         >
         <button
           type="button"
@@ -22,17 +25,23 @@
           v-if="editMode"
           @click="updateTask"
         >
-          check_circle_outline
+          done
         </button>
         <button
           v-else
           type="button"
           class="task_btn material-icons"
-          @click="addTask(task)"
+          @click="addTask"
         >
           add_task
         </button>
-      </div>
+      </div> 
+      <label
+        v-if="!$v.description.minLength"
+        class="error_msg"
+      >
+        Task must have at least {{$v.description.$params.minLength.min}} letters. Now {{description.length}}
+      </label>      
     </div>
     <div class="task-list">
       <transition-group
@@ -42,9 +51,10 @@
         v-for="(task, indx) in taskList"
         :key="indx"
       >
-        <TaskListItem
+        <task-list-item
           :key="indx"
           :task="task"
+          :editMode="editMode"
           v-on:delete-task="deleteTask"
           v-on:edit-task="editTask"
         />
@@ -54,7 +64,9 @@
 </template>
 
 <script>
-import TaskListItem from "./TaskListItem"
+import TaskListItem from "./TaskListItem";
+import { minLength } from 'vuelidate/lib/validators';
+
 export default {
   name: "TaskList",
 
@@ -62,26 +74,37 @@ export default {
 
   data() {
     return {
-      taskData: {
-        description: ""
-      },
+      description: "",
       taskList: [],
       editMode: false,
       editableId: "",
     }
   },
 
+  validations: {
+    description: {
+      minLength: minLength(4)
+    }
+  },
+
   methods: {
     // Add method for task list
     addTask() { 
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return;
+      }
+
       axios.post("/api/task/store", {
-        "task": this.taskData,
+        "task": {
+          "description": this.description
+        },
       })
-      .then((res) => {
-        this.getListTasks();
-        this.taskData.description = "";
-      })
-      .catch((e) => console.log(e));
+        .then((res) => {
+          this.getListTasks();
+          this.description = "";
+        })
+        .catch((e) => console.log(e));
     },
 
     // Method for show our tasks 
@@ -106,7 +129,7 @@ export default {
 
     // Edit method for task
     editTask(description, id) {
-      this.taskData.description = description;
+      this.description = description;
       this.editableId = id;
       if (!this.editMode) {
         this.editMode = true;
@@ -115,20 +138,27 @@ export default {
 
     // Update method for task
     updateTask() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return;
+      }
+
       axios.patch(`api/task/${this.editableId}`, {
-        "task": this.taskData,
+        "task": {
+          "description": this.description
+        },
       })
-      .then((response) => {
-        if (response.status === 200) {
-          this.taskData.description = "";
-          this.editableId = "";
-          this.getListTasks();
-        }
-        if (this.editMode) {
-          this.editMode = false;
-        }
-      })
-      .catch((e) => console.log(e));
+        .then((response) => {
+          if (response.status === 200) {
+            this.description = "";
+            this.editableId = "";
+            this.getListTasks();
+          }
+          if (this.editMode) {
+            this.editMode = false;
+          }
+        })
+        .catch((e) => console.log(e));
     }
 
   },

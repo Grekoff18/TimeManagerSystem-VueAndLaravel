@@ -13,6 +13,7 @@
       <!-- Edit button -->
       <button
         class="material-icons"
+        v-if="!editMode"
         @click="$emit('edit-task', task.description, task.id)"
       >
         edit
@@ -25,8 +26,9 @@
       </button>
       <!-- Delete task button -->
       <button
-       class="material-icons"
-       @click="$emit('delete-task', task.id)"
+        v-if="!editMode"
+        class="material-icons"
+        @click="$emit('delete-task', task.id)"
       >
         clear
       </button>
@@ -36,31 +38,15 @@
 
 <script>
 export default {
-  props: {
-    task: {
-      type: Object,
-    }
-  },
+  props: ["task", "editMode"],
 
   data() {
     return {
-      editableText: false,
-      mouseEnter: false,
-      mouseLeave: true,
+      mouseEnter: false, 
     }
   },
 
-  computed: {
-    
-  },
-
   methods: {
-    edit() {
-      if (!this.editableText) {
-        this.editableText = true;
-      }
-    },
-
     mouseOnElement(event) {
       if (!this.mouseEnter) {
         this.mouseEnter = true;

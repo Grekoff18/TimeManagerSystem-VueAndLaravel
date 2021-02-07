@@ -11076,6 +11076,18 @@ a.text-dark:focus {
   font-size: 30px;
 }
 
+.invalid {
+  border-bottom: 2px solid #D32F2F;
+  color: #D32F2F;
+}
+
+.error_msg {
+  margin: 5px 10px;
+  margin-bottom: 0px;
+  color: #D32F2F;
+  font-weight: bold;
+}
+
 .add-task_field:hover {
   transition: 0.3s;
   box-shadow: 0 0 10px #27363B;

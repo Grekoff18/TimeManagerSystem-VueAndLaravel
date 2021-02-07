@@ -5,7 +5,7 @@
         <h2>TimeSpy</h2>
       </div>
     </div>
-    <TaskList/>
+    <task-list/>
 	</div>
 </template>
 

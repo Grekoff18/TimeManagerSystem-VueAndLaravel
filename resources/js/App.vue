@@ -1,10 +1,10 @@
 <template>
 	<div class="mps-1">
     <div class="top-container">
-      <LeftSideComponent/>
-      <RightSideComponent/>
+      <left-side-component/>
+      <right-side-component/>
     </div>
-    <BottomComponent/>
+    <bottom-component/>
 	</div>
 </template>
 
