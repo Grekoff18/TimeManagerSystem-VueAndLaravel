@@ -1,24 +1,30 @@
 <template>
 	<div class="right-side-container">
     <div class="right-side-container_clock-block">
-
+    	
     </div>
-    <div class="right-side-container_footer">
-      <div class="right-side-container_footer-title">
-        <h2>Menu</h2>
-      </div>
-    </div>
+    <footer-menu/>
 	</div>
 </template>
 
 <script>
-	export default {
-		name: "RightSideComponent",
-		data() {
-			return {
+import FooterMenu from "../FooterMenu";
 
-			}
+export default {
+	name: "RightSideComponent",
+	components: {FooterMenu},
+	data() {
+		return {
 		}
+	},
+
+	computed: {
+
+	},
+
+	methods: {
+		
 	}
+}
 </script>
 

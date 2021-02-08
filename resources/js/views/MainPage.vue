@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import LeftSideComponent from "./components/MainPage/LeftSideComponent";
-import RightSideComponent from "./components/MainPage/RightSideComponent";
-import BottomComponent from "./components/MainPage/BottomComponent";
+import LeftSideComponent from "../components/MainPage/LeftSideComponent";
+import RightSideComponent from "../components/MainPage/RightSideComponent";
+import BottomComponent from "../components/MainPage/BottomComponent";
 
 export default {
   name: "App",
@@ -27,4 +27,3 @@ export default {
   }
 }
 </script>
-

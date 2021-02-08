@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div id="app">
-		<app></app>
+		<router-view></router-view>
 	</div>
 	<script type="text/javascript" src="{{asset("js/app.js")}}"></script>
 </body>

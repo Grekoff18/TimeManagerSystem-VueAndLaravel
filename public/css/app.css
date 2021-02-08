@@ -10954,6 +10954,7 @@ a.text-dark:focus {
   height: 200vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .top-container {
@@ -11145,7 +11146,7 @@ a.text-dark:focus {
   transition: 1s;
 }
 
-/** Second block **/
+/** Right side block **/
 
 .right-side-container {
   width: 50%;
@@ -11160,16 +11161,18 @@ a.text-dark:focus {
   max-height: 77.5vh;
   margin-top: 7.0351758794vh;
   background-color: #27363B;
+  transition: 1s;
 }
 
 .right-side-container_footer {
   width: 50%;
-  height: 7.0351758794vh;
+  min-height: 7.0351758794vh;
   position: fixed;
   bottom: 0;
   right: 0;
   text-align: end;
   background-color: #27363B;
+  transition: 1s;
 }
 
 .right-side-container_footer-title > h2 {
@@ -11186,6 +11189,26 @@ a.text-dark:focus {
   cursor: pointer;
   transition: 0.3s;
   text-shadow: 6px 6px #309B94;
+}
+
+.menu_items {
+  transition: all 2s;
+}
+
+.target-enter {
+  opacity: 0;
+}
+
+.target-enter-to {
+  opacity: 1;
+}
+
+.target-leave {
+  opacity: 0.5;
+}
+
+.target-leave-to {
+  opacity: 0;
 }
 
 .bottom-block {

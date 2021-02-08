@@ -8,19 +8,20 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
-//=== VUEX ===//
-import Vuex from 'vuex'
+import Vuex from 'vuex';
+import Vuelidate from 'vuelidate';
+//====================================
+import storeData from "./store/index";
+import router from "./router.js";
 
-Vue.use(Vuex)
-import storeData from "./store/index"
+Vue.use(Vuex);
+Vue.use(Vuelidate);
 
 const store = new Vuex.Store(
    storeData
 )
 
-//=== VULIDATE ===//
-import Vuelidate from 'vuelidate'
-Vue.use(Vuelidate)
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -34,7 +35,7 @@ Vue.use(Vuelidate)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('app', require('./App.vue').default);
+Vue.component('main-page', require('./views/MainPage.vue').default);
 
 
 /**
@@ -45,5 +46,6 @@ Vue.component('app', require('./App.vue').default);
 
 const app = new Vue({
     el: '#app',
-    store
+    store,
+    router
 });
