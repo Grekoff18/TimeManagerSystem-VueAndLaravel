@@ -11,13 +11,13 @@
     <div class="add-task">
       <div
         class="add-task_field"
-        :class="{'invalid': $v.description.$error}"
+        :class="{'invalid': $v.inputData.$error}"
       >
         <input
           type="text"
           name="added_task"
           placeholder="Type your task here"
-          v-model.trim="$v.description.$model"
+          v-model.trim="$v.inputData.$model"
         >
         <button
           type="button"
@@ -37,11 +37,11 @@
         </button>
       </div> 
       <label
-        v-if="!$v.description.minLength"
+        v-if="!$v.inputData.minLength"
         class="error_msg"
       >
-        Task must have at least {{$v.description.$params.minLength.min}} letters. Now {{description.length}}
-      </label>      
+        Task must have at least {{$v.inputData.$params.minLength.min}} letters. Now {{inputData.length}}
+      </label>     
     </div>
     <div class="task-list">
       <transition-group
@@ -54,8 +54,6 @@
         <task-list-item
           :key="indx"
           :task="task"
-          :editMode="editMode"
-          v-on:delete-task="deleteTask"
           v-on:edit-task="editTask"
         />
       </transition-group>
@@ -65,6 +63,7 @@
 
 <script>
 import TaskListItem from "./TaskListItem";
+import { mapMutations, mapActions, mapState } from 'vuex'
 import { minLength } from 'vuelidate/lib/validators';
 
 export default {
@@ -74,101 +73,68 @@ export default {
 
   data() {
     return {
-      description: "",
-      taskList: [],
-      editMode: false,
+      inputData: "",
       editableId: "",
     }
   },
 
   validations: {
-    description: {
+    inputData: {
       minLength: minLength(4)
     }
   },
 
+  computed:{
+    ...mapState([
+      "taskList",
+      "editMode",
+    ])
+  },
+
   methods: {
-    // Add method for task list
+    ...mapActions({
+      getListTasks: "getAllTasks",
+      add: "addTask",
+      update: "updateTask",
+    }),
+
+    ...mapMutations([
+      "changeEditMode",
+    ]),
+
     addTask() { 
       this.$v.$touch()
       if (this.$v.$invalid) {
         return;
       }
 
-      axios.post("/api/task/store", {
-        "task": {
-          "description": this.description
-        },
-      })
-        .then((res) => {
-          this.getListTasks();
-          this.description = "";
-        })
-        .catch((e) => console.log(e));
+      this.add(this.inputData);
+      this.inputData = "";
+      this.getListTasks();
     },
 
-    // Method for show our tasks 
-    getListTasks() {
-      axios.get("api/tasks")
-        .then((response) => {
-          this.taskList = response.data.reverse();
-        })
-        .catch((e) => console.log(e));
-    },
-
-    // Method for deleting our task 
-    deleteTask(id) {
-      axios.delete(`api/task/${id}`)
-        .then(response => {
-          if (response.status === 200) {
-            this.getListTasks();
-          }
-        })
-        .catch((e) => console.log(e));
-    },
-
-    // Edit method for task
     editTask(description, id) {
-      this.description = description;
+      this.inputData = description;
       this.editableId = id;
-      if (!this.editMode) {
-        this.editMode = true;
-      }
+      this.changeEditMode();
     },
 
-    // Update method for task
     updateTask() {
       this.$v.$touch()
       if (this.$v.$invalid) {
         return;
       }
 
-      axios.patch(`api/task/${this.editableId}`, {
-        "task": {
-          "description": this.description
-        },
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            this.description = "";
-            this.editableId = "";
-            this.getListTasks();
-          }
-          if (this.editMode) {
-            this.editMode = false;
-          }
-        })
-        .catch((e) => console.log(e));
+      this.update({inputData: this.inputData, id: this.editableId});
+      this.inputData = "";
+      this.editableId = "";
     }
 
   },
 
   created() {
     this.getListTasks();
+    console.log(this.taskList);
   }
 }
 </script>
-
-<style scoped>
-
-</style>

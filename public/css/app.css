@@ -11191,26 +11191,6 @@ a.text-dark:focus {
   text-shadow: 6px 6px #309B94;
 }
 
-.menu_items {
-  transition: all 2s;
-}
-
-.target-enter {
-  opacity: 0;
-}
-
-.target-enter-to {
-  opacity: 1;
-}
-
-.target-leave {
-  opacity: 0.5;
-}
-
-.target-leave-to {
-  opacity: 0;
-}
-
 .bottom-block {
   width: 100%;
   height: 100vh;

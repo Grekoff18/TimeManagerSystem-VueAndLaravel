@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Task api
 Route::get("/tasks", [TaskController::class, "index"]);
 Route::prefix("task")->group(function () {
   Route::post("/store", [TaskController::class, "store"]);
@@ -26,3 +27,6 @@ Route::prefix("task")->group(function () {
   Route::patch("/{id}", [TaskController::class, "edit"]);
   Route::delete("/{id}", [TaskController::class, "destroy"]);
 });
+
+
+

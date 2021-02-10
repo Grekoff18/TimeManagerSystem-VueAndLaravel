@@ -28,7 +28,7 @@
       <button
         v-if="!editMode"
         class="material-icons"
-        @click="$emit('delete-task', task.id)"
+        @click="deleteTask(task.id)"
       >
         clear
       </button>
@@ -37,8 +37,10 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
-  props: ["task", "editMode"],
+  props: ["task"],
 
   data() {
     return {
@@ -46,12 +48,22 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState([
+      "editMode",
+    ]),
+  },
+
   methods: {
+    ...mapActions([
+      "deleteTask",
+    ]),
+    
     mouseOnElement(event) {
       if (!this.mouseEnter) {
         this.mouseEnter = true;
         event.target.style.background = "#27363B"
-        event.target.style.boxShadow = "0 0 10px #27363B"
+        event.target.style.boxShadow = "0 0 10px #27363B";
       }
     }, 
 

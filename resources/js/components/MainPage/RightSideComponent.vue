@@ -1,7 +1,7 @@
 <template>
 	<div class="right-side-container">
     <div class="right-side-container_clock-block">
-    	
+    	{{count}}
     </div>
     <footer-menu/>
 	</div>
@@ -19,7 +19,9 @@ export default {
 	},
 
 	computed: {
-
+		count () {
+	    return this.$store.state.count
+    }
 	},
 
 	methods: {

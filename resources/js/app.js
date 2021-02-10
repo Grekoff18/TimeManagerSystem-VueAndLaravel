@@ -10,6 +10,7 @@ window.Vue = require('vue').default;
 
 import Vuex from 'vuex';
 import Vuelidate from 'vuelidate';
+import "animate.css";
 //====================================
 import storeData from "./store/index";
 import router from "./router.js";
