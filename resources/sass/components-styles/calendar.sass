@@ -1,0 +1,30 @@
+.calendar
+  width: 80%
+  margin: 0 auto
+  margin-top: 20px
+  box-shadow: 0 0 10px $sky
+
+  &_title 
+    text-align: center
+    background-color: $cyan-lighten-4
+    margin: 2px
+    padding: 10px
+
+  &_structure
+    display: grid
+    grid-template-columns: repeat(7, 1fr)
+    grid-template-rows: repeat(6, 1fr)
+    grid-gap: 1px
+
+.day 
+  text-align: right
+  padding: 0 2px
+  margin-bottom: 0
+
+.calendar-items
+  min-width: 15%
+  min-height: 8vh
+  background-color: $sky
+
+.weekend-day
+  background-color: #4DB6AC

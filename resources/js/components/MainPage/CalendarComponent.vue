@@ -1,15 +1,22 @@
 <template>
-  <div class="history-table">
-      <ul class="history-table_title">
+  <div class="calendar">
+      <ul class="calendar_title">
         <li>Hello world</li>
       </ul>
-      <ul class="history-table_days-names">
-        <li>
-          
-        </li>
+      <ul class="calendar_days-names">
+      
       </ul>
-      <ul class="history-table_structure">
-        <li></li>
+      <ul class="calendar_structure">
+        <li
+          v-for="(dayItem, indx) in daysArray"
+          :key="indx"
+          class="calendar-items"
+          :class="{'weekend-day': dayItem.day() === 6 || dayItem.day() === 0}"
+        >
+          <p class="day">
+            {{dayItem.format("D")}}
+          </p>
+        </li>
       </ul>
     </div>
 </template>
@@ -24,7 +31,15 @@ export default {
 
   computed: {
     day() {
-      return this.firstDayInMonth.clone();
+      return this.firstDayInMonth.clone().subtract(1, "day");
+    },
+
+    daysArray() {
+      return [...Array(42)].map(() => this.day.add(1, "day").clone());
+    }, 
+
+    weekendDay() {
+      
     },
 
     firstDayInMonth() {
@@ -49,6 +64,7 @@ export default {
 
   mounted() {
     this.fillTheCalendar(7);
+    console.log(this.dayItem);
   }
 }
 </script>

@@ -1932,9 +1932,6 @@ __webpack_require__.r(__webpack_exports__);
   name: "BottomComponent",
   components: {
     CalendarComponent: _CalendarComponent__WEBPACK_IMPORTED_MODULE_0__.default
-  },
-  data: function data() {
-    return {};
   }
 });
 
@@ -1951,6 +1948,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1975,8 +1991,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     day: function day() {
-      return this.firstDayInMonth.clone();
+      return this.firstDayInMonth.clone().subtract(1, "day");
     },
+    daysArray: function daysArray() {
+      var _this = this;
+
+      return _toConsumableArray(Array(42)).map(function () {
+        return _this.day.add(1, "day").clone();
+      });
+    },
+    weekendDay: function weekendDay() {},
     firstDayInMonth: function firstDayInMonth() {
       return this.moment().startOf("month").startOf("week");
     },
@@ -1998,6 +2022,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.fillTheCalendar(7);
+    console.log(this.dayItem);
   }
 });
 
@@ -60516,21 +60541,42 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "calendar" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("ul", { staticClass: "calendar_days-names" }),
+    _vm._v(" "),
+    _c(
+      "ul",
+      { staticClass: "calendar_structure" },
+      _vm._l(_vm.daysArray, function(dayItem, indx) {
+        return _c(
+          "li",
+          {
+            key: indx,
+            staticClass: "calendar-items",
+            class: { "weekend-day": dayItem.day() === 6 || dayItem.day() === 0 }
+          },
+          [
+            _c("p", { staticClass: "day" }, [
+              _vm._v(
+                "\n          " + _vm._s(dayItem.format("D")) + "\n        "
+              )
+            ])
+          ]
+        )
+      }),
+      0
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "history-table" }, [
-      _c("ul", { staticClass: "history-table_title" }, [
-        _c("li", [_vm._v("Hello world")])
-      ]),
-      _vm._v(" "),
-      _c("ul", { staticClass: "history-table_days-names" }, [_c("li")]),
-      _vm._v(" "),
-      _c("ul", { staticClass: "history-table_structure" }, [_c("li")])
+    return _c("ul", { staticClass: "calendar_title" }, [
+      _c("li", [_vm._v("Hello world")])
     ])
   }
 ]

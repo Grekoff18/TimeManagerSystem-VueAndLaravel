@@ -11219,49 +11219,41 @@ a.text-dark:focus {
   margin-top: 10px;
 }
 
-.history-table {
+.calendar {
   width: 80%;
   margin: 0 auto;
   margin-top: 20px;
   box-shadow: 0 0 10px #309B94;
 }
 
-.history-table_title {
+.calendar_title {
   text-align: center;
   background-color: #B2EBF2;
   margin: 2px;
   padding: 10px;
 }
 
-.history-table_structure {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+.calendar_structure {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 1px;
 }
 
-.history-table_structure li {
-  margin: 2px;
-  padding: 5px;
-  width: calc(100% / 8);
+.day {
+  text-align: right;
+  padding: 0 2px;
+  margin-bottom: 0;
+}
+
+.calendar-items {
+  min-width: 15%;
   min-height: 8vh;
   background-color: #309B94;
-  flex-grow: 1;
 }
 
-.history-table_days-names {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.history-table_days-names li {
-  color: #27363B;
-  text-align: center;
-  margin: 2px;
-  padding: 5px;
-  width: calc(100% / 8);
-  background-color: #B2EBF2;
-  flex-grow: 1;
+.weekend-day {
+  background-color: #4DB6AC;
 }
 
 input {

@@ -18,9 +18,6 @@ import CalendarComponent from "./CalendarComponent";
 export default {
   name: "BottomComponent",
   components: {CalendarComponent},
-  data() {
-    return {}
-  },
 }
 </script>
 
