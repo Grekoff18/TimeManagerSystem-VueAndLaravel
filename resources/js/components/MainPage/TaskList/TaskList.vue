@@ -64,7 +64,7 @@
 <script>
 import TaskListItem from "./TaskListItem";
 import { mapMutations, mapActions, mapState } from 'vuex'
-import { minLength } from 'vuelidate/lib/validators';
+import { minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: "TaskList",
@@ -88,7 +88,15 @@ export default {
     ...mapState([
       "taskList",
       "editMode",
-    ])
+    ]),
+
+    startDay() {
+      return this.moment().startOf("month").startOf("week");
+    },
+
+    endDay() {
+      return this.moment().endOf("month").endOf("week");
+    }
   },
 
   methods: {
@@ -128,13 +136,11 @@ export default {
       this.update({inputData: this.inputData, id: this.editableId});
       this.inputData = "";
       this.editableId = "";
-    }
-
+    },
   },
 
   created() {
     this.getListTasks();
-    console.log(this.taskList);
   }
 }
 </script>

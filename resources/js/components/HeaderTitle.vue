@@ -11,9 +11,7 @@
 export default {
   name: "HeaderTitle",
   data() {
-    return {
-
-    }
+    return {}
   },
 }
 </script>

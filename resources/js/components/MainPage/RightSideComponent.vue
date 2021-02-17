@@ -1,8 +1,6 @@
 <template>
 	<div class="right-side-container">
-    <div class="right-side-container_clock-block">
-    	{{count}}
-    </div>
+    <div class="right-side-container_clock-block"></div>
     <footer-menu/>
 	</div>
 </template>
@@ -14,19 +12,8 @@ export default {
 	name: "RightSideComponent",
 	components: {FooterMenu},
 	data() {
-		return {
-		}
+		return {}
 	},
-
-	computed: {
-		count () {
-	    return this.$store.state.count
-    }
-	},
-
-	methods: {
-		
-	}
 }
 </script>
 

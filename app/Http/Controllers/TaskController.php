@@ -14,7 +14,6 @@ class TaskController extends Controller
       return Task::orderBy("created_at", "DESC")->get();
   }
 
-
   public function create()
   {
 

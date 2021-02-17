@@ -1,5 +1,5 @@
 <template>
-  <li 
+  <li
     class="task-list_item"
     v-on:mouseenter="mouseOnElement"
     v-on:mouseleave="mouseLeaveFromElement"
@@ -44,7 +44,7 @@ export default {
 
   data() {
     return {
-      mouseEnter: false, 
+      mouseEnter: false,
     }
   },
 
@@ -58,16 +58,16 @@ export default {
     ...mapActions([
       "deleteTask",
     ]),
-    
+
     mouseOnElement(event) {
       if (!this.mouseEnter) {
         this.mouseEnter = true;
         event.target.style.background = "#27363B"
         event.target.style.boxShadow = "0 0 10px #27363B";
       }
-    }, 
+    },
 
-    mouseLeaveFromElement() {
+    mouseLeaveFromElement(event) {
       if (this.mouseEnter) {
         this.mouseEnter = false;
         event.target.style.background = null
