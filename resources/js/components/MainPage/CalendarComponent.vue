@@ -1,24 +1,18 @@
 <template>
   <div class="calendar">
-      <ul class="calendar_title">
-        <li>Hello world</li>
-      </ul>
-      <ul class="calendar_days-names">
-      
-      </ul>
-      <ul class="calendar_structure">
-        <li
-          v-for="(dayItem, indx) in daysArray"
-          :key="indx"
-          class="calendar-items"
-          :class="{'weekend-day': dayItem.day() === 6 || dayItem.day() === 0}"
-        >
-          <p class="day">
-            {{dayItem.format("D")}}
-          </p>
-        </li>
-      </ul>
-    </div>
+    <ul class="calendar_structure">
+      <li
+        v-for="(dayItem, indx) in daysArray"
+        :key="indx"
+        class="calendar-items"
+        :class="{'weekend-day': dayItem.day() === 6 || dayItem.day() === 0}"
+      >
+        <p class="day">
+          {{dayItem.format("D")}}
+        </p>
+      </li>
+    </ul>
+  </div>
 </template>
 <script>
 export default {
@@ -37,10 +31,6 @@ export default {
     daysArray() {
       return [...Array(42)].map(() => this.day.add(1, "day").clone());
     }, 
-
-    weekendDay() {
-      
-    },
 
     firstDayInMonth() {
       return this.moment().startOf("month").startOf("week");
@@ -64,7 +54,8 @@ export default {
 
   mounted() {
     this.fillTheCalendar(7);
-    console.log(this.dayItem);
   }
 }
 </script>
+
+

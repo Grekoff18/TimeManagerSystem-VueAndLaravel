@@ -1912,7 +1912,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var _CalendarComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CalendarComponent */ "./resources/js/components/MainPage/CalendarComponent.vue");
+/* harmony import */ var _CalendarComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CalendarComponent.vue */ "./resources/js/components/MainPage/CalendarComponent.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -1931,7 +1935,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "BottomComponent",
   components: {
-    CalendarComponent: _CalendarComponent__WEBPACK_IMPORTED_MODULE_0__.default
+    CalendarComponent: _CalendarComponent_vue__WEBPACK_IMPORTED_MODULE_0__.default
   }
 });
 
@@ -1976,12 +1980,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CalendarComponent",
   data: function data() {
@@ -2000,7 +1998,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         return _this.day.add(1, "day").clone();
       });
     },
-    weekendDay: function weekendDay() {},
     firstDayInMonth: function firstDayInMonth() {
       return this.moment().startOf("month").startOf("week");
     },
@@ -2022,7 +2019,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   mounted: function mounted() {
     this.fillTheCalendar(7);
-    console.log(this.dayItem);
   }
 });
 
@@ -60499,14 +60495,14 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "bottom-block" }, [
+    _vm._m(0),
+    _vm._v(" "),
     _c(
       "div",
       { staticClass: "bottom-block_main-container" },
-      [_vm._m(0), _vm._v(" "), _c("calendar-component")],
+      [_c("calendar-component"), _vm._v(" "), _vm._m(1)],
       1
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "bottom-block_bottom-line" })
+    )
   ])
 }
 var staticRenderFns = [
@@ -60514,8 +60510,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bottom-title" }, [
-      _c("h2", [_vm._v("\n        History\n      ")])
+    return _c("div", { staticClass: "bottom-block_title" }, [
+      _c("h2", [_vm._v("\n      History\n    ")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "bottom-block_info-section" }, [
+      _c("span", [
+        _vm._v(
+          "\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis quia ad deleniti voluptates praesentium tempora itaque quod accusamus, vero repellat hic similique dignissimos, ea quas natus necessitatibus modi enim quos.\n      "
+        )
+      ])
     ])
   }
 ]
@@ -60542,10 +60550,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "calendar" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("ul", { staticClass: "calendar_days-names" }),
-    _vm._v(" "),
     _c(
       "ul",
       { staticClass: "calendar_structure" },
@@ -60559,9 +60563,7 @@ var render = function() {
           },
           [
             _c("p", { staticClass: "day" }, [
-              _vm._v(
-                "\n          " + _vm._s(dayItem.format("D")) + "\n        "
-              )
+              _vm._v("\n        " + _vm._s(dayItem.format("D")) + "\n      ")
             ])
           ]
         )
@@ -60570,16 +60572,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "calendar_title" }, [
-      _c("li", [_vm._v("Hello world")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

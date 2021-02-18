@@ -2,27 +2,43 @@
   width: 100%
   height: 100vh
   background-color: $dark-blue
+  position: relative 
+
+  &_title
+    position: absolute
+    top: 10px
+    right: 25px 
+
+    > h2 
+      display: inline-block
+      font-family: $press_start_2p
+      color: $sky
+      text-shadow: 2px 2px $cyan-lighten-4
 
   &_main-container
-    width: 90%
-    min-height: 84.9296842412vh
-    margin: 7.035175879396985vh auto
+    width: 100%
+    height: 100%
+    margin-top: 5.900948366701791vh
     background-color: $dark-blue
     display: flex
     flex-direction: column
-    justify-content: center
 
-.bottom-title
- text-align: center
+  &_info-section
+    width: 50%
+    margin-top: 20px
+    margin-left: 20px
 
-.bottom-title > h2
-  display: inline-block
-  font-family: $press_start_2p
-  color: $sky
-  text-shadow: 2px 2px $cyan-lighten-4
-  margin-top: 10px
+    > span
+      font-family: $lemonada
+      font-weight: 500
+      font-size: 35px
+      color: $sky
+      text-shadow: 0 0 5px $sky
+      background-color: black
+      padding: 4px 
 
 @import "./calendar.sass"
+
 
 
 
