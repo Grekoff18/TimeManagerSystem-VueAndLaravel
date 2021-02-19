@@ -8,9 +8,9 @@
     <div class="bottom-block_main-container">
       <calendar-component/>
       <div class="bottom-block_info-section">
-        <span>
+        <p>
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis quia ad deleniti voluptates praesentium tempora itaque quod accusamus, vero repellat hic similique dignissimos, ea quas natus necessitatibus modi enim quos.
-        </span>
+        </p>
       </div>
     </div>
   </div>

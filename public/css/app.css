@@ -2,8 +2,6 @@
 @import url(https://fonts.googleapis.com/css2?family=Lemonada:wght@300;
 
 400;500;600&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=Sriracha&display=swap);
 @charset "UTF-8";
 
 :root {
@@ -6113,13 +6111,13 @@ a.badge-dark.focus {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
-  color: #000;
+  color: #000000;
   text-shadow: 0 1px 0 #fff;
   opacity: 0.5;
 }
 
 .close:hover {
-  color: #000;
+  color: #000000;
   text-decoration: none;
 }
 
@@ -6298,7 +6296,7 @@ a.close.disabled {
   z-index: 1040;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: #000000;
 }
 
 .modal-backdrop.fade {
@@ -6457,7 +6455,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=top] .arrow::before {
   top: 0;
   border-width: 0.4rem 0.4rem 0;
-  border-top-color: #000;
+  border-top-color: #000000;
 }
 
 .bs-tooltip-right,
@@ -6476,7 +6474,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=right] .arrow::before {
   right: 0;
   border-width: 0.4rem 0.4rem 0.4rem 0;
-  border-right-color: #000;
+  border-right-color: #000000;
 }
 
 .bs-tooltip-bottom,
@@ -6493,7 +6491,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=bottom] .arrow::before {
   bottom: 0;
   border-width: 0 0.4rem 0.4rem;
-  border-bottom-color: #000;
+  border-bottom-color: #000000;
 }
 
 .bs-tooltip-left,
@@ -6512,7 +6510,7 @@ a.close.disabled {
 .bs-tooltip-auto[x-placement^=left] .arrow::before {
   left: 0;
   border-width: 0.4rem 0 0.4rem 0.4rem;
-  border-left-color: #000;
+  border-left-color: #000000;
 }
 
 .tooltip-inner {
@@ -6520,7 +6518,7 @@ a.close.disabled {
   padding: 0.25rem 0.5rem;
   color: #fff;
   text-align: center;
-  background-color: #000;
+  background-color: #000000;
   border-radius: 0.25rem;
 }
 
@@ -10908,7 +10906,7 @@ a.text-dark:focus {
   }
 
   .badge {
-    border: 1px solid #000;
+    border: 1px solid #000000;
   }
 
   .table {
@@ -10980,8 +10978,7 @@ a.text-dark:focus {
 
 .left-side-container_header-title > h2 {
   display: inline-block;
-  padding-top: 10px;
-  margin-left: 25px;
+  margin: 8px 25px;
   font-family: "Press Start 2P", cursive;
   color: #27363B;
   text-shadow: 2px 2px #B2EBF2;
@@ -11175,8 +11172,8 @@ a.text-dark:focus {
   display: inline-block;
   padding-top: 10px;
   font-family: "Press Start 2P", cursive;
-  color: #B2EBF2;
-  text-shadow: 2px 2px #309B94;
+  color: #309B94;
+  text-shadow: 2px 2px #B2EBF2;
   margin: 0;
   margin-right: 25px;
 }
@@ -11184,7 +11181,7 @@ a.text-dark:focus {
 .right-side-container_footer-title > h2:hover {
   cursor: pointer;
   transition: 0.3s;
-  text-shadow: 6px 6px #309B94;
+  text-shadow: 6px 6px #B2EBF2;
 }
 
 .bottom-block {
@@ -11211,38 +11208,56 @@ a.text-dark:focus {
   width: 100%;
   height: 100%;
   margin-top: 5.9009483667vh;
-  background-color: #27363B;
   display: flex;
   flex-direction: column;
 }
 
 .bottom-block_info-section {
   width: 50%;
-  margin-top: 20px;
-  margin-left: 20px;
+  height: 100%;
+  padding: 20px;
+  background-color: #309B94;
 }
 
-.bottom-block_info-section > span {
-  font-family: "Lemonada", cursive;
-  font-weight: 500;
-  font-size: 35px;
-  color: #309B94;
-  text-shadow: 0 0 5px #309B94;
-  background-color: black;
-  padding: 4px;
+.bottom-block_info-section > p {
+  font-family: "Press Start 2P", cursive;
+  font-weight: 600;
+  font-size: 15px;
+  color: #27363B;
 }
 
 .calendar {
   width: 100%;
-  box-shadow: 0 0 10px #309B94;
   border: 1px solid #27363B;
 }
 
 .calendar_title {
-  text-align: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   background-color: #4DB6AC;
-  margin: 2px;
-  padding: 10px;
+  padding: 20px 25px;
+}
+
+.calendar_title > h5 {
+  font-family: "Press Start 2P", cursive;
+  color: #27363B;
+  text-shadow: 2px 2px #B2EBF2;
+  margin-bottom: 0;
+}
+
+.calendar_week-names {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar_week-names > li {
+  font-family: "Press Start 2P", cursive;
+  color: #27363B;
+  text-shadow: 1px 1px #B2EBF2;
+  padding: 2px 5px;
+  text-align: right;
+  background-color: #4DB6AC;
 }
 
 .calendar_structure {
@@ -11250,17 +11265,19 @@ a.text-dark:focus {
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
   grid-gap: 1px;
+  border-top: 1px solid #27363B;
+}
+
+.calendar_items {
+  min-height: 8vh;
+  padding: 5px 5px;
+  background-color: #309B94;
 }
 
 .day {
+  font-family: "Press Start 2P", cursive;
+  color: #27363B;
   text-align: right;
-  padding: 5px 9px;
-  margin-bottom: 0;
-}
-
-.calendar-items {
-  min-height: 8vh;
-  background-color: #309B94;
 }
 
 .weekend-day {

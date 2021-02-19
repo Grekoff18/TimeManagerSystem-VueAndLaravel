@@ -1980,6 +1980,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CalendarComponent",
   data: function data() {
@@ -1988,14 +2001,24 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   computed: {
-    day: function day() {
+    getFirstDayForCalendar: function getFirstDayForCalendar() {
       return this.firstDayInMonth.clone().subtract(1, "day");
     },
-    daysArray: function daysArray() {
+    getFirstDayInWeekForCalendar: function getFirstDayInWeekForCalendar() {
+      return this.firstDayInWeek.clone().subtract(1, "day");
+    },
+    weekNamesArray: function weekNamesArray() {
       var _this = this;
 
+      return _toConsumableArray(Array(7)).map(function () {
+        return _this.getFirstDayInWeekForCalendar.add(1, "day").clone();
+      });
+    },
+    daysArray: function daysArray() {
+      var _this2 = this;
+
       return _toConsumableArray(Array(42)).map(function () {
-        return _this.day.add(1, "day").clone();
+        return _this2.getFirstDayForCalendar.add(1, "day").clone();
       });
     },
     firstDayInMonth: function firstDayInMonth() {
@@ -2003,22 +2026,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     lastDayInMonth: function lastDayInMonth() {
       return this.moment().endOf("month").endOf("week");
+    },
+    firstDayInWeek: function firstDayInWeek() {
+      return this.moment().startOf("week");
     }
   },
-  methods: {
-    fillTheCalendar: function fillTheCalendar() {
-      var chunkSize = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 7;
-
-      do {
-        this.calendar.push(this.day.clone());
-        this.day.add(1, "day");
-      } while (!this.day.isAfter(this.lastDayInMonth));
-
-      _.chunk(this.calendar, chunkSize);
-    }
-  },
+  methods: {},
   mounted: function mounted() {
-    this.fillTheCalendar(7);
+    console.log(this.moment().format("MMMM"), this.moment().format("D"));
   }
 });
 
@@ -60519,7 +60534,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "bottom-block_info-section" }, [
-      _c("span", [
+      _c("p", [
         _vm._v(
           "\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis quia ad deleniti voluptates praesentium tempora itaque quod accusamus, vero repellat hic similique dignissimos, ea quas natus necessitatibus modi enim quos.\n      "
         )
@@ -60550,6 +60565,29 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "calendar" }, [
+    _c("div", { staticClass: "calendar_title" }, [
+      _c("h5", [
+        _vm._v(
+          "\n      " +
+            _vm._s(this.moment().format("MMMM")) +
+            "/" +
+            _vm._s(this.moment().format("YYYY")) +
+            "\n    "
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "ul",
+      { staticClass: "calendar_week-names" },
+      _vm._l(_vm.weekNamesArray, function(weekName, indx) {
+        return _c("li", { key: indx }, [
+          _vm._v("\n      " + _vm._s(weekName.format("ddd")) + "\n    ")
+        ])
+      }),
+      0
+    ),
+    _vm._v(" "),
     _c(
       "ul",
       { staticClass: "calendar_structure" },
@@ -60558,7 +60596,7 @@ var render = function() {
           "li",
           {
             key: indx,
-            staticClass: "calendar-items",
+            staticClass: "calendar_items",
             class: { "weekend-day": dayItem.day() === 6 || dayItem.day() === 0 }
           },
           [

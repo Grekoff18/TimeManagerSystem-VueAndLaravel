@@ -1,10 +1,23 @@
 <template>
   <div class="calendar">
+    <div class="calendar_title">
+      <h5>
+        {{this.moment().format("MMMM")}}/{{this.moment().format("YYYY")}}
+      </h5>
+    </div>
+    <ul class="calendar_week-names">
+      <li
+        v-for="(weekName, indx) in weekNamesArray"
+        :key="indx"
+      >
+        {{weekName.format("ddd")}}
+      </li>
+    </ul>
     <ul class="calendar_structure">
       <li
         v-for="(dayItem, indx) in daysArray"
         :key="indx"
-        class="calendar-items"
+        class="calendar_items"
         :class="{'weekend-day': dayItem.day() === 6 || dayItem.day() === 0}"
       >
         <p class="day">
@@ -24,12 +37,20 @@ export default {
   },
 
   computed: {
-    day() {
+    getFirstDayForCalendar() {
       return this.firstDayInMonth.clone().subtract(1, "day");
     },
 
+    getFirstDayInWeekForCalendar() {
+      return this.firstDayInWeek.clone().subtract(1, "day");
+    },
+
+    weekNamesArray() {
+      return [...Array(7)].map(() => this.getFirstDayInWeekForCalendar.add(1, "day").clone());
+    },
+
     daysArray() {
-      return [...Array(42)].map(() => this.day.add(1, "day").clone());
+      return [...Array(42)].map(() => this.getFirstDayForCalendar.add(1, "day").clone());
     }, 
 
     firstDayInMonth() {
@@ -39,21 +60,18 @@ export default {
     lastDayInMonth() {
       return this.moment().endOf("month").endOf("week");
     },
-  },
 
-  methods: {
-    fillTheCalendar(chunkSize = 7) {
-      do {
-        this.calendar.push(this.day.clone());
-        this.day.add(1, "day");
-      } while (!this.day.isAfter(this.lastDayInMonth));
-
-      _.chunk(this.calendar, chunkSize);
+    firstDayInWeek() {
+      return this.moment().startOf("week")
     },
   },
 
+  methods: {
+    
+  },
+
   mounted() {
-    this.fillTheCalendar(7);
+    console.log(this.moment().format("MMMM"), this.moment().format("D"));
   }
 }
 </script>

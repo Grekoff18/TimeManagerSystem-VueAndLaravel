@@ -1,28 +1,48 @@
 .calendar
   width: 100%
-  box-shadow: 0 0 10px $sky
   border: 1px solid $dark-blue
 
   &_title 
-    text-align: center
-    background-color: #4DB6AC
-    margin: 2px
-    padding: 10px
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    background-color: $light-sky
+    padding: 20px 25px 
+
+    > h5
+      font-family: $press_start_2p
+      color: $dark-blue
+      text-shadow: 2px 2px $cyan-lighten-4
+      margin-bottom: 0
+
+  &_week-names
+    display: grid
+    grid-template-columns: repeat(7, 1fr)
+
+    > li 
+      font-family: $press_start_2p
+      color: $dark-blue
+      text-shadow: 1px 1px $cyan-lighten-4
+      padding: 2px 5px
+      text-align: right
+      background-color: $light-sky
 
   &_structure
     display: grid
     grid-template-columns: repeat(7, 1fr)
     grid-template-rows: repeat(6, 1fr)
     grid-gap: 1px
+    border-top: 1px solid $dark-blue
+
+  &_items
+    min-height: 8vh
+    padding: 5px 5px 
+    background-color: $sky
 
 .day 
+  font-family: $press_start_2p
+  color: $dark-blue
   text-align: right
-  padding: 5px 9px
-  margin-bottom: 0
-
-.calendar-items
-  min-height: 8vh
-  background-color: $sky
 
 .weekend-day
-  background-color: #4DB6AC
+  background-color: $light-sky
