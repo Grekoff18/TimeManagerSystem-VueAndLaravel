@@ -55,6 +55,7 @@
           :key="indx"
           :task="task"
           v-on:edit-task="editTask"
+          v-on:complete-task="completeTask"
         />
       </transition-group>
     </div>
@@ -108,6 +109,7 @@ export default {
 
     ...mapMutations([
       "changeEditMode",
+      "completedTask"
     ]),
 
     addTask() { 
@@ -137,6 +139,22 @@ export default {
       this.inputData = "";
       this.editableId = "";
     },
+
+    completeTask(id) {
+       axios.patch(`api/task/${id}`, {
+        "task": {
+          "completed": true
+        }
+      })
+        .then(response => {
+          if (response.status === 200) {
+            this.completedTask();
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    }
   },
 
   created() {

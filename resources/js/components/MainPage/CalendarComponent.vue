@@ -18,7 +18,10 @@
         v-for="(dayItem, indx) in daysArray"
         :key="indx"
         class="calendar_items"
-        :class="{'weekend-day': dayItem.day() === 6 || dayItem.day() === 0}"
+        :class="{
+          'weekend-day': dayItem.day() === 6 || dayItem.day() === 0,
+          'today': dayItem.date() === today,
+        }"
       >
         <p class="day">
           {{dayItem.format("D")}}
@@ -33,6 +36,7 @@ export default {
   data() {
     return {
       calendar: [],
+      today: this.moment().date(),
     }
   },
 
@@ -71,7 +75,7 @@ export default {
   },
 
   mounted() {
-    console.log(this.moment().format("MMMM"), this.moment().format("D"));
+    console.log(typeof this.today);
   }
 }
 </script>

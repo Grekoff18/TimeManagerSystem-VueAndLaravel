@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\Support\Carbon;
+use Mockery\Undefined;
 
 class TaskController extends Controller
 {
@@ -38,7 +39,14 @@ class TaskController extends Controller
   {
     $selecting_task = Task::find($id);
     if ($selecting_task) {
-      $selecting_task->description = $request->task["description"];
+      if (isset($request->task["completed"])) {
+        $selecting_task->completed = $request->task["completed"];
+      }
+
+      if (isset($request->task["description"])) {
+        $selecting_task->description = $request->task["description"];
+      }
+
       $selecting_task->save();
 
       return $selecting_task;

@@ -1,8 +1,8 @@
 export default {
-
   state: {
   	taskList: [],
   	editMode: false,
+    isCompleted: false,
   },
 
 	getters: {
@@ -56,6 +56,10 @@ export default {
 	mutations: {
     changeEditMode(state) {
     	state.editMode === false ? state.editMode = true : state.editMode = false; 
-    }
+    },
+
+    completedTask(state) {
+      state.isCompleted === false ? state.isCompleted = true : state.isCompleted = false;
+    },
   }
 }

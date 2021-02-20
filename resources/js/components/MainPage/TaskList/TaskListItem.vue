@@ -21,6 +21,8 @@
       <!-- Complete task button -->
       <button
         class="material-icons"
+        v-if="!isCompleted"
+        @click="completedTask"
       >
         check_circle_outline
       </button>
@@ -37,7 +39,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default {
   props: ["task"],
@@ -51,12 +53,17 @@ export default {
   computed: {
     ...mapState([
       "editMode",
+      "isCompleted",
     ]),
   },
 
   methods: {
     ...mapActions([
       "deleteTask",
+    ]),
+
+    ...mapMutations([
+      "completedTask",
     ]),
 
     mouseOnElement(event) {
@@ -74,6 +81,12 @@ export default {
         event.target.style.boxShadow = null
       }
     }
+  },
+
+  mounted() {
   }
 }
+
+
+// $emit('complete-task', task.id)
 </script>

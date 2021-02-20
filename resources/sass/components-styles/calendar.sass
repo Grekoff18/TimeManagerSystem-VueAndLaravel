@@ -38,11 +38,26 @@
     min-height: 8vh
     padding: 5px 5px 
     background-color: $sky
+    transition: all 0.4s
+
+  &_items:hover 
+    border: 1px solid $cyan-lighten-4
+
+    > .day 
+      color: $cyan-lighten-4
 
 .day 
   font-family: $press_start_2p
   color: $dark-blue
   text-align: right
+  transition: all 0.8s
 
 .weekend-day
   background-color: $light-sky
+
+.today 
+  background-color: $cyan-lighten-4
+
+  > p 
+    color: $sky
+    text-shadow: 1px 1px 1px $dark-blue

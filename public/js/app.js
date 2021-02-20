@@ -1952,6 +1952,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1993,11 +1995,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CalendarComponent",
   data: function data() {
     return {
-      calendar: []
+      calendar: [],
+      today: this.moment().date()
     };
   },
   computed: {
@@ -2033,7 +2039,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   methods: {},
   mounted: function mounted() {
-    console.log(this.moment().format("MMMM"), this.moment().format("D"));
+    console.log(_typeof(this.today));
   }
 });
 
@@ -2189,6 +2195,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -2220,7 +2227,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getListTasks: "getAllTasks",
     add: "addTask",
     update: "updateTask"
-  })), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapMutations)(["changeEditMode"])), {}, {
+  })), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapMutations)(["changeEditMode", "completedTask"])), {}, {
     addTask: function addTask() {
       this.$v.$touch();
 
@@ -2250,6 +2257,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
       this.inputData = "";
       this.editableId = "";
+    },
+    completeTask: function completeTask(id) {
+      var _this = this;
+
+      axios.patch("api/task/".concat(id), {
+        "task": {
+          "completed": true
+        }
+      }).then(function (response) {
+        if (response.status === 200) {
+          _this.completedTask();
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }),
   created: function created() {
@@ -2315,6 +2337,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["task"],
@@ -2323,8 +2347,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       mouseEnter: false
     };
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(["editMode"])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(["deleteTask"])), {}, {
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(["editMode", "isCompleted"])),
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(["deleteTask"])), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapMutations)(["completedTask"])), {}, {
     mouseOnElement: function mouseOnElement(event) {
       if (!this.mouseEnter) {
         this.mouseEnter = true;
@@ -2339,8 +2363,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         event.target.style.boxShadow = null;
       }
     }
-  })
-});
+  }),
+  mounted: function mounted() {}
+}); // $emit('complete-task', task.id)
 
 /***/ }),
 
@@ -2543,7 +2568,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   state: {
     taskList: [],
-    editMode: false
+    editMode: false,
+    isCompleted: false
   },
   getters: {},
   actions: {
@@ -2599,6 +2625,9 @@ __webpack_require__.r(__webpack_exports__);
   mutations: {
     changeEditMode: function changeEditMode(state) {
       state.editMode === false ? state.editMode = true : state.editMode = false;
+    },
+    completedTask: function completedTask(state) {
+      state.isCompleted === false ? state.isCompleted = true : state.isCompleted = false;
     }
   }
 });
@@ -60597,7 +60626,10 @@ var render = function() {
           {
             key: indx,
             staticClass: "calendar_items",
-            class: { "weekend-day": dayItem.day() === 6 || dayItem.day() === 0 }
+            class: {
+              "weekend-day": dayItem.day() === 6 || dayItem.day() === 0,
+              today: dayItem.date() === _vm.today
+            }
           },
           [
             _c("p", { staticClass: "day" }, [
@@ -60787,7 +60819,10 @@ var render = function() {
             _c("task-list-item", {
               key: indx,
               attrs: { task: task },
-              on: { "edit-task": _vm.editTask }
+              on: {
+                "edit-task": _vm.editTask,
+                "complete-task": _vm.completeTask
+              }
             })
           ],
           1
@@ -60868,9 +60903,16 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
-            _c("button", { staticClass: "material-icons" }, [
-              _vm._v("\n      check_circle_outline\n    ")
-            ]),
+            !_vm.isCompleted
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "material-icons",
+                    on: { click: _vm.completedTask }
+                  },
+                  [_vm._v("\n      check_circle_outline\n    ")]
+                )
+              : _vm._e(),
             _vm._v(" "),
             !_vm.editMode
               ? _c(

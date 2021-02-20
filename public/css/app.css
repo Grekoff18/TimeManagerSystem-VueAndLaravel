@@ -11272,16 +11272,35 @@ a.text-dark:focus {
   min-height: 8vh;
   padding: 5px 5px;
   background-color: #309B94;
+  transition: all 0.4s;
+}
+
+.calendar_items:hover {
+  border: 1px solid #B2EBF2;
+}
+
+.calendar_items:hover > .day {
+  color: #B2EBF2;
 }
 
 .day {
   font-family: "Press Start 2P", cursive;
   color: #27363B;
   text-align: right;
+  transition: all 0.8s;
 }
 
 .weekend-day {
   background-color: #4DB6AC;
+}
+
+.today {
+  background-color: #B2EBF2;
+}
+
+.today > p {
+  color: #309B94;
+  text-shadow: 1px 1px 1px #27363B;
 }
 
 body {
