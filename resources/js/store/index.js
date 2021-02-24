@@ -2,7 +2,12 @@ export default {
   state: {
   	taskList: [],
   	editMode: false,
-    isCompleted: false,
+    menu: [
+      {title: "dfsdff", href: "/lalala"},
+      {title: "dfsdff", href: "/lalal"},
+      {title: "dfsdff", href: "/lala"},
+      {title: "dfsdff", href: "/lal"},
+    ],
   },
 
 	getters: {
@@ -58,8 +63,12 @@ export default {
     	state.editMode === false ? state.editMode = true : state.editMode = false; 
     },
 
-    completedTask(state) {
-      state.isCompleted === false ? state.isCompleted = true : state.isCompleted = false;
+    fillMenu(state, item) {
+      if (item) {
+        state.menu.forEach(elem => {
+          item.push(elem);
+        })
+      }
     },
   }
 }

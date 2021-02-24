@@ -1,6 +1,7 @@
 <template>
   <li
     class="task-list_item"
+    :class="{'completed-task': task.completed}"
     v-on:mouseenter="mouseOnElement"
     v-on:mouseleave="mouseLeaveFromElement"
   >
@@ -13,7 +14,7 @@
       <!-- Edit button -->
       <button
         class="material-icons"
-        v-if="!editMode"
+        v-if="!editMode && !task.completed"
         @click="$emit('edit-task', task.description, task.id)"
       >
         edit
@@ -21,8 +22,8 @@
       <!-- Complete task button -->
       <button
         class="material-icons"
-        v-if="!isCompleted"
-        @click="completedTask"
+        v-if="!task.completed"
+        @click="$emit('complete-task', task.id)"
       >
         check_circle_outline
       </button>
@@ -39,7 +40,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   props: ["task"],
@@ -62,10 +63,6 @@ export default {
       "deleteTask",
     ]),
 
-    ...mapMutations([
-      "completedTask",
-    ]),
-
     mouseOnElement(event) {
       if (!this.mouseEnter) {
         this.mouseEnter = true;
@@ -80,13 +77,10 @@ export default {
         event.target.style.background = null
         event.target.style.boxShadow = null
       }
-    }
+    },
   },
 
   mounted() {
   }
 }
-
-
-// $emit('complete-task', task.id)
 </script>

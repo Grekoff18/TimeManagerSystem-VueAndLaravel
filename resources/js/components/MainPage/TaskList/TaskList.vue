@@ -46,10 +46,10 @@
     <div class="task-list">
       <transition-group
         appear
-        name="task"
         tag="ul"
         v-for="(task, indx) in taskList"
         :key="indx"
+        enter-active-class="animate__animated animate__bounceIn"
       >
         <task-list-item
           :key="indx"
@@ -109,7 +109,6 @@ export default {
 
     ...mapMutations([
       "changeEditMode",
-      "completedTask"
     ]),
 
     addTask() { 
@@ -148,7 +147,7 @@ export default {
       })
         .then(response => {
           if (response.status === 200) {
-            this.completedTask();
+            this.getListTasks();
           }
         })
         .catch(error => {
@@ -157,8 +156,8 @@ export default {
     }
   },
 
-  created() {
-    this.getListTasks();
-  }
+  created() { 
+    this.getListTasks(); 
+  } 
 }
 </script>
