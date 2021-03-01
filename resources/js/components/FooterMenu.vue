@@ -15,8 +15,8 @@
       leave-active-class="animate__animated animate__fadeOutRight"
     >
       <li
-        v-for="(item, index) in menuItems"
-        :key="index"
+        v-for="item in menuItems"
+        :key="item.href"
       >
         <router-link :to="item.href"> {{item.title}} </router-link>
       </li>

@@ -39,20 +39,14 @@ class TaskController extends Controller
   {
     $selecting_task = Task::find($id);
     if ($selecting_task) {
-      if (isset($request->task["completed"])) {
-        $selecting_task->completed = $request->task["completed"];
-      }
-
-      if (isset($request->task["description"])) {
-        $selecting_task->description = $request->task["description"];
-      }
-
+      $selecting_task->description = $request->task["description"];
+      $selecting_task->updated_at = $request->task["updated_at"];
       $selecting_task->save();
 
       return $selecting_task;
     }
 
-    return "Task desc not found";
+    return "Task description not found";
   }
 
 
@@ -73,7 +67,7 @@ class TaskController extends Controller
 
   public function destroy($id) {
     $existing_task = Task::find($id);
-    if ($existing_task) {
+    if (isset($existing_task)) {
       $existing_task->delete();
       return "Task successfully deleted";
     }

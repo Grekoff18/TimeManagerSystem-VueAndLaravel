@@ -1957,6 +1957,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1969,6 +1970,12 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2001,47 +2008,66 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CalendarComponent",
   data: function data() {
     return {
-      calendar: [],
-      today: this.moment().date()
+      daysArray: [],
+      weekNamesArray: []
     };
   },
-  computed: {
-    getFirstDayForCalendar: function getFirstDayForCalendar() {
-      return this.firstDayInMonth.clone().subtract(1, "day");
-    },
-    getFirstDayInWeekForCalendar: function getFirstDayInWeekForCalendar() {
-      return this.firstDayInWeek.clone().subtract(1, "day");
-    },
-    weekNamesArray: function weekNamesArray() {
-      var _this = this;
-
-      return _toConsumableArray(Array(7)).map(function () {
-        return _this.getFirstDayInWeekForCalendar.add(1, "day").clone();
-      });
-    },
-    daysArray: function daysArray() {
-      var _this2 = this;
-
-      return _toConsumableArray(Array(42)).map(function () {
-        return _this2.getFirstDayForCalendar.add(1, "day").clone();
-      });
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(["taskList"])), {}, {
+    firstDayInWeek: function firstDayInWeek() {
+      return this.moment().startOf("week").clone().subtract(1, "day");
     },
     firstDayInMonth: function firstDayInMonth() {
-      return this.moment().startOf("month").startOf("week");
+      return this.moment().startOf("month").startOf("week").clone().subtract(1, "day");
     },
-    lastDayInMonth: function lastDayInMonth() {
-      return this.moment().endOf("month").endOf("week");
-    },
-    firstDayInWeek: function firstDayInWeek() {
-      return this.moment().startOf("week");
+    daysWithTasks: function daysWithTasks() {
+      return _.uniq(this.taskList.map(function (el) {
+        return el.created_at.split("T")[0];
+      }));
+    }
+  }),
+  effects: {
+    actions: {
+      getAllTasks: {
+        after: function after(action, state) {
+          return this.taskList;
+        }
+      }
     }
   },
-  methods: {},
-  mounted: function mounted() {}
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(["getAllTasks"])), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapMutations)(["changeEditMode"])), {}, {
+    fillDataArray: function fillDataArray(arr, count, from) {
+      arr = _toConsumableArray(Array(count)).map(function () {
+        return from.add(1, "day").clone();
+      }).map(function (el) {
+        return {
+          fullDate: el.format("YYYY-MM-DD"),
+          monthDay: el.format("DD"),
+          weekDay: el.day(),
+          dayShorName: el.format("ddd")
+        };
+      });
+      return arr;
+    },
+    getDateByFormat: function getDateByFormat(format) {
+      return this.moment().format(format);
+    }
+  }),
+  mounted: function mounted() {
+    // this.getAllTasks().then(res => this.);
+    this.daysArray = this.fillDataArray([], 42, this.firstDayInMonth);
+    this.weekNamesArray = this.fillDataArray([], 7, this.firstDayInWeek);
+  }
 });
 
 /***/ }),
@@ -2373,37 +2399,31 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./store/index */ "./resources/js/store/index.js");
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
-/* harmony import */ var animate_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! animate.css */ "./node_modules/animate.css/animate.css");
-/* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./router.js */ "./resources/js/router.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_5__);
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
+/* harmony import */ var vuex_effects__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex-effects */ "./node_modules/vuex-effects/vuex-effects.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router.js */ "./resources/js/router.js");
+/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store/index */ "./resources/js/store/index.js");
+/* harmony import */ var animate_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! animate.css */ "./node_modules/animate.css/animate.css");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js").default; // Added vuex store
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js").default;
 
 
 
-Vue.use(vuex__WEBPACK_IMPORTED_MODULE_1__.default);
-var store = new vuex__WEBPACK_IMPORTED_MODULE_1__.default.Store(_store_index__WEBPACK_IMPORTED_MODULE_0__.default); // Added vuelidate
 
 
-Vue.use(vuelidate__WEBPACK_IMPORTED_MODULE_2__.default); // Added animate.css
-
- // Added vue-router
-
- // Added moment js
 
 
-Vue.prototype.moment = (moment__WEBPACK_IMPORTED_MODULE_5___default());
-moment__WEBPACK_IMPORTED_MODULE_5___default().updateLocale("en", {
+Vue.use(vuex__WEBPACK_IMPORTED_MODULE_5__.default);
+var store = new vuex__WEBPACK_IMPORTED_MODULE_5__.default.Store(_store_index__WEBPACK_IMPORTED_MODULE_3__.default);
+Vue.use(vuelidate__WEBPACK_IMPORTED_MODULE_6__.default);
+Vue.use((0,vuex_effects__WEBPACK_IMPORTED_MODULE_0__.default)(store));
+Vue.prototype.moment = (moment__WEBPACK_IMPORTED_MODULE_1___default());
+window.moment_global = (moment__WEBPACK_IMPORTED_MODULE_1___default());
+moment__WEBPACK_IMPORTED_MODULE_1___default().updateLocale("en", {
   week: {
     dow: 1
   }
@@ -2428,7 +2448,7 @@ Vue.component('main-page', __webpack_require__(/*! ./views/MainPage.vue */ "./re
 var app = new Vue({
   el: '#app',
   store: store,
-  router: _router_js__WEBPACK_IMPORTED_MODULE_4__.default
+  router: _router_js__WEBPACK_IMPORTED_MODULE_2__.default
 });
 
 /***/ }),
@@ -2523,16 +2543,16 @@ __webpack_require__.r(__webpack_exports__);
     taskList: [],
     editMode: false,
     menu: [{
-      title: "dfsdff",
+      title: "dagdfsf",
       href: "/lalala"
     }, {
-      title: "dfsdff",
+      title: "dagdfsf",
       href: "/lalal"
     }, {
-      title: "dfsdff",
+      title: "dagdfsf",
       href: "/lala"
     }, {
-      title: "dfsdff",
+      title: "dagdfsf",
       href: "/lal"
     }]
   },
@@ -2540,7 +2560,7 @@ __webpack_require__.r(__webpack_exports__);
   actions: {
     getAllTasks: function getAllTasks(_ref) {
       var state = _ref.state;
-      axios.get("api/tasks").then(function (response) {
+      return axios.get("api/tasks").then(function (response) {
         return state.taskList = response.data.reverse();
       })["catch"](function (error) {
         return console.log(error);
@@ -2549,9 +2569,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteTask: function deleteTask(_ref2, id) {
       var dispatch = _ref2.dispatch;
       axios["delete"]("api/task/".concat(id)).then(function (response) {
-        if (response.status === 200) {
-          dispatch("getAllTasks");
-        }
+        return response.status === 200 ? dispatch("getAllTasks") : console.log(response.data);
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -2575,7 +2593,8 @@ __webpack_require__.r(__webpack_exports__);
           dispatch = _ref4.dispatch;
       axios.patch("api/task/".concat(payload.id), {
         "task": {
-          "description": payload.inputData
+          "description": payload.inputData,
+          "updated_at": moment_global().format("YYYY-MM-DD HH:mm:ss")
         }
       }).then(function (response) {
         if (response.status === 200) {
@@ -60242,10 +60261,10 @@ var render = function() {
                 "leave-active-class": "animate__animated animate__fadeOutRight"
               }
             },
-            _vm._l(_vm.menuItems, function(item, index) {
+            _vm._l(_vm.menuItems, function(item) {
               return _c(
                 "li",
-                { key: index },
+                { key: item.href },
                 [
                   _c("router-link", { attrs: { to: item.href } }, [
                     _vm._v(" " + _vm._s(item.title) + " ")
@@ -60325,9 +60344,9 @@ var render = function() {
       _c("h5", [
         _vm._v(
           "\n      " +
-            _vm._s(this.moment().format("MMMM")) +
+            _vm._s(this.getDateByFormat("MMMM")) +
             "/" +
-            _vm._s(this.moment().format("YYYY")) +
+            _vm._s(this.getDateByFormat("YYYY")) +
             "\n    "
         )
       ])
@@ -60336,9 +60355,9 @@ var render = function() {
     _c(
       "ul",
       { staticClass: "calendar_week-names" },
-      _vm._l(_vm.weekNamesArray, function(weekName, indx) {
-        return _c("li", { key: indx }, [
-          _vm._v("\n      " + _vm._s(weekName.format("ddd")) + "\n    ")
+      _vm._l(_vm.weekNamesArray, function(name) {
+        return _c("li", { key: name.fullDate }, [
+          _vm._v("\n      " + _vm._s(name.dayShorName) + "\n    ")
         ])
       }),
       0
@@ -60347,21 +60366,36 @@ var render = function() {
     _c(
       "ul",
       { staticClass: "calendar_structure" },
-      _vm._l(_vm.daysArray, function(dayItem, indx) {
+      _vm._l(_vm.daysArray, function(day) {
         return _c(
           "li",
           {
-            key: indx,
+            key: day.fullDate,
             staticClass: "calendar_items",
             class: {
-              "weekend-day": dayItem.day() === 6 || dayItem.day() === 0,
-              today: dayItem.date() === _vm.today
+              "weekend-day": day.weekDay === 6 || day.weekDay === 0,
+              today: day.fullDate === _vm.getDateByFormat("YYYY-MM-DD")
             }
           },
           [
-            _c("p", { staticClass: "day" }, [
-              _vm._v("\n        " + _vm._s(dayItem.format("D")) + "\n      ")
-            ])
+            _c(
+              "p",
+              { staticClass: "day" },
+              [
+                _vm._v("\n        " + _vm._s(day.monthDay) + "\n        "),
+                _vm._v(" "),
+                _vm._l(_vm.daysWithTasks, function(workingDay, index) {
+                  return [
+                    day.fullDate === workingDay
+                      ? _c("p", { key: index }, [
+                          _vm._v("\n            Hello world\n          ")
+                        ])
+                      : _vm._e()
+                  ]
+                })
+              ],
+              2
+            )
           ]
         )
       }),
@@ -77858,6 +77892,186 @@ var fakeWithParams = function fakeWithParams(paramsOrClosure, maybeValidator) {
 
 var withParams = root.vuelidate ? root.vuelidate.withParams : fakeWithParams;
 exports.withParams = withParams;
+
+/***/ }),
+
+/***/ "./node_modules/vuex-effects/vuex-effects.js":
+/*!***************************************************!*\
+  !*** ./node_modules/vuex-effects/vuex-effects.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+const VuexEffects = (store, effectsList = []) => ({
+  install(VueGlobal) {
+    function callActionEffect(effectsPath, stage, action, state, prepend = false) {
+      const actionsPath = effectsPath.actions;
+
+      // exit if effect's prepend not the same as subscriber
+      if (typeof actionsPath[action.type] === 'object') {
+        if (!!actionsPath[action.type].prepend !== prepend) {
+          return;
+        }
+      } else if (typeof actionsPath[action.type] === 'function' && prepend) {
+        return;
+      }
+
+      if (stage === 'before') {
+        // if effect is function
+        if (typeof actionsPath[action.type] === 'function') {
+          actionsPath[action.type].apply(this, [action, state]);
+          return;
+        }
+
+        // if effect is object and it has handler function
+        if (typeof actionsPath[action.type] === 'object'
+            && typeof actionsPath[action.type].handler === 'function') {
+          actionsPath[action.type].handler.apply(this, [action, state]);
+          return;
+        }
+
+        // if effect is object with before function
+        if (typeof actionsPath[action.type] === 'object'
+            && typeof actionsPath[action.type][stage] === 'function') {
+          actionsPath[action.type][stage].apply(this, [action, state]);
+        }
+      } else if (stage === 'after') {
+        // if effect is object with after function
+        if (typeof actionsPath[action.type] === 'object'
+            && typeof actionsPath[action.type][stage] === 'function') {
+          actionsPath[action.type][stage].apply(this, [action, state]);
+        }
+      }
+    }
+
+    function callMutationEffect(effectsPath, mutation, state, prepend = false) {
+      const mutationsPath = effectsPath.mutations;
+
+      // exit if effect's prepend not the same as subscriber
+      if (typeof mutationsPath[mutation.type] === 'object') {
+        if (!!mutationsPath[mutation.type].prepend !== prepend) {
+          return;
+        }
+      } else if (typeof mutationsPath[mutation.type] === 'function' && prepend) {
+        return;
+      }
+
+      // if effect is function
+      if (typeof mutationsPath[mutation.type] === 'function') {
+        mutationsPath[mutation.type].apply(this, [mutation, state]);
+        return;
+      }
+
+      // if effect is object and it has handler function
+      if (typeof mutationsPath[mutation.type] === 'object'
+          && typeof mutationsPath[mutation.type].handler === 'function') {
+        mutationsPath[mutation.type].handler.apply(this, [mutation, state]);
+      }
+    }
+
+    // action wrapper fn
+    function actionFn(effectsPath, effectActionsList, prepend = false) {
+      return {
+        before: (action, state) => {
+          if (effectActionsList.includes(action.type)) {
+            callActionEffect.apply(this, [effectsPath, 'before', action, state, prepend]);
+          }
+        },
+        after: (action, state) => {
+          if (effectActionsList.includes(action.type)) {
+            callActionEffect.apply(this, [effectsPath, 'after', action, state, prepend]);
+          }
+        },
+      };
+    }
+
+    // mutation wrapper fn
+    function mutationFn(effectsPath, effectActionsList, prepend = false) {
+      return (mutation, state) => {
+        if (effectActionsList.includes(mutation.type)) {
+          callMutationEffect.apply(this, [effectsPath, mutation, state, prepend]);
+        }
+      };
+    }
+
+    // register effects for component
+    VueGlobal.mixin({
+      beforeCreate() {
+        const { effects } = this.$options;
+        if (effects) {
+          const subscribers = [];
+          const effectTypes = Object.keys(effects);
+          effectTypes.forEach((effectType) => {
+            const effectActionsList = Object.keys(effects[effectType]);
+
+            // subscribe to two identical events, with 'prepend' option and without it
+            // so we have only two subscriber for all events
+            // for actions and mutations
+            switch (effectType) {
+              case 'actions': {
+                subscribers.push(
+                    store.subscribeAction(actionFn.apply(this, [this.$options.effects, effectActionsList])),
+                    store.subscribeAction(actionFn.apply(this, [this.$options.effects, effectActionsList, true]), { prepend: true }),
+                );
+                break;
+              }
+              case 'mutations': {
+                subscribers.push(
+                    store.subscribe(mutationFn.apply(this, [this.$options.effects, effectActionsList])),
+                    store.subscribe(mutationFn.apply(this, [this.$options.effects, effectActionsList, true]), { prepend: true }),
+                );
+                break;
+              }
+              default: {
+                throw new Error(`[vuex-effects] Unrecognized effect section ${effectType} \n Maybe you mean 'actions' or 'mutations'?`);
+              }
+            }
+          });
+
+          this.$once('hook:beforeDestroy', () => {
+            subscribers.forEach((subscriber) => subscriber());
+          });
+        }
+      },
+    });
+
+    // register global effects
+    effectsList.forEach((effectsItem) => {
+      const { effects } = effectsItem;
+
+      const effectTypes = Object.keys(effects);
+      effectTypes.forEach((effectType) => {
+        const effectActionsList = Object.keys(effects[effectType]);
+
+        // subscribe to two identical events, with 'prepend' option and without it
+        // so we have only two subscriber for all events
+        // for actions and mutations
+        switch (effectType) {
+          case 'actions': {
+            store.subscribeAction(actionFn.apply(effectsItem, [effectsItem.effects, effectActionsList]));
+            store.subscribeAction(actionFn.apply(effectsItem, [effectsItem.effects, effectActionsList, true]), { prepend: true });
+            break;
+          }
+          case 'mutations': {
+            store.subscribe(mutationFn.apply(effectsItem, [effectsItem.effects, effectActionsList]));
+            store.subscribe(mutationFn.apply(effectsItem, [effectsItem.effects, effectActionsList, true]), { prepend: true });
+            break;
+          }
+          default: {
+            throw new Error(`[vuex-effects] Unrecognized effect section ${effectType}`);
+          }
+        }
+      });
+    });
+  },
+});
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VuexEffects);
+
 
 /***/ }),
 

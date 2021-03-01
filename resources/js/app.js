@@ -1,29 +1,28 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 require('./bootstrap');
 
 window.Vue = require('vue').default;
-// Added vuex store
-import Vuex from 'vuex';
-import storeData from "./store/index";
+
+import Vuex        from 'vuex';
+import Vuelidate   from 'vuelidate';
+import VuexEffects from "vuex-effects";
+import moment      from 'moment';
+import router      from "./router.js";
+import storeData   from "./store/index";
+import "animate.css";
+
 Vue.use(Vuex);
 const store = new Vuex.Store(
   storeData
 )
-// Added vuelidate
-import Vuelidate from 'vuelidate';
+
 Vue.use(Vuelidate);
-// Added animate.css
-import "animate.css";
-// Added vue-router
-import router from "./router.js";
-// Added moment js
-import moment from 'moment';
+Vue.use(VuexEffects(store));
 Vue.prototype.moment = moment;
+window.moment_global = moment;
+
 moment.updateLocale("en", {week: {dow: 1}});
+
+
 
 /**
  * The following block of code may be used to automatically register your

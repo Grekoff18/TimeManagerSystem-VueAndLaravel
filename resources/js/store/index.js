@@ -3,31 +3,27 @@ export default {
   	taskList: [],
   	editMode: false,
     menu: [
-      {title: "dfsdff", href: "/lalala"},
-      {title: "dfsdff", href: "/lalal"},
-      {title: "dfsdff", href: "/lala"},
-      {title: "dfsdff", href: "/lal"},
-    ],
+      {title: "dagdfsf", href: "/lalala"},
+      {title: "dagdfsf", href: "/lalal"},
+      {title: "dagdfsf", href: "/lala"},
+      {title: "dagdfsf", href: "/lal"}
+    ]
   },
 
 	getters: {
-
+    
 	},
 
 	actions: {
     getAllTasks({state}) {
-    	axios.get("api/tasks")
+    	return axios.get("api/tasks")
         .then(response => state.taskList = response.data.reverse())
-       	.catch((error) => console.log(error));
+       	.catch(error => console.log(error));
     },
 
     deleteTask({dispatch}, id) {
     	axios.delete(`api/task/${id}`)
-        .then(response => {
-          if (response.status === 200) {
-            dispatch("getAllTasks");
-          }
-        })
+        .then(response => response.status === 200 ? dispatch("getAllTasks") : console.log(response.data))
         .catch((error) => console.log(error));
     },
 
@@ -45,15 +41,16 @@ export default {
     updateTask({commit, state, dispatch}, payload) {
 	    axios.patch(`api/task/${payload.id}`, {
         "task": {
-          "description": payload.inputData
+          "description": payload.inputData,
+          "updated_at": moment_global().format("YYYY-MM-DD HH:mm:ss")
         },
       })
       	.then(response => {
-      		if (response.status === 200) {
-      			dispatch('getAllTasks');
+          if (response.status === 200) {
+            dispatch('getAllTasks');
 						commit('changeEditMode');
-      		}
-      	})
+          }
+        })
       	.catch(error => console.log(error));
     },
 	},

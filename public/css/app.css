@@ -11312,6 +11312,11 @@ a.text-dark:focus {
   text-shadow: 1px 1px 1px #27363B;
 }
 
+.has-tasks-mark {
+  color: white;
+  background-color: #000000;
+}
+
 body {
   background-color: #27363B;
 }
