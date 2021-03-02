@@ -17,30 +17,32 @@
       <li
         v-for="day in daysArray"
         :key="day.fullDate"
+        @click="$emit('daySelected', day)"
         class="calendar_items"
         :class="{
           'weekend-day':  day.weekDay === 6 || day.weekDay === 0,
           'today':        day.fullDate === getDateByFormat('YYYY-MM-DD'),
         }"
       >
-        <p class="day">
-          {{day.monthDay}}
-          <!-- !!! -->
-          <template v-for="(workingDay, index) in daysWithTasks">
-            <p v-if="day.fullDate === workingDay" :key="index">
-              Hello world
-            </p>
-          </template>
-        </p>
+        <p class="day">{{day.monthDay}}</p>
+        <template v-for="(workingDay, index) in daysWithTasks">
+          <span
+            v-if="day.fullDate === workingDay"
+            :key="index"
+            class="more-info-label"
+          >
+            Has Task
+          </span>
+        </template>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: "CalendarComponent",
+  name: "AppCalendar",
   data() {
     return {
       daysArray: [],
@@ -62,27 +64,13 @@ export default {
     },
 
     daysWithTasks() {
-      return _.uniq(this.taskList.map(el => el.created_at.split("T")[0]));
-    }
-  },
-
-  effects: {
-    actions: {
-      getAllTasks: {
-        after(action, state) {
-          return this.taskList;
-        }
-      }
-    }
+      return _.uniq(this.taskList.map(element => element.created_at.split("T")[0]))
+    },
   },
 
   methods: {
     ...mapActions([
       "getAllTasks"
-    ]),
-
-    ...mapMutations([
-      "changeEditMode",
     ]),
 
     fillDataArray(arr, count, from) {
@@ -100,11 +88,9 @@ export default {
     getDateByFormat(format) {
       return this.moment().format(format);
     }
-
   },
 
   mounted() {
-    // this.getAllTasks().then(res => this.);
     this.daysArray = this.fillDataArray([], 42, this.firstDayInMonth); 
     this.weekNamesArray = this.fillDataArray([], 7, this.firstDayInWeek);
   }

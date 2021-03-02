@@ -17,22 +17,85 @@
 
   &_main-container
     width: 100%
-    height: 100%
+    height: 94.0990516333vh
     margin-top: 5.900948366701791vh
     display: flex
     flex-direction: column
 
   &_info-section
-    width: 50%
+    width: 100%
     height: 100%
-    padding: 20px
+    padding-bottom: 5.900948366701791vh
+    display: flex
     background-color: $sky
 
-    > p
-      // font-family: $lemonada
-      font-family: $press_start_2p
-      font-weight: 600
-      font-size: 15px
-      color: $dark-blue
+    .current-day-info
+      width: 50%
+      background-color: $dark-blue
+      padding: 10px
+
+      &_title > h5 
+        font-family: $press_start_2p
+        color: $sky
+        text-shadow: 2px 2px $cyan-lighten-4
+        text-align: center
+
+      &_count
+        border-bottom: 1px solid $cyan-lighten-4
+        display: flex
+        align-items: center
+        justify-content: space-between
+        margin-bottom: 20px
+        padding-bottom: 4px
+
+        span 
+          font-family: $press_start_2p
+          color: $sky
+          text-shadow: 1px 1px $cyan-lighten-4
+
+      &_completed
+        display: flex
+        align-items: center
+        justify-content: space-between
+        border-bottom: 1px solid $cyan-lighten-4
+        margin-bottom: 20px
+        padding-bottom: 4px
+
+        .completed-count-tasks
+          width: 45%
+          display: flex
+          align-items: center
+          justify-content: space-between
+
+          span
+            font-family: $press_start_2p
+            color: $sky   
+            text-shadow: 1px 1px $cyan-lighten-4    
+
+        .uncompleted-count-tasks
+          width: 45%
+          display: flex
+          align-items: center
+          justify-content: space-between
+
+          span
+            font-family: $press_start_2p
+            color: $sky   
+            text-shadow: 1px 1px $cyan-lighten-4    
+
+      &_tasks
+        display: flex
+        align-items: center
+        justify-content: space-between
+        border-bottom: 1px solid $cyan-lighten-4
+        padding-bottom: 4px
+
+        span
+          font-family: $press_start_2p
+          color: $sky   
+          text-shadow: 1px 1px $cyan-lighten-4    
+
+    .about-calendar-info
+      width: 50%
 
 @import "./calendar"

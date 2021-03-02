@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "HeaderTitle",
+  name: "AppHeader",
   data() {
     return {}
   },

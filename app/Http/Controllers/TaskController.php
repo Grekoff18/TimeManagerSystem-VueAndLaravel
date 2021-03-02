@@ -55,7 +55,7 @@ class TaskController extends Controller
     $existing_task = Task::find($id);
 
     if ($existing_task) {
-      $existing_task->completed = $request->task["completed"] ? true : false;
+      $existing_task->completed = $request->task["completed"];
       $existing_task->completed_at = $request->task["completed"] ? Carbon::now() : null;
       $existing_task->save();
 

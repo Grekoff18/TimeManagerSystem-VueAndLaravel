@@ -51,11 +51,11 @@
         :key="indx"
         enter-active-class="animate__animated animate__bounceIn"
       >
-        <task-list-item
+        <app-task-list-item
           :key="indx"
           :task="task"
           v-on:edit-task="editTask"
-          v-on:complete-task="completeTask"
+          v-on:complete-task="completeTask($event)"
         />
       </transition-group>
     </div>
@@ -63,14 +63,14 @@
 </template>
 
 <script>
-import TaskListItem from "./TaskListItem";
+import AppTaskListItem from "./App-Task-List-Item";
 import { mapMutations, mapActions, mapState } from 'vuex'
 import { minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: "TaskList",
 
-  components: {TaskListItem},
+  components: {AppTaskListItem},
 
   data() {
     return {
@@ -140,7 +140,7 @@ export default {
     },
 
     completeTask(id) {
-       axios.patch(`api/task/${id}`, {
+      axios.put(`api/task/${id}`, {
         "task": {
           "completed": true
         }
