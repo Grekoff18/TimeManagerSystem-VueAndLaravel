@@ -10991,7 +10991,7 @@ a.text-dark:focus {
 .left-side-container_task-block {
   width: 85%;
   min-height: 79vh;
-  padding: 25px;
+  padding-top: 25px;
   background-color: #309B94;
   position: relative;
 }
@@ -11093,7 +11093,6 @@ a.text-dark:focus {
   margin-top: 25px;
   padding: 0 10px;
   border-bottom: 2px solid #B2EBF2;
-  border-radius: 5px;
   background-color: #27363B;
   display: flex;
   justify-content: space-between;
@@ -11154,19 +11153,22 @@ a.text-dark:focus {
   margin-top: 20px;
 }
 
-.task-list p {
-  word-break: break-all;
-  margin: 0;
+.task-list_item {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 10px;
+  color: #27363B;
+  background-color: #4DB6AC;
+  border: 2px solid #27363B;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
-.task-list ul > li {
-  margin: 10px 0;
-  padding: 5px 10px;
-  color: #27363B;
-  background-color: #B2EBF2;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
+.task-list_item > p {
+  word-break: break-all;
+  margin: 5px 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .task-list_item > input {
@@ -11175,9 +11177,11 @@ a.text-dark:focus {
 
 .task-list_btn-section {
   width: 100%;
+  padding: 5px;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  background-color: #27363B;
 }
 
 .task-list_btn-section button {

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default {
   state: {
   	taskList: [],
@@ -22,24 +24,22 @@ export default {
     },
 
     deleteTask({dispatch}, id) {
-    	axios.delete(`api/task/${id}`)
+    	return axios.delete(`api/task/${id}`)
         .then(response => response.status === 200 ? dispatch("getAllTasks") : console.log(response.data))
         .catch((error) => console.log(error));
     },
 
-    addTask({commit, dispatch}, inputData) {
-    	axios.post("api/task/store", {
-        "task": {
-          "description": inputData
-        },
+    addTask({dispatch}, inputData) {
+    	return axios.post("api/task/store", {
+        "task": {"description": inputData},
       })
-      	.then(response => console.log("task added"))
-      	.catch(error => console.log(error));
+      	.then(response => response.status === 201 ? dispatch("getAllTasks") : console.log(response.data))
+      	.catch(error => console.log(error, inputData));
       	
     },
 
-    updateTask({commit, state, dispatch}, payload) {
-	    axios.patch(`api/task/${payload.id}`, {
+    editTask({commit, dispatch}, payload) {
+	    return axios.patch(`api/task/${payload.id}`, {
         "task": {
           "description": payload.inputData,
           "updated_at": moment_global().format("YYYY-MM-DD HH:mm:ss")
@@ -53,6 +53,14 @@ export default {
         })
       	.catch(error => console.log(error));
     },
+
+    completeTask({dispatch}, id) {
+      return axios.put(`api/task/${id}`, {
+        "task": { "completed": true }
+      })
+      .then(response => response.status === 200 ? dispatch("getAllTasks") : console.log(response.data))
+      .catch(error => console.log(error));
+    }
 	},
 
 	mutations: {

@@ -2,13 +2,12 @@
   <li
     class="task-list_item"
     :class="{'completed-task': task.completed}"
-    v-on:mouseenter="mouseOnElement"
-    v-on:mouseleave="mouseLeaveFromElement"
+    @click="isOpen = !isOpen"
   >
-    <p v-if="!mouseEnter">{{task.description}}</p>
+    <p>{{task.description}}</p>
     <div
-      v-if="mouseEnter"
       class="task-list_btn-section"
+      v-if="isOpen"
     >
       <button class="material-icons">keyboard_arrow_down</button>
       <!-- Edit button -->
@@ -31,7 +30,7 @@
       <button
         v-if="!editMode"
         class="material-icons"
-        @click="deleteTask(task.id)"
+        @click="$emit('delete-task', task.id)"
       >
         clear
       </button>
@@ -40,14 +39,14 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   props: ["task"],
 
   data() {
     return {
-      mouseEnter: false,
+      isOpen: false
     }
   },
 
@@ -57,30 +56,5 @@ export default {
       "isCompleted",
     ]),
   },
-
-  methods: {
-    ...mapActions([
-      "deleteTask",
-    ]),
-
-    mouseOnElement(event) {
-      if (!this.mouseEnter) {
-        this.mouseEnter = true;
-        event.target.style.background = "#27363B"
-        event.target.style.boxShadow = "0 0 10px #27363B";
-      }
-    },
-
-    mouseLeaveFromElement(event) {
-      if (this.mouseEnter) {
-        this.mouseEnter = false;
-        event.target.style.background = null
-        event.target.style.boxShadow = null
-      }
-    },
-  },
-
-  mounted() {
-  }
 }
 </script>

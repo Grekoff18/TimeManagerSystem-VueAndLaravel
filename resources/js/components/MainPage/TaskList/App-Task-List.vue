@@ -18,12 +18,13 @@
           name="added_task"
           placeholder="Type your task here"
           v-model.trim="$v.inputData.$model"
+          v-on:keyup.enter="add"
         >
         <button
           type="button"
           class="task_btn material-icons"
           v-if="editMode"
-          @click="updateTask"
+          @click="update"
         >
           done
         </button>
@@ -31,7 +32,7 @@
           v-else
           type="button"
           class="task_btn material-icons"
-          @click="addTask"
+          @click="add"
         >
           add_task
         </button>
@@ -54,8 +55,9 @@
         <app-task-list-item
           :key="indx"
           :task="task"
-          v-on:edit-task="editTask"
-          v-on:complete-task="completeTask($event)"
+          v-on:edit-task="edit($event)"
+          v-on:complete-task="complete($event)"
+          v-on:delete-task="removeTask($event)"
         />
       </transition-group>
     </div>
@@ -81,7 +83,7 @@ export default {
 
   validations: {
     inputData: {
-      minLength: minLength(4)
+      minLength: minLength(4),
     }
   },
 
@@ -101,63 +103,59 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      getListTasks: "getAllTasks",
-      add: "addTask",
-      update: "updateTask",
-    }),
+    ...mapActions([
+      "getAllTasks",
+      "addTask",
+      "editTask",
+      "deleteTask",
+      "completeTask"
+    ]),
 
     ...mapMutations([
       "changeEditMode",
     ]),
 
-    addTask() { 
+    add() { 
       this.$v.$touch()
       if (this.$v.$invalid) {
         return;
       }
 
-      this.add(this.inputData);
+      this.addTask(this.inputData)
+        .then(() => this.$emit("task-completed", this.moment().format("YYYY-MM-DD")));
       this.inputData = "";
-      this.getListTasks();
     },
 
-    editTask(description, id) {
+    edit(description, id) {
       this.inputData = description;
       this.editableId = id;
       this.changeEditMode();
     },
 
-    updateTask() {
+    update() {
       this.$v.$touch()
       if (this.$v.$invalid) {
         return;
       }
 
-      this.update({inputData: this.inputData, id: this.editableId});
+      this.editTask({inputData: this.inputData, id: this.editableId});
       this.inputData = "";
       this.editableId = "";
     },
 
-    completeTask(id) {
-      axios.put(`api/task/${id}`, {
-        "task": {
-          "completed": true
-        }
-      })
-        .then(response => {
-          if (response.status === 200) {
-            this.getListTasks();
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    }
+    complete(id) {
+      this.completeTask(id)
+        .then(() => this.$emit("task-completed", this.moment().format("YYYY-MM-DD")));
+    },
+
+    removeTask(id) {
+      this.deleteTask(id)
+        .then(() => this.$emit("remove", this.moment().format("YYYY-MM-DD")));
+    },
   },
 
   created() { 
-    this.getListTasks(); 
+    this.getAllTasks(); 
   } 
 }
 </script>

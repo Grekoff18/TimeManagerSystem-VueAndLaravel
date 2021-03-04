@@ -12,7 +12,6 @@
     margin-top: 25px
     padding: 0 10px
     border-bottom: 2px solid $cyan-lighten-4
-    border-radius: 5px
     background-color: $dark-blue
     display: flex
     justify-content: space-between
@@ -56,27 +55,32 @@
 .task-list
   margin-top: 20px
 
-  p
-    word-break: break-all
-    margin: 0
-
-  ul > li
-    margin: 10px 0
-    padding: 5px 10px
-    color: $dark-blue
-    background-color: $cyan-lighten-4
-    border-radius: 5px
+  &_item
     display: flex
-    align-items: center
+    flex-direction: column
+    margin: 10px 10px
+    color: $dark-blue
+    background-color: $light-sky
+    border: 2px solid $dark-blue
+    border-radius: 5px
+    overflow: hidden
 
-  &_item>input
+    > p 
+      word-break: break-all
+      margin: 5px 10px
+      cursor: pointer
+      font-weight: bold
+
+  &_item > input
     width: 65%
 
   &_btn-section
     width: 100%
+    padding: 5px
     display: flex
     justify-content: space-around
     align-items: center
+    background-color: $dark-blue
 
     button
       font-size: 25px
@@ -89,11 +93,3 @@
     button:hover
       transition: 0.3s
       color: $cyan-lighten-4
-
-
-// .task-enter
-//   opacity: 0
-
-// .task-enter-to 
-//   opacity: 1
-//   transition: 1s

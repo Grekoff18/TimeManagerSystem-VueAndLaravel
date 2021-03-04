@@ -2122,33 +2122,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["task"],
   data: function data() {
     return {
-      mouseEnter: false
+      isOpen: false
     };
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(["editMode", "isCompleted"])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(["deleteTask"])), {}, {
-    mouseOnElement: function mouseOnElement(event) {
-      if (!this.mouseEnter) {
-        this.mouseEnter = true;
-        event.target.style.background = "#27363B";
-        event.target.style.boxShadow = "0 0 10px #27363B";
-      }
-    },
-    mouseLeaveFromElement: function mouseLeaveFromElement(event) {
-      if (this.mouseEnter) {
-        this.mouseEnter = false;
-        event.target.style.background = null;
-        event.target.style.boxShadow = null;
-      }
-    }
-  }),
-  mounted: function mounted() {}
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(["editMode", "isCompleted"]))
 });
 
 /***/ }),
@@ -2173,6 +2155,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -2264,59 +2248,57 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.moment().endOf("month").endOf("week");
     }
   }),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)({
-    getListTasks: "getAllTasks",
-    add: "addTask",
-    update: "updateTask"
-  })), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapMutations)(["changeEditMode"])), {}, {
-    addTask: function addTask() {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["getAllTasks", "addTask", "editTask", "deleteTask", "completeTask"])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapMutations)(["changeEditMode"])), {}, {
+    add: function add() {
+      var _this = this;
+
       this.$v.$touch();
 
       if (this.$v.$invalid) {
         return;
       }
 
-      this.add(this.inputData);
+      this.addTask(this.inputData).then(function () {
+        return _this.$emit("task-completed", _this.moment().format("YYYY-MM-DD"));
+      });
       this.inputData = "";
-      this.getListTasks();
     },
-    editTask: function editTask(description, id) {
+    edit: function edit(description, id) {
       this.inputData = description;
       this.editableId = id;
       this.changeEditMode();
     },
-    updateTask: function updateTask() {
+    update: function update() {
       this.$v.$touch();
 
       if (this.$v.$invalid) {
         return;
       }
 
-      this.update({
+      this.editTask({
         inputData: this.inputData,
         id: this.editableId
       });
       this.inputData = "";
       this.editableId = "";
     },
-    completeTask: function completeTask(id) {
-      var _this = this;
+    complete: function complete(id) {
+      var _this2 = this;
 
-      axios.put("api/task/".concat(id), {
-        "task": {
-          "completed": true
-        }
-      }).then(function (response) {
-        if (response.status === 200) {
-          _this.getListTasks();
-        }
-      })["catch"](function (error) {
-        console.log(error);
+      this.completeTask(id).then(function () {
+        return _this2.$emit("task-completed", _this2.moment().format("YYYY-MM-DD"));
+      });
+    },
+    removeTask: function removeTask(id) {
+      var _this3 = this;
+
+      this.deleteTask(id).then(function () {
+        return _this3.$emit("remove", _this3.moment().format("YYYY-MM-DD"));
       });
     }
   }),
   created: function created() {
-    this.getListTasks();
+    this.getAllTasks();
   }
 });
 
@@ -2338,12 +2320,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_App_Footer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/App-Footer */ "./resources/js/components/App-Footer.vue");
 /* harmony import */ var _components_MainPage_App_Calendar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/MainPage/App-Calendar */ "./resources/js/components/MainPage/App-Calendar.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
 //
 //
 //
@@ -2430,27 +2417,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       selectedDate: "",
-      countOfTasks: 10,
+      countOfCompletedTasks: 0,
+      countOfUncompletedTasks: 0,
       currentArr: []
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapState)(["taskList"])), {}, {
     getCountOfTask: function getCountOfTask() {
       return this.currentArr.length;
+    },
+    getCountOfCompletedTasks: function getCountOfCompletedTasks() {
+      return this.currentArr.filter(function (item) {
+        return item.completed === 1;
+      }).length;
+    },
+    getCountOfUncompletedTasks: function getCountOfUncompletedTasks() {
+      return this.currentArr.filter(function (item) {
+        return item.completed === 0;
+      }).length;
     }
   }),
   methods: {
-    sortedTaskList: function sortedTaskList(date) {
-      return this.taskList.filter(function (item) {
-        return item.created_at.split("T")[0] === date;
-      });
-    },
     parseInfo: function parseInfo(dayInfo) {
-      this.selectedDate = dayInfo.fullDate;
-      this.currentArr = this.sortedTaskList(this.selectedDate);
+      if (_typeof(dayInfo) === "object") {
+        this.selectedDate = dayInfo.fullDate;
+        this.currentArr = this.taskList.filter(function (item) {
+          return item.created_at.split("T")[0] === dayInfo.fullDate;
+        });
+        console.log("obj");
+      } else {
+        this.selectedDate = dayInfo;
+        this.currentArr = this.taskList.filter(function (item) {
+          return item.created_at.split("T")[0] === dayInfo;
+        });
+        console.log("str");
+      }
     }
-  },
-  mounted: function mounted() {}
+  }
 });
 
 /***/ }),
@@ -2602,6 +2605,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   state: {
     taskList: [],
@@ -2624,7 +2630,7 @@ __webpack_require__.r(__webpack_exports__);
   actions: {
     getAllTasks: function getAllTasks(_ref) {
       var state = _ref.state;
-      return axios.get("api/tasks").then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().get("api/tasks").then(function (response) {
         return state.taskList = response.data.reverse();
       })["catch"](function (error) {
         return console.log(error);
@@ -2632,30 +2638,28 @@ __webpack_require__.r(__webpack_exports__);
     },
     deleteTask: function deleteTask(_ref2, id) {
       var dispatch = _ref2.dispatch;
-      axios["delete"]("api/task/".concat(id)).then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().delete("api/task/".concat(id)).then(function (response) {
         return response.status === 200 ? dispatch("getAllTasks") : console.log(response.data);
       })["catch"](function (error) {
         return console.log(error);
       });
     },
     addTask: function addTask(_ref3, inputData) {
-      var commit = _ref3.commit,
-          dispatch = _ref3.dispatch;
-      axios.post("api/task/store", {
+      var dispatch = _ref3.dispatch;
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().post("api/task/store", {
         "task": {
           "description": inputData
         }
       }).then(function (response) {
-        return console.log("task added");
+        return response.status === 201 ? dispatch("getAllTasks") : console.log(response.data);
       })["catch"](function (error) {
-        return console.log(error);
+        return console.log(error, inputData);
       });
     },
-    updateTask: function updateTask(_ref4, payload) {
+    editTask: function editTask(_ref4, payload) {
       var commit = _ref4.commit,
-          state = _ref4.state,
           dispatch = _ref4.dispatch;
-      axios.patch("api/task/".concat(payload.id), {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().patch("api/task/".concat(payload.id), {
         "task": {
           "description": payload.inputData,
           "updated_at": moment_global().format("YYYY-MM-DD HH:mm:ss")
@@ -2665,6 +2669,18 @@ __webpack_require__.r(__webpack_exports__);
           dispatch('getAllTasks');
           commit('changeEditMode');
         }
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    completeTask: function completeTask(_ref5, id) {
+      var dispatch = _ref5.dispatch;
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().put("api/task/".concat(id), {
+        "task": {
+          "completed": true
+        }
+      }).then(function (response) {
+        return response.status === 200 ? dispatch("getAllTasks") : console.log(response.data);
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -60495,16 +60511,15 @@ var render = function() {
       staticClass: "task-list_item",
       class: { "completed-task": _vm.task.completed },
       on: {
-        mouseenter: _vm.mouseOnElement,
-        mouseleave: _vm.mouseLeaveFromElement
+        click: function($event) {
+          _vm.isOpen = !_vm.isOpen
+        }
       }
     },
     [
-      !_vm.mouseEnter
-        ? _c("p", [_vm._v(_vm._s(_vm.task.description))])
-        : _vm._e(),
+      _c("p", [_vm._v(_vm._s(_vm.task.description))]),
       _vm._v(" "),
-      _vm.mouseEnter
+      _vm.isOpen
         ? _c("div", { staticClass: "task-list_btn-section" }, [
             _c("button", { staticClass: "material-icons" }, [
               _vm._v("keyboard_arrow_down")
@@ -60551,7 +60566,7 @@ var render = function() {
                     staticClass: "material-icons",
                     on: {
                       click: function($event) {
-                        return _vm.deleteTask(_vm.task.id)
+                        return _vm.$emit("delete-task", _vm.task.id)
                       }
                     }
                   },
@@ -60618,6 +60633,15 @@ var render = function() {
             },
             domProps: { value: _vm.$v.inputData.$model },
             on: {
+              keyup: function($event) {
+                if (
+                  !$event.type.indexOf("key") &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                ) {
+                  return null
+                }
+                return _vm.add($event)
+              },
               input: function($event) {
                 if ($event.target.composing) {
                   return
@@ -60636,7 +60660,7 @@ var render = function() {
                 {
                   staticClass: "task_btn material-icons",
                   attrs: { type: "button" },
-                  on: { click: _vm.updateTask }
+                  on: { click: _vm.update }
                 },
                 [_vm._v("\n        done\n      ")]
               )
@@ -60645,7 +60669,7 @@ var render = function() {
                 {
                   staticClass: "task_btn material-icons",
                   attrs: { type: "button" },
-                  on: { click: _vm.addTask }
+                  on: { click: _vm.add }
                 },
                 [_vm._v("\n        add_task\n      ")]
               )
@@ -60684,9 +60708,14 @@ var render = function() {
               key: indx,
               attrs: { task: task },
               on: {
-                "edit-task": _vm.editTask,
+                "edit-task": function($event) {
+                  return _vm.edit($event)
+                },
                 "complete-task": function($event) {
-                  return _vm.completeTask($event)
+                  return _vm.complete($event)
+                },
+                "delete-task": function($event) {
+                  return _vm.removeTask($event)
                 }
               }
             })
@@ -60735,7 +60764,20 @@ var render = function() {
       _c(
         "div",
         { staticClass: "left-side-container" },
-        [_c("app-header"), _vm._v(" "), _c("app-task-list")],
+        [
+          _c("app-header"),
+          _vm._v(" "),
+          _c("app-task-list", {
+            on: {
+              "task-completed": function($event) {
+                return _vm.parseInfo($event)
+              },
+              remove: function($event) {
+                return _vm.parseInfo($event)
+              }
+            }
+          })
+        ],
         1
       ),
       _vm._v(" "),
@@ -60779,7 +60821,9 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "current-day-info_count" }, [
-                _c("span", [_vm._v("\n                Count\n              ")]),
+                _c("span", [
+                  _vm._v("\n                Count of tasks\n              ")
+                ]),
                 _vm._v(" "),
                 _c("span", [
                   _vm._v(
@@ -60790,9 +60834,37 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(1),
+              _c("div", { staticClass: "current-day-info_completed" }, [
+                _c("div", { staticClass: "completed-count-tasks" }, [
+                  _c("span", [
+                    _vm._v("\n                  Completed\n                ")
+                  ]),
+                  _vm._v(" "),
+                  _c("span", [
+                    _vm._v(
+                      "\n                  " +
+                        _vm._s(_vm.getCountOfCompletedTasks) +
+                        "\n                "
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uncompleted-count-tasks" }, [
+                  _c("span", [
+                    _vm._v("\n                  Uncompleted\n                ")
+                  ]),
+                  _vm._v(" "),
+                  _c("span", [
+                    _vm._v(
+                      "\n                  " +
+                        _vm._s(_vm.getCountOfUncompletedTasks) +
+                        "\n                "
+                    )
+                  ])
+                ])
+              ]),
               _vm._v(" "),
-              _vm._m(2)
+              _vm._m(1)
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "about-calendar-info" })
@@ -60810,26 +60882,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "bottom-block_title" }, [
       _c("h2", [_vm._v("\n          History\n        ")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "current-day-info_completed" }, [
-      _c("div", { staticClass: "completed-count-tasks" }, [
-        _c("span", [_vm._v("\n                  Completed\n                ")]),
-        _vm._v(" "),
-        _c("span", [_vm._v("\n                  10\n                ")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "uncompleted-count-tasks" }, [
-        _c("span", [
-          _vm._v("\n                  Uncompleted\n                ")
-        ]),
-        _vm._v(" "),
-        _c("span", [_vm._v("\n                  4\n                ")])
-      ])
     ])
   },
   function() {

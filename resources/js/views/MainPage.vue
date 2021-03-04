@@ -3,7 +3,10 @@
     <div class="top-container">
       <div class="left-side-container">
         <app-header/>
-        <app-task-list/>
+        <app-task-list 
+          v-on:task-completed="parseInfo($event)"
+          v-on:remove="parseInfo($event)"
+        />
       </div>
       <div class="right-side-container">
         <div class="right-side-container_clock-block"></div>
@@ -29,7 +32,7 @@
             </div>
             <div class="current-day-info_count">
               <span>
-                Count
+                Count of tasks
               </span>
               <span>
                 {{ getCountOfTask }}
@@ -41,7 +44,7 @@
                   Completed
                 </span>
                 <span>
-                  10
+                  {{ getCountOfCompletedTasks }}
                 </span>
               </div>
               <div class="uncompleted-count-tasks">
@@ -49,7 +52,7 @@
                   Uncompleted
                 </span>
                 <span>
-                  4
+                  {{ getCountOfUncompletedTasks }}
                 </span>
               </div>
             </div>
@@ -88,7 +91,8 @@ export default {
   data() {
     return {
       selectedDate: "",
-      countOfTasks: 10,
+      countOfCompletedTasks: 0,
+      countOfUncompletedTasks: 0,
       currentArr: [],
     }
   },
@@ -100,22 +104,29 @@ export default {
 
     getCountOfTask() {
       return this.currentArr.length;
+    },
+
+    getCountOfCompletedTasks() {
+      return this.currentArr.filter(item => item.completed === 1).length
+    },
+
+    getCountOfUncompletedTasks() {
+      return this.currentArr.filter(item => item.completed === 0).length;
     }
   },
 
   methods: {
-    sortedTaskList(date) {
-      return this.taskList.filter(item => item.created_at.split("T")[0] === date);
-    },
-
     parseInfo(dayInfo) {
-      this.selectedDate = dayInfo.fullDate;
-      this.currentArr = this.sortedTaskList(this.selectedDate);
-    }
+      if (typeof dayInfo === "object") {
+        this.selectedDate = dayInfo.fullDate;
+        this.currentArr = this.taskList.filter(item => item.created_at.split("T")[0] === dayInfo.fullDate);
+        console.log("obj");
+      } else {
+        this.selectedDate = dayInfo;
+        this.currentArr = this.taskList.filter(item => item.created_at.split("T")[0] === dayInfo);
+        console.log("str");
+      }
+    },
   },
-
-  mounted() {
-
-  }
 }
 </script>
