@@ -52,7 +52,7 @@ export default {
 
   computed: {
     ...mapState([
-      "taskList"
+      "TASK_LIST"
     ]),
 
     firstDayInWeek() {
@@ -64,13 +64,13 @@ export default {
     },
 
     daysWithTasks() {
-      return _.uniq(this.taskList.map(element => element.created_at.split("T")[0]))
+      return _.uniq(this.TASK_LIST.map(element => element.created_at.split("T")[0]))
     },
   },
 
   methods: {
     ...mapActions([
-      "getAllTasks"
+      "GET_ALL_TASKS"
     ]),
 
     fillDataArray(arr, count, from) {

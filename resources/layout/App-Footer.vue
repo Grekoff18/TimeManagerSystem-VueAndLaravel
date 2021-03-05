@@ -39,7 +39,7 @@ export default {
 
 	computed: {
     ...mapState([
-      "menu"
+      "MENU"
     ]),
 
 		menuTitle() {
@@ -49,7 +49,7 @@ export default {
 
 	methods: {
     ...mapMutations([
-      "fillMenu",
+      "FILL_MENU",
     ]),
 
 		openMenu() {
@@ -58,7 +58,7 @@ export default {
         this.$refs.menu.style.width = "100%";
         this.$refs.menu.style.height = "100vh";
         setTimeout(() => {
-          this.fillMenu(this.menuItems);
+          this.FILL_MENU(this.menuItems);
         }, 300);
       } else {
         this.menuItems = [];

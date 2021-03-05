@@ -1,10 +1,9 @@
-import axios from "axios";
-
 export default {
   state: {
-  	taskList: [],
-  	editMode: false,
-    menu: [
+  	TASK_LIST: [],
+  	EDIT_MODE: false,
+    // add to config 
+    MENU: [
       {title: "dagdfsf", href: "/lalala"},
       {title: "dagdfsf", href: "/lalal"},
       {title: "dagdfsf", href: "/lala"},
@@ -17,28 +16,28 @@ export default {
 	},
 
 	actions: {
-    getAllTasks({state}) {
+    GET_ALL_TASKS({state}) {
     	return axios.get("api/tasks")
-        .then(response => state.taskList = response.data.reverse())
+        .then(response => state.TASK_LIST = response.data.reverse())
        	.catch(error => console.log(error));
     },
 
-    deleteTask({dispatch}, id) {
+    DELETE_TASK({dispatch}, id) {
     	return axios.delete(`api/task/${id}`)
-        .then(response => response.status === 200 ? dispatch("getAllTasks") : console.log(response.data))
+        .then(response => response.status === 200 ? dispatch("GET_ALL_TASKS") : console.log(response.data))
         .catch((error) => console.log(error));
     },
 
-    addTask({dispatch}, inputData) {
+    ADD_TASK({dispatch}, inputData) {
     	return axios.post("api/task/store", {
         "task": {"description": inputData},
       })
-      	.then(response => response.status === 201 ? dispatch("getAllTasks") : console.log(response.data))
+      	.then(response => response.status === 201 ? dispatch("GET_ALL_TASKS") : console.log(response.data))
       	.catch(error => console.log(error, inputData));
       	
     },
 
-    editTask({commit, dispatch}, payload) {
+    EDIT_TASK({commit, dispatch}, payload) {
 	    return axios.patch(`api/task/${payload.id}`, {
         "task": {
           "description": payload.inputData,
@@ -47,33 +46,29 @@ export default {
       })
       	.then(response => {
           if (response.status === 200) {
-            dispatch('getAllTasks');
-						commit('changeEditMode');
+            dispatch('GET_ALL_TASKS');
+						commit('CHANGE_EDIT_MODE');
           }
         })
       	.catch(error => console.log(error));
     },
 
-    completeTask({dispatch}, id) {
+    COMPLETE_TASK({dispatch}, id) {
       return axios.put(`api/task/${id}`, {
         "task": { "completed": true }
       })
-      .then(response => response.status === 200 ? dispatch("getAllTasks") : console.log(response.data))
+      .then(response => response.status === 200 ? dispatch("GET_ALL_TASKS") : console.log(response.data))
       .catch(error => console.log(error));
     }
 	},
 
 	mutations: {
-    changeEditMode(state) {
-    	state.editMode === false ? state.editMode = true : state.editMode = false; 
+    CHANGE_EDIT_MODE(state) {
+    	state.EDIT_MODE === false ? state.EDIT_MODE = true : state.EDIT_MODE = false; 
     },
 
-    fillMenu(state, item) {
-      if (item) {
-        state.menu.forEach(elem => {
-          item.push(elem);
-        })
-      }
+    FILL_MENU(state, item) {
+      if (item) state.MENU.forEach(elem => item.push(elem)); 
     },
   }
 }

@@ -23,7 +23,7 @@
         <button
           type="button"
           class="task_btn material-icons"
-          v-if="editMode"
+          v-if="EDIT_MODE"
           @click="update"
         >
           done
@@ -48,7 +48,7 @@
       <transition-group
         appear
         tag="ul"
-        v-for="(task, indx) in taskList"
+        v-for="(task, indx) in TASK_LIST"
         :key="indx"
         enter-active-class="animate__animated animate__bounceIn"
       >
@@ -57,7 +57,7 @@
           :task="task"
           v-on:edit-task="edit($event)"
           v-on:complete-task="complete($event)"
-          v-on:delete-task="removeTask($event)"
+          v-on:delete-task="remove($event)"
         />
       </transition-group>
     </div>
@@ -81,6 +81,7 @@ export default {
     }
   },
 
+  // вынести логику 
   validations: {
     inputData: {
       minLength: minLength(4),
@@ -89,8 +90,8 @@ export default {
 
   computed:{
     ...mapState([
-      "taskList",
-      "editMode",
+      "TASK_LIST",
+      "EDIT_MODE",
     ]),
 
     startDay() {
@@ -104,15 +105,15 @@ export default {
 
   methods: {
     ...mapActions([
-      "getAllTasks",
-      "addTask",
-      "editTask",
-      "deleteTask",
-      "completeTask"
+      "GET_ALL_TASKS",
+      "ADD_TASK",
+      "EDIT_TASK",
+      "DELETE_TASK",
+      "COMPLETE_TASK"
     ]),
 
     ...mapMutations([
-      "changeEditMode",
+      "CHANGE_EDIT_MODE",
     ]),
 
     add() { 
@@ -121,7 +122,7 @@ export default {
         return;
       }
 
-      this.addTask(this.inputData)
+      this.ADD_TASK(this.inputData)
         .then(() => this.$emit("task-completed", this.moment().format("YYYY-MM-DD")));
       this.inputData = "";
     },
@@ -129,7 +130,7 @@ export default {
     edit(description, id) {
       this.inputData = description;
       this.editableId = id;
-      this.changeEditMode();
+      this.CHANGE_EDIT_MODE();
     },
 
     update() {
@@ -138,24 +139,26 @@ export default {
         return;
       }
 
-      this.editTask({inputData: this.inputData, id: this.editableId});
+      this.EDIT_TASK({inputData: this.inputData, id: this.editableId});
       this.inputData = "";
       this.editableId = "";
     },
 
     complete(id) {
-      this.completeTask(id)
+      this.COMPLETE_TASK(id)
         .then(() => this.$emit("task-completed", this.moment().format("YYYY-MM-DD")));
     },
 
-    removeTask(id) {
-      this.deleteTask(id)
-        .then(() => this.$emit("remove", this.moment().format("YYYY-MM-DD")));
+    remove(id) {
+      this.DELETE_TASK(id)
+        .then(() => this.$emit("task-removed", this.moment().format("YYYY-MM-DD")));
     },
   },
 
+  // Take away this.moment logic
+
   created() { 
-    this.getAllTasks(); 
+    this.GET_ALL_TASKS(); 
   } 
 }
 </script>

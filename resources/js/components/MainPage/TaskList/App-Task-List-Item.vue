@@ -13,7 +13,7 @@
       <!-- Edit button -->
       <button
         class="material-icons"
-        v-if="!editMode && !task.completed"
+        v-if="!EDIT_MODE && !task.completed"
         @click="$emit('edit-task', task.description, task.id)"
       >
         edit
@@ -28,7 +28,7 @@
       </button>
       <!-- Delete task button -->
       <button
-        v-if="!editMode"
+        v-if="!EDIT_MODE"
         class="material-icons"
         @click="$emit('delete-task', task.id)"
       >
@@ -52,8 +52,7 @@ export default {
 
   computed: {
     ...mapState([
-      "editMode",
-      "isCompleted",
+      "EDIT_MODE",
     ]),
   },
 }

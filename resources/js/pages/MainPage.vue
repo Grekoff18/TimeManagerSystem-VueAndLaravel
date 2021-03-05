@@ -5,7 +5,7 @@
         <app-header/>
         <app-task-list 
           v-on:task-completed="parseInfo($event)"
-          v-on:remove="parseInfo($event)"
+          v-on:task-removed="parseInfo($event)"
         />
       </div>
       <div class="right-side-container">
@@ -72,11 +72,11 @@
 </template>
 
 <script>
-import AppHeader    from "../components/App-Header";
+import AppHeader    from "../../layout/App-Header";
+import AppFooter    from "../../layout/App-Footer";
 import AppTaskList  from "../components/MainPage/TaskList/App-Task-List";
-import AppFooter    from "../components/App-Footer";
 import AppCalendar  from "../components/MainPage/App-Calendar";
-import { mapMutations, mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex';
 
 export default {
   name: "MainPage",
@@ -99,7 +99,7 @@ export default {
 
   computed: {
     ...mapState([
-      "taskList"
+      "TASK_LIST"
     ]),
 
     getCountOfTask() {
@@ -119,11 +119,11 @@ export default {
     parseInfo(dayInfo) {
       if (typeof dayInfo === "object") {
         this.selectedDate = dayInfo.fullDate;
-        this.currentArr = this.taskList.filter(item => item.created_at.split("T")[0] === dayInfo.fullDate);
+        this.currentArr = this.TASK_LIST.filter(item => item.created_at.split("T")[0] === dayInfo.fullDate);
         console.log("obj");
       } else {
         this.selectedDate = dayInfo;
-        this.currentArr = this.taskList.filter(item => item.created_at.split("T")[0] === dayInfo);
+        this.currentArr = this.TASK_LIST.filter(item => item.created_at.split("T")[0] === dayInfo);
         console.log("str");
       }
     },
