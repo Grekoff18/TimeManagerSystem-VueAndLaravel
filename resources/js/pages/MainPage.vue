@@ -9,7 +9,9 @@
         />
       </div>
       <div class="right-side-container">
-        <div class="right-side-container_clock-block"></div>
+        <div class="right-side-container_clock-block">
+          <app-clock/>
+        </div>
         <app-footer/>
       </div>
     </div>
@@ -76,6 +78,7 @@ import AppHeader    from "../../layout/App-Header";
 import AppFooter    from "../../layout/App-Footer";
 import AppTaskList  from "../components/MainPage/TaskList/App-Task-List";
 import AppCalendar  from "../components/MainPage/App-Calendar";
+import AppClock     from "../components/MainPage/App-Clock";
 import { mapState } from 'vuex';
 
 export default {
@@ -85,7 +88,8 @@ export default {
     AppHeader,
     AppTaskList,
     AppFooter,
-    AppCalendar
+    AppCalendar,
+    AppClock
   },
 
   data() {

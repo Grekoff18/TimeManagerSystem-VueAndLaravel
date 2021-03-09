@@ -1,13 +1,13 @@
-require('./bootstrap');
-
+require('./bootstrap');  
 window.Vue = require('vue').default;
 
-import Vuex        from 'vuex';
-import Vuelidate   from 'vuelidate';
-import VuexEffects from "vuex-effects";
-import moment      from 'moment';
-import router      from "../router/router";
-import storeData   from "./store/index";
+import Vuex          from 'vuex';
+import Vuelidate     from 'vuelidate';
+import VuexEffects   from "vuex-effects";
+import VueApexCharts from 'vue-apexcharts'
+import moment        from 'moment';
+import router        from "../router/router";
+import storeData     from "./store/index";
 import "animate.css";
 
 Vue.use(Vuex);
@@ -17,13 +17,11 @@ const store = new Vuex.Store(
 
 Vue.use(Vuelidate);
 Vue.use(VuexEffects(store));
+Vue.use(VueApexCharts);
 Vue.prototype.moment = moment;
 // убрать в константы 
 window.moment_global = moment;
-
 moment.updateLocale("en", {week: {dow: 1}});
-
-
 
 /**
  * The following block of code may be used to automatically register your
@@ -36,6 +34,7 @@ moment.updateLocale("en", {week: {dow: 1}});
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component('main-page', require('./pages/MainPage.vue').default);
+Vue.component('apexchart', VueApexCharts)
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
