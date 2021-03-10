@@ -8,7 +8,11 @@ export default {
       {title: "dagdfsf", href: "/lalal"},
       {title: "dagdfsf", href: "/lala"},
       {title: "dagdfsf", href: "/lal"}
-    ]
+    ],
+    SHOW_TOOLTIP: false,
+    TOOLTIP_TEXT: "",
+    TIME_LIMIT: false,
+    INPUT_DATA: "",
   },
 
 	getters: {
@@ -28,11 +32,19 @@ export default {
         .catch((error) => console.log(error));
     },
 
-    ADD_TASK({dispatch}, inputData) {
+    ADD_TASK({dispatch, commit}, payload) {
     	return axios.post("api/task/store", {
-        "task": {"description": inputData},
+        "task": {
+          "description": payload.inputData,
+          "timeLimit":   payload.timeLimit
+        },
       })
-      	.then(response => response.status === 201 ? dispatch("GET_ALL_TASKS") : console.log(response.data))
+      	.then(response => {
+          if (response.status === 201) {
+            dispatch("GET_ALL_TASKS");
+            commit("DROP_INPUT_DATA");
+          }
+        })
       	.catch(error => console.log(error, inputData));
       	
     },
@@ -67,8 +79,28 @@ export default {
     	state.EDIT_MODE === false ? state.EDIT_MODE = true : state.EDIT_MODE = false; 
     },
 
+    CHANGE_STATE_TOOLTIP(state) {
+      state.SHOW_TOOLTIP === false ? state.SHOW_TOOLTIP = true : state.SHOW_TOOLTIP = false;
+    },
+
     FILL_MENU(state, item) {
       if (item) state.MENU.forEach(elem => item.push(elem)); 
     },
+
+    FILL_TOOLTIP_TEXT(state, text) {
+      text.length > 0 ? state.TOOLTIP_TEXT = text : console.log("ToolTipText length == 0");
+    },
+
+    ADD_TIME_LIMIT(state, bool) {
+      state.TIME_LIMIT = bool;
+    },
+
+    SET_INPUT_DATA(state, inputData) {
+      state.INPUT_DATA = inputData;
+    },
+
+    DROP_INPUT_DATA(state) {
+      state.INPUT_DATA = "";
+    }
   }
 }

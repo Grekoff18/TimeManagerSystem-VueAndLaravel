@@ -114,17 +114,25 @@ export default {
 
     ...mapMutations([
       "CHANGE_EDIT_MODE",
+      "CHANGE_STATE_TOOLTIP",
+      "FILL_TOOLTIP_TEXT",
+      "SET_INPUT_DATA",
     ]),
 
     add() { 
+      // take out validate logic
       this.$v.$touch()
       if (this.$v.$invalid) {
         return;
       }
 
-      this.ADD_TASK(this.inputData)
-        .then(() => this.$emit("task-completed", this.moment().format("YYYY-MM-DD")));
-      this.inputData = "";
+      this.SET_INPUT_DATA(this.inputData);
+      this.CHANGE_STATE_TOOLTIP();
+      this.FILL_TOOLTIP_TEXT("Do you want to add a time limit on this task ?");
+
+      // this.ADD_TASK(this.inputData)
+      //   .then(() => this.$emit("task-completed", this.moment().format("YYYY-MM-DD")));
+      // this.inputData = "";
     },
 
     edit(description, id) {

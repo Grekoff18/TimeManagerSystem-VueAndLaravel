@@ -1,15 +1,20 @@
 <template>
 	<div class="mps-1">
     <div class="top-container">
+      <app-tooltip
+        v-if="SHOW_TOOLTIP"
+        :tooltip_text="TOOLTIP_TEXT"
+        v-on:task-added="taskAdded($event)"
+      />
       <div class="left-side-container">
         <app-header/>
         <app-task-list 
-          v-on:task-completed="parseInfo($event)"
           v-on:task-removed="parseInfo($event)"
         />
       </div>
       <div class="right-side-container">
         <div class="right-side-container_clock-block">
+          <app-radial-bar/>
           <app-clock/>
         </div>
         <app-footer/>
@@ -78,7 +83,9 @@ import AppHeader    from "../../layout/App-Header";
 import AppFooter    from "../../layout/App-Footer";
 import AppTaskList  from "../components/MainPage/TaskList/App-Task-List";
 import AppCalendar  from "../components/MainPage/App-Calendar";
+import AppRadialBar from "../components/MainPage/App-Radial-Bar";
 import AppClock     from "../components/MainPage/App-Clock";
+import AppTooltip   from '../components/MainPage/App-Tooltip';
 import { mapState } from 'vuex';
 
 export default {
@@ -89,7 +96,9 @@ export default {
     AppTaskList,
     AppFooter,
     AppCalendar,
-    AppClock
+    AppRadialBar,
+    AppClock,
+    AppTooltip
   },
 
   data() {
@@ -103,7 +112,9 @@ export default {
 
   computed: {
     ...mapState([
-      "TASK_LIST"
+      "TASK_LIST",
+      "SHOW_TOOLTIP",
+      "TOOLTIP_TEXT",
     ]),
 
     getCountOfTask() {
@@ -131,6 +142,11 @@ export default {
         console.log("str");
       }
     },
+
+    taskAdded(date) {
+      this.parseInfo(date);
+      
+    }
   },
 }
 </script>

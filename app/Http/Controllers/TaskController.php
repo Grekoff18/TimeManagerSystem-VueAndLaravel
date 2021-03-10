@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\Support\Carbon;
-use Mockery\Undefined;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
+  private $min_length_of_task = 4;
 
   public function index()
   {
@@ -23,7 +24,27 @@ class TaskController extends Controller
   public function store(Request $request)
   {
     $new_task = new Task();
-    $new_task->description = $request->task["description"];
+
+    if (isset($request->task["description"])) {
+      $is_set_time_limit = DB::table("tasks")->where("description", $request->task["description"])->value("description");
+
+      if (isset($is_set_time_limit)) {
+        return "You have task with current description";
+      } else {
+        $description = $request->task["description"];
+        if (strlen($description) >= 4) {
+          $new_task->description = $description;
+        } else {
+          return "Task must have at least {$this->min_length_of_task} letters. Now " . strlen($description);
+        }
+      }
+    }
+
+    if (isset($request->task["timeLimit"])) {
+      $time_limit = $request->task["timeLimit"];
+      $new_task->time_to_complete = $time_limit;
+    }
+
     $new_task->save();
 
     return $new_task;
@@ -38,7 +59,7 @@ class TaskController extends Controller
   public function edit(Request $request, $id)
   {
     $selecting_task = Task::find($id);
-    if ($selecting_task) {
+    if (isset($selecting_task)) {
       $selecting_task->description = $request->task["description"];
       $selecting_task->updated_at = $request->task["updated_at"];
       $selecting_task->save();
@@ -54,7 +75,7 @@ class TaskController extends Controller
   {
     $existing_task = Task::find($id);
 
-    if ($existing_task) {
+    if (isset($existing_task)) {
       $existing_task->completed = $request->task["completed"];
       $existing_task->completed_at = $request->task["completed"] ? Carbon::now() : null;
       $existing_task->save();
