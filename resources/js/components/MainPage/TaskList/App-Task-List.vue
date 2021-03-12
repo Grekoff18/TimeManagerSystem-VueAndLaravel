@@ -74,6 +74,13 @@ export default {
 
   components: {AppTaskListItem},
 
+  props: {
+    timeLimit: {
+      type: [String, Number],
+      default: "",
+    }
+  },
+
   data() {
     return {
       inputData: "",
@@ -94,12 +101,24 @@ export default {
       "EDIT_MODE",
     ]),
 
-    startDay() {
-      return this.moment().startOf("month").startOf("week");
+    todayDate() {
+      return this.moment().format("YYYY-MM-DD");
     },
+  },
 
-    endDay() {
-      return this.moment().endOf("month").endOf("week");
+  watch: {
+    timeLimit(newValue, oldValue) {
+      if (newValue !== "") {
+        this.ADD_TASK({
+          inputData: this.inputData,
+          timeLimit: newValue === "null" ? null : newValue
+        })
+          .then(() => {
+            this.CHANGE_STATE_TOOLTIP();
+            this.inputData = "";
+            this.$emit("task-added", this.todayDate);
+          });
+      } 
     }
   },
 
@@ -116,7 +135,6 @@ export default {
       "CHANGE_EDIT_MODE",
       "CHANGE_STATE_TOOLTIP",
       "FILL_TOOLTIP_TEXT",
-      "SET_INPUT_DATA",
     ]),
 
     add() { 
@@ -126,13 +144,8 @@ export default {
         return;
       }
 
-      this.SET_INPUT_DATA(this.inputData);
       this.CHANGE_STATE_TOOLTIP();
       this.FILL_TOOLTIP_TEXT("Do you want to add a time limit on this task ?");
-
-      // this.ADD_TASK(this.inputData)
-      //   .then(() => this.$emit("task-completed", this.moment().format("YYYY-MM-DD")));
-      // this.inputData = "";
     },
 
     edit(description, id) {

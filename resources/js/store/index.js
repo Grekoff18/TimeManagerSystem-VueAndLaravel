@@ -11,8 +11,6 @@ export default {
     ],
     SHOW_TOOLTIP: false,
     TOOLTIP_TEXT: "",
-    TIME_LIMIT: false,
-    INPUT_DATA: "",
   },
 
 	getters: {
@@ -42,7 +40,6 @@ export default {
       	.then(response => {
           if (response.status === 201) {
             dispatch("GET_ALL_TASKS");
-            commit("DROP_INPUT_DATA");
           }
         })
       	.catch(error => console.log(error, inputData));
@@ -90,17 +87,5 @@ export default {
     FILL_TOOLTIP_TEXT(state, text) {
       text.length > 0 ? state.TOOLTIP_TEXT = text : console.log("ToolTipText length == 0");
     },
-
-    ADD_TIME_LIMIT(state, bool) {
-      state.TIME_LIMIT = bool;
-    },
-
-    SET_INPUT_DATA(state, inputData) {
-      state.INPUT_DATA = inputData;
-    },
-
-    DROP_INPUT_DATA(state) {
-      state.INPUT_DATA = "";
-    }
   }
 }

@@ -2059,13 +2059,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -2095,7 +2088,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     tooltip_text: {
@@ -2109,42 +2101,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       timeLimit: ""
     };
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(["INPUT_DATA"])),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(["GET_ALL_TASKS", "ADD_TASK", "EDIT_TASK", "DELETE_TASK", "COMPLETE_TASK"])), (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapMutations)(["ADD_TIME_LIMIT", "CHANGE_STATE_TOOLTIP", "DROP_INPUT_DATA"])), {}, {
+  methods: {
     addTimeLimit: function addTimeLimit() {
-      this.ADD_TIME_LIMIT(true);
       this.chooseLimit = true;
     },
     addTaskWithLimit: function addTaskWithLimit() {
-      var _this = this;
-
-      this.ADD_TASK({
-        inputData: this.INPUT_DATA,
-        timeLimit: this.timeLimit
-      }).then(function () {
-        _this.chooseLimit = false;
-        _this.timeLimit = "";
-
-        _this.CHANGE_STATE_TOOLTIP();
-
-        _this.$emit("task-added", _this.moment().format("YYYY-MM-DD"));
-      });
+      this.chooseLimit = false;
+      this.$emit("add-task-with-limit", this.timeLimit);
     },
     notAddTimeLimit: function notAddTimeLimit() {
-      var _this2 = this;
-
-      this.ADD_TIME_LIMIT(false);
-      this.ADD_TASK({
-        inputData: this.INPUT_DATA,
-        timeLimit: null
-      }).then(function () {
-        _this2.CHANGE_STATE_TOOLTIP();
-
-        _this2.$emit("task-added", _this2.moment().format("YYYY-MM-DD"));
-      });
+      this.$emit("add-task-with-limit", null);
     },
-    addTaskWithoutLimit: function addTaskWithoutLimit() {}
-  })
+    addTaskWithoutLimit: function addTaskWithoutLimit() {
+      this.chooseLimit = false;
+    }
+  }
 });
 
 /***/ }),
@@ -2314,6 +2285,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   components: {
     AppTaskListItem: _App_Task_List_Item__WEBPACK_IMPORTED_MODULE_0__.default
   },
+  props: {
+    timeLimit: {
+      type: [String, Number],
+      "default": ""
+    }
+  },
   data: function data() {
     return {
       inputData: "",
@@ -2327,14 +2304,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST", "EDIT_MODE"])), {}, {
-    startDay: function startDay() {
-      return this.moment().startOf("month").startOf("week");
-    },
-    endDay: function endDay() {
-      return this.moment().endOf("month").endOf("week");
+    todayDate: function todayDate() {
+      return this.moment().format("YYYY-MM-DD");
     }
   }),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS", "ADD_TASK", "EDIT_TASK", "DELETE_TASK", "COMPLETE_TASK"])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapMutations)(["CHANGE_EDIT_MODE", "CHANGE_STATE_TOOLTIP", "FILL_TOOLTIP_TEXT", "SET_INPUT_DATA"])), {}, {
+  watch: {
+    timeLimit: function timeLimit(newValue, oldValue) {
+      var _this = this;
+
+      if (newValue !== "") {
+        this.ADD_TASK({
+          inputData: this.inputData,
+          timeLimit: newValue === "null" ? null : newValue
+        }).then(function () {
+          _this.CHANGE_STATE_TOOLTIP();
+
+          _this.inputData = "";
+
+          _this.$emit("task-added", _this.todayDate);
+        });
+      }
+    }
+  },
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS", "ADD_TASK", "EDIT_TASK", "DELETE_TASK", "COMPLETE_TASK"])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapMutations)(["CHANGE_EDIT_MODE", "CHANGE_STATE_TOOLTIP", "FILL_TOOLTIP_TEXT"])), {}, {
     add: function add() {
       // take out validate logic
       this.$v.$touch();
@@ -2343,11 +2335,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.SET_INPUT_DATA(this.inputData);
       this.CHANGE_STATE_TOOLTIP();
-      this.FILL_TOOLTIP_TEXT("Do you want to add a time limit on this task ?"); // this.ADD_TASK(this.inputData)
-      //   .then(() => this.$emit("task-completed", this.moment().format("YYYY-MM-DD")));
-      // this.inputData = "";
+      this.FILL_TOOLTIP_TEXT("Do you want to add a time limit on this task ?");
     },
     edit: function edit(description, id) {
       this.inputData = description;
@@ -2369,17 +2358,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editableId = "";
     },
     complete: function complete(id) {
-      var _this = this;
+      var _this2 = this;
 
       this.COMPLETE_TASK(id).then(function () {
-        return _this.$emit("task-completed", _this.moment().format("YYYY-MM-DD"));
+        return _this2.$emit("task-completed", _this2.moment().format("YYYY-MM-DD"));
       });
     },
     remove: function remove(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.DELETE_TASK(id).then(function () {
-        return _this2.$emit("task-removed", _this2.moment().format("YYYY-MM-DD"));
+        return _this3.$emit("task-removed", _this3.moment().format("YYYY-MM-DD"));
       });
     }
   }),
@@ -2498,6 +2487,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -2520,9 +2511,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       selectedDate: "",
-      countOfCompletedTasks: 0,
-      countOfUncompletedTasks: 0,
-      currentArr: []
+      currentArr: [],
+      time_limit: ""
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapState)(["TASK_LIST", "SHOW_TOOLTIP", "TOOLTIP_TEXT"])), {}, {
@@ -2556,7 +2546,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log("str");
       }
     },
+    addTaskWithTimeLimit: function addTaskWithTimeLimit(limit) {
+      this.time_limit = limit;
+    },
     taskAdded: function taskAdded(date) {
+      this.time_limit = "";
       this.parseInfo(date);
     }
   }
@@ -2821,9 +2815,7 @@ __webpack_require__.r(__webpack_exports__);
       href: "/lal"
     }],
     SHOW_TOOLTIP: false,
-    TOOLTIP_TEXT: "",
-    TIME_LIMIT: false,
-    INPUT_DATA: ""
+    TOOLTIP_TEXT: ""
   },
   getters: {},
   actions: {
@@ -2854,7 +2846,6 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.status === 201) {
           dispatch("GET_ALL_TASKS");
-          commit("DROP_INPUT_DATA");
         }
       })["catch"](function (error) {
         return console.log(error, inputData);
@@ -2904,15 +2895,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     FILL_TOOLTIP_TEXT: function FILL_TOOLTIP_TEXT(state, text) {
       text.length > 0 ? state.TOOLTIP_TEXT = text : console.log("ToolTipText length == 0");
-    },
-    ADD_TIME_LIMIT: function ADD_TIME_LIMIT(state, bool) {
-      state.TIME_LIMIT = bool;
-    },
-    SET_INPUT_DATA: function SET_INPUT_DATA(state, inputData) {
-      state.INPUT_DATA = inputData;
-    },
-    DROP_INPUT_DATA: function DROP_INPUT_DATA(state) {
-      state.INPUT_DATA = "";
     }
   }
 });
@@ -64956,8 +64938,8 @@ var render = function() {
           ? _c("app-tooltip", {
               attrs: { tooltip_text: _vm.TOOLTIP_TEXT },
               on: {
-                "task-added": function($event) {
-                  return _vm.taskAdded($event)
+                "add-task-with-limit": function($event) {
+                  return _vm.addTaskWithTimeLimit($event)
                 }
               }
             })
@@ -64970,9 +64952,13 @@ var render = function() {
             _c("app-header"),
             _vm._v(" "),
             _c("app-task-list", {
+              attrs: { "time-limit": _vm.time_limit },
               on: {
                 "task-removed": function($event) {
                   return _vm.parseInfo($event)
+                },
+                "task-added": function($event) {
+                  return _vm.taskAdded($event)
                 }
               }
             })

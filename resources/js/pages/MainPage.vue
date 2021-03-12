@@ -4,12 +4,14 @@
       <app-tooltip
         v-if="SHOW_TOOLTIP"
         :tooltip_text="TOOLTIP_TEXT"
-        v-on:task-added="taskAdded($event)"
+        v-on:add-task-with-limit="addTaskWithTimeLimit($event)"
       />
       <div class="left-side-container">
         <app-header/>
         <app-task-list 
           v-on:task-removed="parseInfo($event)"
+          v-on:task-added="taskAdded($event)"
+          :time-limit="time_limit"
         />
       </div>
       <div class="right-side-container">
@@ -104,9 +106,8 @@ export default {
   data() {
     return {
       selectedDate: "",
-      countOfCompletedTasks: 0,
-      countOfUncompletedTasks: 0,
       currentArr: [],
+      time_limit: "",
     }
   },
 
@@ -143,9 +144,13 @@ export default {
       }
     },
 
+    addTaskWithTimeLimit(limit) {
+      this.time_limit = limit;
+    },
+
     taskAdded(date) {
+      this.time_limit = "";
       this.parseInfo(date);
-      
     }
   },
 }

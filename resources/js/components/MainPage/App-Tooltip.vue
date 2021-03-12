@@ -28,7 +28,6 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex'
 
 export default {
   props: {
@@ -45,57 +44,22 @@ export default {
     }
   },
 
-  computed: {
-    ...mapState([
-      "INPUT_DATA",
-    ]),
-  },
-
   methods: {
-    ...mapActions([
-      "GET_ALL_TASKS",
-      "ADD_TASK",
-      "EDIT_TASK",
-      "DELETE_TASK",
-      "COMPLETE_TASK"
-    ]),
-
-    ...mapMutations([
-      "ADD_TIME_LIMIT",
-      "CHANGE_STATE_TOOLTIP",
-      "DROP_INPUT_DATA"
-    ]),
-
     addTimeLimit() {
-      this.ADD_TIME_LIMIT(true);
       this.chooseLimit = true;
     },
 
     addTaskWithLimit() {
-      this.ADD_TASK({
-        inputData: this.INPUT_DATA,
-        timeLimit: this.timeLimit
-      }).then(() => {
-        this.chooseLimit = false;
-        this.timeLimit = "";
-        this.CHANGE_STATE_TOOLTIP();
-        this.$emit("task-added", this.moment().format("YYYY-MM-DD"));
-      })
+      this.chooseLimit = false;
+      this.$emit("add-task-with-limit", this.timeLimit);
     },
 
     notAddTimeLimit() {
-      this.ADD_TIME_LIMIT(false);
-      this.ADD_TASK({
-        inputData: this.INPUT_DATA,
-        timeLimit: null
-      }).then(() => {
-        this.CHANGE_STATE_TOOLTIP();
-        this.$emit("task-added", this.moment().format("YYYY-MM-DD"));
-      })
+      this.$emit("add-task-with-limit", null);
     },
 
     addTaskWithoutLimit() {
-
+      this.chooseLimit = false;
     }
 
 

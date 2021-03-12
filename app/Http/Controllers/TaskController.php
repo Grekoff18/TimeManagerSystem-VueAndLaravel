@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-
 class TaskController extends Controller
 {
   private $min_length_of_task = 4;
