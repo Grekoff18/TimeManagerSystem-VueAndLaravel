@@ -26,9 +26,9 @@
     },
     "dependencies": {
         "animate.css": "^4.1.1",
-        "apexcharts": "^3.25.0",
+        "chart.js": "^2.9.4",
         "moment": "^2.29.1",
-        "vue-apexcharts": "^1.6.0",
+        "vue-chartjs": "^3.5.1",
         "vue-router": "^3.5.1",
         "vue2-timepicker": "^1.1.6",
         "vuelidate": "^0.7.6",

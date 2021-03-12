@@ -16,7 +16,7 @@
       </div>
       <div class="right-side-container">
         <div class="right-side-container_clock-block">
-          <app-radial-bar/>
+          <app-chart/>
           <app-clock/>
         </div>
         <app-footer/>
@@ -85,7 +85,7 @@ import AppHeader    from "../../layout/App-Header";
 import AppFooter    from "../../layout/App-Footer";
 import AppTaskList  from "../components/MainPage/TaskList/App-Task-List";
 import AppCalendar  from "../components/MainPage/App-Calendar";
-import AppRadialBar from "../components/MainPage/App-Radial-Bar";
+import AppChart     from "../components/MainPage/App-Chart";
 import AppClock     from "../components/MainPage/App-Clock";
 import AppTooltip   from '../components/MainPage/App-Tooltip';
 import { mapState } from 'vuex';
@@ -98,7 +98,7 @@ export default {
     AppTaskList,
     AppFooter,
     AppCalendar,
-    AppRadialBar,
+    AppChart,
     AppClock,
     AppTooltip
   },

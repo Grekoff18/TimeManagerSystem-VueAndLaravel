@@ -4,7 +4,6 @@ window.Vue = require('vue').default;
 import Vuex          from 'vuex';
 import Vuelidate     from 'vuelidate';
 import VuexEffects   from "vuex-effects";
-import VueApexCharts from 'vue-apexcharts';
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import moment        from 'moment';
 import router        from "../router/router";
@@ -18,7 +17,6 @@ const store = new Vuex.Store(
 
 Vue.use(Vuelidate);
 Vue.use(VuexEffects(store));
-Vue.use(VueApexCharts);
 Vue.prototype.moment = moment;
 // убрать в константы 
 window.moment_global = moment;
@@ -35,8 +33,9 @@ moment.updateLocale("en", {week: {dow: 1}});
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component('main-page', require('./pages/MainPage.vue').default);
-Vue.component('apexchart', VueApexCharts)
 Vue.component("vue-timepicker", VueTimepicker);
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
