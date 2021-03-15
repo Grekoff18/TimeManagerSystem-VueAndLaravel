@@ -2069,59 +2069,69 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS"])), {}, {
     fillChartData: function fillChartData() {
+      var _this = this;
+
       this.chartData.labels = this.TASK_LIST.map(function (item) {
         return item.description;
-      }); //this.chartData.datasets[0].data = this.TASK_LIST.map(item => item.time_to_complete)
+      });
+      this.chartData.datasets[0].backgroundColor = _toConsumableArray(Array(this.getDataLength)).map(function () {
+        return _this.generateRandomColor();
+      });
+      this.chartData.datasets[0].data = this.TASK_LIST.map(function (item) {
+        if (item.time_to_complete !== null && item.time_to_complete !== undefined) {
+          item.time_to_complete.replace(":", ".");
+        }
+      });
     },
     // take away this logic after finish work on chart !!!
-    generateRandomColor: function generateRandomColor(count) {
-      return _toConsumableArray(Array(count)).map(function () {
-        return "#" + Math.floor(Math.random() * 16777215).toString(16);
-      });
+    generateRandomColor: function generateRandomColor() {
+      return "#" + Math.floor(Math.random() * 16777215).toString(16);
     }
   }),
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])), {}, {
     getDataLength: function getDataLength() {
       return this.chartData.datasets[0].data.length;
+    },
+    getListOfLimits: function getListOfLimits() {
+      return this.TASK_LIST.map(function (item) {
+        if (typeof item.time_to_complete == "string") {
+          item.time_to_complete.replace(":", ".");
+        }
+      });
     }
   }),
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _this.loaded = false;
-              _context.prev = 1;
-              _context.next = 4;
-              return _this.GET_ALL_TASKS().then(function () {
-                _this.fillChartData();
+              _this2.loaded = false;
 
-                console.log(_this.chartData);
-              });
+              try {
+                _this2.GET_ALL_TASKS().then(function () {
+                  _this2.fillChartData();
 
-            case 4:
-              _this.loaded = true;
-              _context.next = 10;
-              break;
+                  console.log(_this2.chartData);
+                });
 
-            case 7:
-              _context.prev = 7;
-              _context.t0 = _context["catch"](1);
-              console.error(_context.t0);
+                _this2.loaded = true;
+              } catch (e) {
+                console.error(e);
+              }
 
-            case 10:
-              console.log(_this.generateRandomColor());
-              console.log(_this.getDataLength);
+              console.log(_this2.getListOfLimits);
+              console.log(_this2.generateRandomColor());
+              console.log(_this2.getDataLength);
 
-            case 12:
+            case 5:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 7]]);
+      }, _callee);
     }))();
   }
 });

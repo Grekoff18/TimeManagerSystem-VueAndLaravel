@@ -42,12 +42,17 @@ export default  {
 
     fillChartData() {
       this.chartData.labels = this.TASK_LIST.map(item => item.description);
-      //this.chartData.datasets[0].data = this.TASK_LIST.map(item => item.time_to_complete)
+      this.chartData.datasets[0].backgroundColor = [...Array(this.getDataLength)].map(() => this.generateRandomColor());
+      this.chartData.datasets[0].data = this.TASK_LIST.map(item => {
+        if (item.time_to_complete !== null && item.time_to_complete !== undefined) {
+          item.time_to_complete.replace(":", ".");
+        }
+      })
     },
 
     // take away this logic after finish work on chart !!!
-    generateRandomColor(count) {
-      return [...Array(count)].map(() => "#" + Math.floor(Math.random()*16777215).toString(16));
+    generateRandomColor() {
+      return "#" + Math.floor(Math.random()*16777215).toString(16);
     }
   },
 
@@ -58,13 +63,21 @@ export default  {
 
     getDataLength() {
       return this.chartData.datasets[0].data.length;
+    },
+
+    getListOfLimits() {
+      return this.TASK_LIST.map(item => {
+        if (typeof item.time_to_complete == "string") {
+          item.time_to_complete.replace(":", ".");
+        }
+      })
     }
   },
 
   async mounted () {
     this.loaded = false
     try {
-      await this.GET_ALL_TASKS()
+      this.GET_ALL_TASKS()
         .then(() => { 
           this.fillChartData();
           console.log(this.chartData);
@@ -74,6 +87,7 @@ export default  {
       console.error(e)
     }
 
+    console.log(this.getListOfLimits);
     console.log(this.generateRandomColor());
     console.log(this.getDataLength);
   }
