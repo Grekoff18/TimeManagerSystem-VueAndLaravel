@@ -1,14 +1,15 @@
 <template>
   <div>
     <doughnut-chart
-      :chartData="chartData"
+      v-if="loaded"
+      :chartdata="chartData"
       :options="options"
     />   
   </div>
 </template>
 
 <script>
-import DoughnutChart from "../../charts/DoughnutChart.vue";
+import DoughnutChart from "../../charts/Doughnut";
 import { mapMutations, mapActions, mapState } from 'vuex';
 
 export default  {
@@ -17,24 +18,64 @@ export default  {
   data() {
     return {
       loaded: false,
-      chartData: null,
+      chartData: {
+        labels: [],
+        datasets: [
+          {
+            label: "data",
+            backgroundColor: [this.generateRandomColor()],
+            data: [20, 30, 20, 20, 10],
+          }
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    }
+  },
+
+  methods: {
+    ...mapActions([
+      "GET_ALL_TASKS",
+    ]),
+
+    fillChartData() {
+      this.chartData.labels = this.TASK_LIST.map(item => item.description);
+      //this.chartData.datasets[0].data = this.TASK_LIST.map(item => item.time_to_complete)
+    },
+
+    // take away this logic after finish work on chart !!!
+    generateRandomColor(count) {
+      return [...Array(count)].map(() => "#" + Math.floor(Math.random()*16777215).toString(16));
     }
   },
 
   computed:{
     ...mapState([
       "TASK_LIST",
-    ])
+    ]),
+
+    getDataLength() {
+      return this.chartData.datasets[0].data.length;
+    }
   },
 
   async mounted () {
     this.loaded = false
     try {
-      this.chartdata = this.TASK_LIST.map(el => el.time_to_complete)
+      await this.GET_ALL_TASKS()
+        .then(() => { 
+          this.fillChartData();
+          console.log(this.chartData);
+      });
       this.loaded = true
     } catch (e) {
       console.error(e)
     }
+
+    console.log(this.generateRandomColor());
+    console.log(this.getDataLength);
   }
 }
 </script>

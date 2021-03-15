@@ -3,7 +3,6 @@ window.Vue = require('vue').default;
 
 import Vuex          from 'vuex';
 import Vuelidate     from 'vuelidate';
-import VuexEffects   from "vuex-effects";
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import moment        from 'moment';
 import router        from "../router/router";
@@ -16,7 +15,6 @@ const store = new Vuex.Store(
 )
 
 Vue.use(Vuelidate);
-Vue.use(VuexEffects(store));
 Vue.prototype.moment = moment;
 // убрать в константы 
 window.moment_global = moment;

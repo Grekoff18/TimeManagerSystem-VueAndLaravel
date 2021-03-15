@@ -1845,10 +1845,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/charts/DoughnutChart.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/charts/DoughnutChart.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/charts/Doughnut.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/charts/Doughnut.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2008,13 +2008,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _charts_DoughnutChart_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../charts/DoughnutChart.vue */ "./resources/js/charts/DoughnutChart.vue");
+/* harmony import */ var _charts_Doughnut__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../charts/Doughnut */ "./resources/js/charts/Doughnut.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -2031,19 +2043,48 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    DoughnutChart: _charts_DoughnutChart_vue__WEBPACK_IMPORTED_MODULE_1__.default
+    DoughnutChart: _charts_Doughnut__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
     return {
       loaded: false,
-      chartData: null
+      chartData: {
+        labels: [],
+        datasets: [{
+          label: "data",
+          backgroundColor: [this.generateRandomColor()],
+          data: [20, 30, 20, 20, 10]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
     };
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])),
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS"])), {}, {
+    fillChartData: function fillChartData() {
+      this.chartData.labels = this.TASK_LIST.map(function (item) {
+        return item.description;
+      }); //this.chartData.datasets[0].data = this.TASK_LIST.map(item => item.time_to_complete)
+    },
+    // take away this logic after finish work on chart !!!
+    generateRandomColor: function generateRandomColor(count) {
+      return _toConsumableArray(Array(count)).map(function () {
+        return "#" + Math.floor(Math.random() * 16777215).toString(16);
+      });
+    }
+  }),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])), {}, {
+    getDataLength: function getDataLength() {
+      return this.chartData.datasets[0].data.length;
+    }
+  }),
   mounted: function mounted() {
     var _this = this;
 
@@ -2053,22 +2094,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           switch (_context.prev = _context.next) {
             case 0:
               _this.loaded = false;
+              _context.prev = 1;
+              _context.next = 4;
+              return _this.GET_ALL_TASKS().then(function () {
+                _this.fillChartData();
 
-              try {
-                _this.chartdata = _this.TASK_LIST.map(function (el) {
-                  return el.time_to_complete;
-                });
-                _this.loaded = true;
-              } catch (e) {
-                console.error(e);
-              }
+                console.log(_this.chartData);
+              });
 
-            case 2:
+            case 4:
+              _this.loaded = true;
+              _context.next = 10;
+              break;
+
+            case 7:
+              _context.prev = 7;
+              _context.t0 = _context["catch"](1);
+              console.error(_context.t0);
+
+            case 10:
+              console.log(_this.generateRandomColor());
+              console.log(_this.getDataLength);
+
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[1, 7]]);
     }))();
   }
 });
@@ -2725,15 +2778,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
-/* harmony import */ var vuex_effects__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex-effects */ "./node_modules/vuex-effects/vuex-effects.js");
-/* harmony import */ var vue2_timepicker_src_vue_timepicker_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-timepicker/src/vue-timepicker.vue */ "./node_modules/vue2-timepicker/src/vue-timepicker.vue");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _router_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../router/router */ "./resources/router/router.js");
-/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store/index */ "./resources/js/store/index.js");
-/* harmony import */ var animate_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! animate.css */ "./node_modules/animate.css/animate.css");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
+/* harmony import */ var vue2_timepicker_src_vue_timepicker_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-timepicker/src/vue-timepicker.vue */ "./node_modules/vue2-timepicker/src/vue-timepicker.vue");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _router_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../router/router */ "./resources/router/router.js");
+/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store/index */ "./resources/js/store/index.js");
+/* harmony import */ var animate_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! animate.css */ "./node_modules/animate.css/animate.css");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js").default;
@@ -2744,15 +2796,13 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js"
 
 
 
+Vue.use(vuex__WEBPACK_IMPORTED_MODULE_5__.default);
+var store = new vuex__WEBPACK_IMPORTED_MODULE_5__.default.Store(_store_index__WEBPACK_IMPORTED_MODULE_3__.default);
+Vue.use(vuelidate__WEBPACK_IMPORTED_MODULE_6__.default);
+Vue.prototype.moment = (moment__WEBPACK_IMPORTED_MODULE_1___default()); // убрать в константы 
 
-Vue.use(vuex__WEBPACK_IMPORTED_MODULE_6__.default);
-var store = new vuex__WEBPACK_IMPORTED_MODULE_6__.default.Store(_store_index__WEBPACK_IMPORTED_MODULE_4__.default);
-Vue.use(vuelidate__WEBPACK_IMPORTED_MODULE_7__.default);
-Vue.use((0,vuex_effects__WEBPACK_IMPORTED_MODULE_0__.default)(store));
-Vue.prototype.moment = (moment__WEBPACK_IMPORTED_MODULE_2___default()); // убрать в константы 
-
-window.moment_global = (moment__WEBPACK_IMPORTED_MODULE_2___default());
-moment__WEBPACK_IMPORTED_MODULE_2___default().updateLocale("en", {
+window.moment_global = (moment__WEBPACK_IMPORTED_MODULE_1___default());
+moment__WEBPACK_IMPORTED_MODULE_1___default().updateLocale("en", {
   week: {
     dow: 1
   }
@@ -2768,7 +2818,7 @@ moment__WEBPACK_IMPORTED_MODULE_2___default().updateLocale("en", {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('main-page', __webpack_require__(/*! ./pages/MainPage.vue */ "./resources/js/pages/MainPage.vue").default);
-Vue.component("vue-timepicker", vue2_timepicker_src_vue_timepicker_vue__WEBPACK_IMPORTED_MODULE_1__.default);
+Vue.component("vue-timepicker", vue2_timepicker_src_vue_timepicker_vue__WEBPACK_IMPORTED_MODULE_0__.default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -2778,7 +2828,7 @@ Vue.component("vue-timepicker", vue2_timepicker_src_vue_timepicker_vue__WEBPACK_
 var app = new Vue({
   el: '#app',
   store: store,
-  router: _router_router__WEBPACK_IMPORTED_MODULE_3__.default
+  router: _router_router__WEBPACK_IMPORTED_MODULE_2__.default
 });
 
 /***/ }),
@@ -79513,10 +79563,10 @@ const DEFAULT_OPTIONS = {
 
 /***/ }),
 
-/***/ "./resources/js/charts/DoughnutChart.vue":
-/*!***********************************************!*\
-  !*** ./resources/js/charts/DoughnutChart.vue ***!
-  \***********************************************/
+/***/ "./resources/js/charts/Doughnut.vue":
+/*!******************************************!*\
+  !*** ./resources/js/charts/Doughnut.vue ***!
+  \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -79524,7 +79574,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var _DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DoughnutChart.vue?vue&type=script&lang=js& */ "./resources/js/charts/DoughnutChart.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Doughnut_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Doughnut.vue?vue&type=script&lang=js& */ "./resources/js/charts/Doughnut.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 var render, staticRenderFns
 ;
@@ -79534,7 +79584,7 @@ var render, staticRenderFns
 /* normalize component */
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__.default)(
-  _DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default,
+  _Doughnut_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default,
   render,
   staticRenderFns,
   false,
@@ -79546,7 +79596,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/charts/DoughnutChart.vue"
+component.options.__file = "resources/js/charts/Doughnut.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -79902,10 +79952,10 @@ component.options.__file = "resources/layout/App-Header.vue"
 
 /***/ }),
 
-/***/ "./resources/js/charts/DoughnutChart.vue?vue&type=script&lang=js&":
-/*!************************************************************************!*\
-  !*** ./resources/js/charts/DoughnutChart.vue?vue&type=script&lang=js& ***!
-  \************************************************************************/
+/***/ "./resources/js/charts/Doughnut.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/charts/Doughnut.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -79913,8 +79963,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DoughnutChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/charts/DoughnutChart.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Doughnut_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Doughnut.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/charts/Doughnut.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Doughnut_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -81588,9 +81638,11 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("doughnut-chart", {
-        attrs: { chartData: _vm.chartData, options: _vm.options }
-      })
+      _vm.loaded
+        ? _c("doughnut-chart", {
+            attrs: { chartdata: _vm.chartData, options: _vm.options }
+          })
+        : _vm._e()
     ],
     1
   )
@@ -99396,186 +99448,6 @@ var fakeWithParams = function fakeWithParams(paramsOrClosure, maybeValidator) {
 
 var withParams = root.vuelidate ? root.vuelidate.withParams : fakeWithParams;
 exports.withParams = withParams;
-
-/***/ }),
-
-/***/ "./node_modules/vuex-effects/vuex-effects.js":
-/*!***************************************************!*\
-  !*** ./node_modules/vuex-effects/vuex-effects.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
-const VuexEffects = (store, effectsList = []) => ({
-  install(VueGlobal) {
-    function callActionEffect(effectsPath, stage, action, state, prepend = false) {
-      const actionsPath = effectsPath.actions;
-
-      // exit if effect's prepend not the same as subscriber
-      if (typeof actionsPath[action.type] === 'object') {
-        if (!!actionsPath[action.type].prepend !== prepend) {
-          return;
-        }
-      } else if (typeof actionsPath[action.type] === 'function' && prepend) {
-        return;
-      }
-
-      if (stage === 'before') {
-        // if effect is function
-        if (typeof actionsPath[action.type] === 'function') {
-          actionsPath[action.type].apply(this, [action, state]);
-          return;
-        }
-
-        // if effect is object and it has handler function
-        if (typeof actionsPath[action.type] === 'object'
-            && typeof actionsPath[action.type].handler === 'function') {
-          actionsPath[action.type].handler.apply(this, [action, state]);
-          return;
-        }
-
-        // if effect is object with before function
-        if (typeof actionsPath[action.type] === 'object'
-            && typeof actionsPath[action.type][stage] === 'function') {
-          actionsPath[action.type][stage].apply(this, [action, state]);
-        }
-      } else if (stage === 'after') {
-        // if effect is object with after function
-        if (typeof actionsPath[action.type] === 'object'
-            && typeof actionsPath[action.type][stage] === 'function') {
-          actionsPath[action.type][stage].apply(this, [action, state]);
-        }
-      }
-    }
-
-    function callMutationEffect(effectsPath, mutation, state, prepend = false) {
-      const mutationsPath = effectsPath.mutations;
-
-      // exit if effect's prepend not the same as subscriber
-      if (typeof mutationsPath[mutation.type] === 'object') {
-        if (!!mutationsPath[mutation.type].prepend !== prepend) {
-          return;
-        }
-      } else if (typeof mutationsPath[mutation.type] === 'function' && prepend) {
-        return;
-      }
-
-      // if effect is function
-      if (typeof mutationsPath[mutation.type] === 'function') {
-        mutationsPath[mutation.type].apply(this, [mutation, state]);
-        return;
-      }
-
-      // if effect is object and it has handler function
-      if (typeof mutationsPath[mutation.type] === 'object'
-          && typeof mutationsPath[mutation.type].handler === 'function') {
-        mutationsPath[mutation.type].handler.apply(this, [mutation, state]);
-      }
-    }
-
-    // action wrapper fn
-    function actionFn(effectsPath, effectActionsList, prepend = false) {
-      return {
-        before: (action, state) => {
-          if (effectActionsList.includes(action.type)) {
-            callActionEffect.apply(this, [effectsPath, 'before', action, state, prepend]);
-          }
-        },
-        after: (action, state) => {
-          if (effectActionsList.includes(action.type)) {
-            callActionEffect.apply(this, [effectsPath, 'after', action, state, prepend]);
-          }
-        },
-      };
-    }
-
-    // mutation wrapper fn
-    function mutationFn(effectsPath, effectActionsList, prepend = false) {
-      return (mutation, state) => {
-        if (effectActionsList.includes(mutation.type)) {
-          callMutationEffect.apply(this, [effectsPath, mutation, state, prepend]);
-        }
-      };
-    }
-
-    // register effects for component
-    VueGlobal.mixin({
-      beforeCreate() {
-        const { effects } = this.$options;
-        if (effects) {
-          const subscribers = [];
-          const effectTypes = Object.keys(effects);
-          effectTypes.forEach((effectType) => {
-            const effectActionsList = Object.keys(effects[effectType]);
-
-            // subscribe to two identical events, with 'prepend' option and without it
-            // so we have only two subscriber for all events
-            // for actions and mutations
-            switch (effectType) {
-              case 'actions': {
-                subscribers.push(
-                    store.subscribeAction(actionFn.apply(this, [this.$options.effects, effectActionsList])),
-                    store.subscribeAction(actionFn.apply(this, [this.$options.effects, effectActionsList, true]), { prepend: true }),
-                );
-                break;
-              }
-              case 'mutations': {
-                subscribers.push(
-                    store.subscribe(mutationFn.apply(this, [this.$options.effects, effectActionsList])),
-                    store.subscribe(mutationFn.apply(this, [this.$options.effects, effectActionsList, true]), { prepend: true }),
-                );
-                break;
-              }
-              default: {
-                throw new Error(`[vuex-effects] Unrecognized effect section ${effectType} \n Maybe you mean 'actions' or 'mutations'?`);
-              }
-            }
-          });
-
-          this.$once('hook:beforeDestroy', () => {
-            subscribers.forEach((subscriber) => subscriber());
-          });
-        }
-      },
-    });
-
-    // register global effects
-    effectsList.forEach((effectsItem) => {
-      const { effects } = effectsItem;
-
-      const effectTypes = Object.keys(effects);
-      effectTypes.forEach((effectType) => {
-        const effectActionsList = Object.keys(effects[effectType]);
-
-        // subscribe to two identical events, with 'prepend' option and without it
-        // so we have only two subscriber for all events
-        // for actions and mutations
-        switch (effectType) {
-          case 'actions': {
-            store.subscribeAction(actionFn.apply(effectsItem, [effectsItem.effects, effectActionsList]));
-            store.subscribeAction(actionFn.apply(effectsItem, [effectsItem.effects, effectActionsList, true]), { prepend: true });
-            break;
-          }
-          case 'mutations': {
-            store.subscribe(mutationFn.apply(effectsItem, [effectsItem.effects, effectActionsList]));
-            store.subscribe(mutationFn.apply(effectsItem, [effectsItem.effects, effectActionsList, true]), { prepend: true });
-            break;
-          }
-          default: {
-            throw new Error(`[vuex-effects] Unrecognized effect section ${effectType}`);
-          }
-        }
-      });
-    });
-  },
-});
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VuexEffects);
-
 
 /***/ }),
 

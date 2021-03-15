@@ -3,6 +3,7 @@ import { Doughnut } from 'vue-chartjs';
 
 export default {
   extends: Doughnut,
+
   props: {
     chartdata: {
       type: Object,
@@ -13,6 +14,7 @@ export default {
       default: null
     }
   },
+
   mounted() {
     this.renderChart(this.chartdata, this.options)
   }
