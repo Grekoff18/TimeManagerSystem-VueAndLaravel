@@ -2057,7 +2057,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         labels: [],
         datasets: [{
           label: "data",
-          backgroundColor: [this.generateRandomColor()],
+          backgroundColor: [],
           data: [20, 30, 20, 20, 10]
         }]
       },
@@ -2077,15 +2077,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.chartData.datasets[0].backgroundColor = _toConsumableArray(Array(this.getDataLength)).map(function () {
         return _this.generateRandomColor();
       });
-      this.chartData.datasets[0].data = this.TASK_LIST.map(function (item) {
-        if (item.time_to_complete !== null && item.time_to_complete !== undefined) {
-          item.time_to_complete.replace(":", ".");
-        }
-      });
+      this.chartData.datasets[0].data = this.chartLimits;
     },
     // take away this logic after finish work on chart !!!
     generateRandomColor: function generateRandomColor() {
       return "#" + Math.floor(Math.random() * 16777215).toString(16);
+    },
+    intervalForTask: function intervalForTask() {
+      var _this2 = this;
+
+      this.startItems.map(function (item) {
+        item.subtract(1, "s").clone();
+        console.log(item);
+
+        if (item.format("HH:mm:ss") === "00:00:00") {
+          clearInterval(_this2.intervalForTask);
+          console.log("end");
+        }
+      });
     }
   }),
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])), {}, {
@@ -2093,45 +2102,66 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.chartData.datasets[0].data.length;
     },
     getListOfLimits: function getListOfLimits() {
-      return this.TASK_LIST.map(function (item) {
-        if (typeof item.time_to_complete == "string") {
-          item.time_to_complete.replace(":", ".");
-        }
+      return this.TASK_LIST.filter(function (el) {
+        return el.time_to_complete !== null;
+      });
+    },
+    chartLimits: function chartLimits() {
+      var _this3 = this;
+
+      return this.getListOfLimits.map(function (item) {
+        return +_this3.moment(item.time_to_complete, "HH:mm:ss").format("HH.mm");
+      });
+    },
+    startItems: function startItems() {
+      var _this4 = this;
+
+      return this.getListOfLimits.map(function (el) {
+        return _this4.moment(el.time_to_complete, "HH:mm:ss").clone();
       });
     }
   }),
   mounted: function mounted() {
-    var _this2 = this;
+    var _this5 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _this2.loaded = false;
+              _this5.loaded = false;
+              _context.prev = 1;
+              _context.next = 4;
+              return _this5.GET_ALL_TASKS().then(function () {
+                _this5.fillChartData();
 
-              try {
-                _this2.GET_ALL_TASKS().then(function () {
-                  _this2.fillChartData();
+                console.log(_this5.chartData);
+                console.log(_this5.getListOfLimits);
+                console.log(_this5.startItems); // setInterval(() => {
+                //   this.intervalForTask();
+                // }, 1000)
+              });
 
-                  console.log(_this2.chartData);
-                });
+            case 4:
+              _this5.loaded = true;
+              _context.next = 10;
+              break;
 
-                _this2.loaded = true;
-              } catch (e) {
-                console.error(e);
-              }
+            case 7:
+              _context.prev = 7;
+              _context.t0 = _context["catch"](1);
+              console.error(_context.t0);
 
-              console.log(_this2.getListOfLimits);
-              console.log(_this2.generateRandomColor());
-              console.log(_this2.getDataLength);
+            case 10:
+              console.log(_this5.generateRandomColor());
+              console.log(_this5.getDataLength);
 
-            case 5:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[1, 7]]);
     }))();
   }
 });
