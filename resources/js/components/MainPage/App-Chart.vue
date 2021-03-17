@@ -31,7 +31,9 @@ export default  {
       options: {
         responsive: true,
         maintainAspectRatio: false
-      }
+      },
+
+      taskWithEndOFLimit: [],
     }
   },
 
@@ -51,15 +53,21 @@ export default  {
       return "#" + Math.floor(Math.random()*16777215).toString(16);
     },
 
-    intervalForTask() {
-      this.startItems.map(item => {
-        item.subtract(1, "s").clone();
-        console.log(item);
-        if (item.format("HH:mm:ss") === "00:00:00") {
-          clearInterval(this.intervalForTask);
-          console.log("end");
-        }  
-      })
+    // intervalForTask(item) {
+    //   setInterval(function test() {
+    //     item.subtract(1, "s");
+    //     console.log(item.format("HH:mm:ss"));
+    //     if (item.format("HH:mm:ss") === "00:00:00") {
+    //       clearInterval(test);
+    //       console.log("end", item.format("HH:mm:ss"));
+    //     } 
+    //   }, 1000);
+    // }
+  },
+
+  watch: {
+    taskWithEndOFLimit(newVal, oldVal) {
+      // console.log(this.taskWithEndOFLimit);
     }
   },
 
@@ -94,9 +102,25 @@ export default  {
           console.log(this.chartData);
           console.log(this.getListOfLimits);
           console.log(this.startItems);
-          // setInterval(() => {
-          //   this.intervalForTask();
-          // }, 1000)
+          /////////////////////////////////
+
+
+        for (let i = 0; i < this.startItems.length; i++) {
+          (function(item, arr) {
+            setInterval(function test() {
+              if (item.format("HH:mm:ss") !== "00:00:00") {
+                item.subtract(1, "s");
+                console.log(item.format("HH:mm:ss"));
+              } else {
+                clearInterval(test);
+                if (arr.includes(item) === false) {
+                  arr.push(item);
+                  console.log(arr);
+                } 
+              }
+            }, 1000)
+          })(this.startItems[i], this.taskWithEndOFLimit);
+        }
       });
       this.loaded = true
     } catch (e) {

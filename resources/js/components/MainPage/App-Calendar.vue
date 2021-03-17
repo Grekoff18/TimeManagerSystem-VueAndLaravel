@@ -60,7 +60,7 @@ export default {
     },
 
     firstDayInMonth() {
-      return this.moment().startOf("month").startOf("week").clone().subtract(1, "day");
+      return this.moment().startOf("month").startOf("week").clone().subtract (1, "day");
     },
 
     daysWithTasks() {
