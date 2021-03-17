@@ -2058,14 +2058,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         datasets: [{
           label: "data",
           backgroundColor: [],
-          data: [20, 30, 20, 20, 10]
+          data: []
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false
-      },
-      taskWithEndOFLimit: []
+      }
     };
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS"])), {}, {
@@ -2075,93 +2074,80 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.chartData.labels = this.TASK_LIST.map(function (item) {
         return item.description;
       });
-      this.chartData.datasets[0].backgroundColor = _toConsumableArray(Array(this.getDataLength)).map(function () {
+      this.chartData.datasets[0].backgroundColor = _toConsumableArray(Array(this.getTasksWithLimits.length)).map(function () {
         return _this.generateRandomColor();
       });
-      this.chartData.datasets[0].data = this.chartLimits;
+      this.chartData.datasets[0].data = this.getTasksWithLimits.map(function (item) {
+        return +item.timeLimit.format("HH.mm");
+      });
+    },
+    intervalForTasksLimits: function intervalForTasksLimits() {
+      this.getTasksWithLimits.forEach(function (element) {
+        (function (item) {
+          setInterval(function test() {
+            if (item.timeLimit.format("HH:mm:ss") !== "00:00:00") {
+              item.timeLimit = item.timeLimit.clone().subtract(1, "s");
+              console.log(item.timeLimit.format("HH:mm:ss"));
+            } else {
+              clearInterval(test);
+            }
+          }, 1000);
+        })(element);
+      });
     },
     // take away this logic after finish work on chart !!!
     generateRandomColor: function generateRandomColor() {
       return "#" + Math.floor(Math.random() * 16777215).toString(16);
-    } // intervalForTask(item) {
-    //   setInterval(function test() {
-    //     item.subtract(1, "s");
-    //     console.log(item.format("HH:mm:ss"));
-    //     if (item.format("HH:mm:ss") === "00:00:00") {
-    //       clearInterval(test);
-    //       console.log("end", item.format("HH:mm:ss"));
-    //     } 
-    //   }, 1000);
-    // }
-
+    }
   }),
   watch: {
-    taskWithEndOFLimit: function taskWithEndOFLimit(newVal, oldVal) {// console.log(this.taskWithEndOFLimit);
+    limitsWatcher: function limitsWatcher(value) {
+      console.log(value);
     }
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])), {}, {
     getDataLength: function getDataLength() {
       return this.chartData.datasets[0].data.length;
     },
-    getListOfLimits: function getListOfLimits() {
-      return this.TASK_LIST.filter(function (el) {
-        return el.time_to_complete !== null;
-      });
-    },
-    chartLimits: function chartLimits() {
+    getTasksWithLimits: function getTasksWithLimits() {
       var _this2 = this;
 
-      return this.getListOfLimits.map(function (item) {
-        return +_this2.moment(item.time_to_complete, "HH:mm:ss").format("HH.mm");
+      return this.TASK_LIST.filter(function (el) {
+        return el.time_to_complete !== null;
+      }).map(function (item) {
+        return {
+          fullTaskData: item,
+          timeLimit: _this2.moment(item.time_to_complete, "HH:mm:ss")
+        };
       });
     },
-    startItems: function startItems() {
-      var _this3 = this;
-
-      return this.getListOfLimits.map(function (el) {
-        return _this3.moment(el.time_to_complete, "HH:mm:ss").clone();
+    limitsWatcher: function limitsWatcher() {
+      return this.getTasksWithLimits.map(function (item) {
+        return item.timeLimit;
       });
     }
   }),
   mounted: function mounted() {
-    var _this4 = this;
+    var _this3 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _this4.loaded = false;
+              _this3.loaded = false;
               _context.prev = 1;
               _context.next = 4;
-              return _this4.GET_ALL_TASKS().then(function () {
-                _this4.fillChartData();
+              return _this3.GET_ALL_TASKS().then(function () {
+                _this3.fillChartData();
 
-                console.log(_this4.chartData);
-                console.log(_this4.getListOfLimits);
-                console.log(_this4.startItems); /////////////////////////////////
+                console.log(_this3.getTasksWithLimits);
 
-                for (var i = 0; i < _this4.startItems.length; i++) {
-                  (function (item, arr) {
-                    setInterval(function test() {
-                      if (item.format("HH:mm:ss") !== "00:00:00") {
-                        item.subtract(1, "s");
-                        console.log(item.format("HH:mm:ss"));
-                      } else {
-                        clearInterval(test);
-
-                        if (arr.includes(item) === false) {
-                          arr.push(item);
-                          console.log(arr);
-                        }
-                      }
-                    }, 1000);
-                  })(_this4.startItems[i], _this4.taskWithEndOFLimit);
-                }
+                _this3.intervalForTasksLimits();
               });
 
             case 4:
-              _this4.loaded = true;
+              _this3.loaded = true;
               _context.next = 10;
               break;
 
@@ -2171,8 +2157,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               console.error(_context.t0);
 
             case 10:
-              console.log(_this4.generateRandomColor());
-              console.log(_this4.getDataLength);
+              console.log(_this3.generateRandomColor());
+              console.log(_this3.getDataLength);
 
             case 12:
             case "end":
