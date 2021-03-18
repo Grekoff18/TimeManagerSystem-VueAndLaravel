@@ -1858,20 +1858,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
 
+var reactiveProp = vue_chartjs__WEBPACK_IMPORTED_MODULE_0__.mixins.reactiveProp;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__.Doughnut,
-  props: {
-    chartdata: {
-      type: Object,
-      "default": null
-    },
-    options: {
-      type: Object,
-      "default": null
-    }
-  },
+  mixins: [reactiveProp],
+  props: ['options'],
   mounted: function mounted() {
-    this.renderChart(this.chartdata, this.options);
+    // this.chartData is created in the mixin.
+    // If you want to pass options please create a local options object
+    this.renderChart(this.chartData, this.options);
   }
 });
 
@@ -2043,7 +2038,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2053,31 +2047,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       loaded: false,
-      testArr: [],
-      chartData: {
-        labels: [],
-        datasets: [{
-          label: "data",
-          backgroundColor: [],
-          data: []
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
+      datacollection: null,
+      infoChart: []
     };
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS"])), {}, {
     fillChartData: function fillChartData() {
       var _this = this;
 
-      this.chartData.labels = this.TASK_LIST.map(function (item) {
-        return item.description;
-      });
-      this.chartData.datasets[0].backgroundColor = _toConsumableArray(Array(this.getTasksWithLimits.length)).map(function () {
-        return _this.generateRandomColor();
-      }); // this.chartData.datasets[0].data = this.getTasksWithLimits.map(item => +item.timeLimit.format("HH.mm"));
+      this.datacollection = {
+        labels: this.TASK_LIST.map(function (item) {
+          return item.description;
+        }),
+        datasets: [{
+          label: 'Data One',
+          backgroundColor: _toConsumableArray(Array(this.getTasksWithLimits.length)).map(function () {
+            return _this.generateRandomColor();
+          }),
+          data: this.infoChart
+        }]
+      };
     },
     intervalForTasksLimits: function intervalForTasksLimits() {
       var dataWhatINeed = this;
@@ -2086,8 +2075,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           setInterval(function test() {
             if (item.format("HH:mm:ss") !== "00:00:00") {
               item = item.subtract(1, "s");
-              dataWhatINeed.chartData.datasets[0].data[index] = +item.format("H.ms");
-              console.log(dataWhatINeed.chartData.datasets[0].data);
+              dataWhatINeed.infoChart[index] = (+item.format("H.ms") / 24.00 * 100 * 10).toFixed(2);
+              dataWhatINeed.fillChartData();
             } else {
               clearInterval(test);
             }
@@ -2100,9 +2089,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "#" + Math.floor(Math.random() * 16777215).toString(16);
     }
   }),
+  watch: {},
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])), {}, {
     getDataLength: function getDataLength() {
-      return this.chartData.datasets[0].data.length;
+      return this.infoChart.length;
     },
     getTasksWithLimits: function getTasksWithLimits() {
       var _this2 = this;
@@ -2114,11 +2104,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           fullTaskData: item,
           timeLimit: _this2.moment(item.time_to_complete, "HH:mm:ss")
         };
-      });
-    },
-    getInfoAboutLimits: function getInfoAboutLimits() {
-      return this.getTasksWithLimits.map(function (el) {
-        return el.timeLimit;
       });
     }
   }),
@@ -2134,21 +2119,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _context.prev = 1;
               _context.next = 4;
               return _this3.GET_ALL_TASKS().then(function () {
-                _this3.fillChartData();
+                _this3.intervalForTasksLimits();
 
-                console.log(_this3.getTasksWithLimits);
-
-                _this3.intervalForTasksLimits(); // this.getTasksWithLimits.map((element, indx) => {
+                _this3.fillChartData(); // this.getTasksWithLimits.map(element => {
                 //   let t = this
                 //   setInterval(function testInterval() {
                 //     if (element.timeLimit.format("HH:mm:ss") !== "00:00:00") {
-                //       // 
-                //       t.chartData.datasets[0].data[indx] = +element.timeLimit.format("H.ms"); 
-                //       console.log(t.chartData.datasets[0].data);
+                //       t.fillChartData();
                 //     } else {
                 //       clearInterval(testInterval);
                 //     }
-                //   }, 1000)
+                //   }, 1000);
                 // })
 
               });
@@ -2164,10 +2145,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               console.error(_context.t0);
 
             case 10:
-              console.log(_this3.generateRandomColor());
-              console.log(_this3.getDataLength);
-
-            case 12:
             case "end":
               return _context.stop();
           }
@@ -81690,9 +81667,7 @@ var render = function() {
     "div",
     [
       _vm.loaded
-        ? _c("doughnut-chart", {
-            attrs: { chartdata: _vm.chartData, options: _vm.options }
-          })
+        ? _c("doughnut-chart", { attrs: { "chart-data": _vm.datacollection } })
         : _vm._e()
     ],
     1

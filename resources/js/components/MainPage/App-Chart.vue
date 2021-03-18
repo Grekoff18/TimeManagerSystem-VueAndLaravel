@@ -2,15 +2,14 @@
   <div>
     <doughnut-chart
       v-if="loaded"
-      :chartdata="chartData"
-      :options="options"
+      :chart-data="datacollection"
     />   
   </div>
 </template>
 
 <script>
 import DoughnutChart from "../../charts/Doughnut";
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default  {
   components: {DoughnutChart},
@@ -18,21 +17,8 @@ export default  {
   data() {
     return {
       loaded: false,
-      testArr: [],
-      chartData: {
-        labels: [],
-        datasets: [
-          {
-            label: "data",
-            backgroundColor: [],
-            data: [],
-          }
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      },
+      datacollection: null,
+      infoChart: [],
     }
   },
 
@@ -42,9 +28,16 @@ export default  {
     ]),
 
     fillChartData() {
-      this.chartData.labels = this.TASK_LIST.map(item => item.description);
-      this.chartData.datasets[0].backgroundColor = [...Array(this.getTasksWithLimits.length)].map(() => this.generateRandomColor());
-      // this.chartData.datasets[0].data = this.getTasksWithLimits.map(item => +item.timeLimit.format("HH.mm"));
+      this.datacollection = {
+        labels: this.TASK_LIST.map(item => item.description),
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: [...Array(this.getTasksWithLimits.length)].map(() => this.generateRandomColor()),
+            data: this.infoChart
+          }
+        ]
+      }
     },
 
     intervalForTasksLimits() {
@@ -54,8 +47,8 @@ export default  {
           setInterval(function test() {
             if (item.format("HH:mm:ss") !== "00:00:00") {
               item = item.subtract(1, "s");
-              dataWhatINeed.chartData.datasets[0].data[index] = +item.format("H.ms"); 
-              console.log(dataWhatINeed.chartData.datasets[0].data);
+              dataWhatINeed.infoChart[index] = (((+item.format("H.ms") / 24.00) * 100) * 10).toFixed(2); 
+              dataWhatINeed.fillChartData();
             } else {
               clearInterval(test);
             }
@@ -70,13 +63,17 @@ export default  {
     },
   },
 
+  watch: {
+    
+  },
+
   computed:{
     ...mapState([
       "TASK_LIST",
     ]),
 
     getDataLength() {
-      return this.chartData.datasets[0].data.length;
+      return this.infoChart.length;
     },
 
     getTasksWithLimits() {
@@ -90,9 +87,6 @@ export default  {
         })
     },
 
-    getInfoAboutLimits() {
-      return this.getTasksWithLimits.map(el => el.timeLimit);
-    }
   },
 
   async mounted () {
@@ -100,29 +94,23 @@ export default  {
     try {
       await this.GET_ALL_TASKS()
         .then(() => { 
-          this.fillChartData();
-          console.log(this.getTasksWithLimits);
           this.intervalForTasksLimits();
-          // this.getTasksWithLimits.map((element, indx) => {
+          this.fillChartData();
+          // this.getTasksWithLimits.map(element => {
           //   let t = this
           //   setInterval(function testInterval() {
           //     if (element.timeLimit.format("HH:mm:ss") !== "00:00:00") {
-          //       // 
-          //       t.chartData.datasets[0].data[indx] = +element.timeLimit.format("H.ms"); 
-          //       console.log(t.chartData.datasets[0].data);
+          //       t.fillChartData();
           //     } else {
           //       clearInterval(testInterval);
           //     }
-          //   }, 1000)
+          //   }, 1000);
           // })
       });
       this.loaded = true
     } catch (e) {
       console.error(e)
     }
-
-    console.log(this.generateRandomColor());
-    console.log(this.getDataLength);
   }
 }
 </script>
