@@ -2053,6 +2053,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       loaded: false,
+      testArr: [],
       chartData: {
         labels: [],
         datasets: [{
@@ -2076,23 +2077,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
       this.chartData.datasets[0].backgroundColor = _toConsumableArray(Array(this.getTasksWithLimits.length)).map(function () {
         return _this.generateRandomColor();
-      });
-      this.chartData.datasets[0].data = this.getTasksWithLimits.map(function (item) {
-        return +item.timeLimit.format("HH.mm");
-      });
+      }); // this.chartData.datasets[0].data = this.getTasksWithLimits.map(item => +item.timeLimit.format("HH.mm"));
     },
     intervalForTasksLimits: function intervalForTasksLimits() {
-      this.getTasksWithLimits.forEach(function (element) {
+      var dataWhatINeed = this;
+      this.getTasksWithLimits.forEach(function (element, index) {
         (function (item) {
           setInterval(function test() {
-            if (item.timeLimit.format("HH:mm:ss") !== "00:00:00") {
-              item.timeLimit = item.timeLimit.clone().subtract(1, "s");
-              console.log(item.timeLimit.format("HH:mm:ss"));
+            if (item.format("HH:mm:ss") !== "00:00:00") {
+              item = item.subtract(1, "s");
+              dataWhatINeed.chartData.datasets[0].data[index] = +item.format("H.ms");
+              console.log(dataWhatINeed.chartData.datasets[0].data);
             } else {
               clearInterval(test);
             }
           }, 1000);
-        })(element);
+        })(element.timeLimit, index);
       });
     },
     // take away this logic after finish work on chart !!!
@@ -2100,11 +2100,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "#" + Math.floor(Math.random() * 16777215).toString(16);
     }
   }),
-  watch: {
-    limitsWatcher: function limitsWatcher(value) {
-      console.log(value);
-    }
-  },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])), {}, {
     getDataLength: function getDataLength() {
       return this.chartData.datasets[0].data.length;
@@ -2121,9 +2116,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
       });
     },
-    limitsWatcher: function limitsWatcher() {
-      return this.getTasksWithLimits.map(function (item) {
-        return item.timeLimit;
+    getInfoAboutLimits: function getInfoAboutLimits() {
+      return this.getTasksWithLimits.map(function (el) {
+        return el.timeLimit;
       });
     }
   }),
@@ -2143,7 +2138,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
                 console.log(_this3.getTasksWithLimits);
 
-                _this3.intervalForTasksLimits();
+                _this3.intervalForTasksLimits(); // this.getTasksWithLimits.map((element, indx) => {
+                //   let t = this
+                //   setInterval(function testInterval() {
+                //     if (element.timeLimit.format("HH:mm:ss") !== "00:00:00") {
+                //       // 
+                //       t.chartData.datasets[0].data[indx] = +element.timeLimit.format("H.ms"); 
+                //       console.log(t.chartData.datasets[0].data);
+                //     } else {
+                //       clearInterval(testInterval);
+                //     }
+                //   }, 1000)
+                // })
+
               });
 
             case 4:

@@ -18,6 +18,7 @@ export default  {
   data() {
     return {
       loaded: false,
+      testArr: [],
       chartData: {
         labels: [],
         datasets: [
@@ -43,21 +44,23 @@ export default  {
     fillChartData() {
       this.chartData.labels = this.TASK_LIST.map(item => item.description);
       this.chartData.datasets[0].backgroundColor = [...Array(this.getTasksWithLimits.length)].map(() => this.generateRandomColor());
-      this.chartData.datasets[0].data = this.getTasksWithLimits.map(item => +item.timeLimit.format("HH.mm"));
+      // this.chartData.datasets[0].data = this.getTasksWithLimits.map(item => +item.timeLimit.format("HH.mm"));
     },
 
     intervalForTasksLimits() {
-      this.getTasksWithLimits.forEach(element => {
+      let dataWhatINeed = this;
+      this.getTasksWithLimits.forEach((element, index) => {
         (function(item) {
           setInterval(function test() {
-            if (item.timeLimit.format("HH:mm:ss") !== "00:00:00") {
-              item.timeLimit = item.timeLimit.clone().subtract(1, "s");
-              console.log(item.timeLimit.format("HH:mm:ss"));
+            if (item.format("HH:mm:ss") !== "00:00:00") {
+              item = item.subtract(1, "s");
+              dataWhatINeed.chartData.datasets[0].data[index] = +item.format("H.ms"); 
+              console.log(dataWhatINeed.chartData.datasets[0].data);
             } else {
               clearInterval(test);
             }
           }, 1000)
-        })(element);
+        })(element.timeLimit, index);
       })
     },
 
@@ -65,12 +68,6 @@ export default  {
     generateRandomColor() {
       return "#" + Math.floor(Math.random()*16777215).toString(16);
     },
-  },
-
-  watch: {
-    limitsWatcher: value => {
-      console.log(value);
-    }
   },
 
   computed:{
@@ -93,8 +90,8 @@ export default  {
         })
     },
 
-    limitsWatcher() {
-      return this.getTasksWithLimits.map(item => item.timeLimit);
+    getInfoAboutLimits() {
+      return this.getTasksWithLimits.map(el => el.timeLimit);
     }
   },
 
@@ -106,6 +103,18 @@ export default  {
           this.fillChartData();
           console.log(this.getTasksWithLimits);
           this.intervalForTasksLimits();
+          // this.getTasksWithLimits.map((element, indx) => {
+          //   let t = this
+          //   setInterval(function testInterval() {
+          //     if (element.timeLimit.format("HH:mm:ss") !== "00:00:00") {
+          //       // 
+          //       t.chartData.datasets[0].data[indx] = +element.timeLimit.format("H.ms"); 
+          //       console.log(t.chartData.datasets[0].data);
+          //     } else {
+          //       clearInterval(testInterval);
+          //     }
+          //   }, 1000)
+          // })
       });
       this.loaded = true
     } catch (e) {
