@@ -1,4 +1,4 @@
-<template lang="">
+<template>
   <div class="app-tooltip">
     <div
       v-if="!chooseLimit"
@@ -28,6 +28,8 @@
   </div>
 </template>
 <script>
+// create time validation !!!
+// remake this with slots !!!
 
 export default {
   props: {
@@ -67,5 +69,5 @@ export default {
 }
 </script>
 <style lang="">
-  
+
 </style>

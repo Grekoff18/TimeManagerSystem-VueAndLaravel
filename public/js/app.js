@@ -2038,6 +2038,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2045,15 +2049,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     DoughnutChart: _charts_Doughnut__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
+    var _this = this;
+
     return {
       loaded: false,
+      targetInfo: "",
       datacollection: null,
-      infoChart: []
+      infoChart: [],
+      options: {
+        tooltips: {
+          enabled: false
+        },
+        onHover: function onHover(arr, target) {
+          if (target.length > 0) {
+            _this.targetInfo = "".concat(_this.datacollection.labels[target[0]._index], " : ").concat(_this.infoChart[target[0]._datasetIndex]);
+          }
+        }
+      }
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS"])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS", "UPDATE_ALL"])), {}, {
     fillChartData: function fillChartData() {
-      var _this = this;
+      var _this2 = this;
 
       this.datacollection = {
         labels: this.TASK_LIST.map(function (item) {
@@ -2062,9 +2079,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         datasets: [{
           label: 'Data One',
           backgroundColor: _toConsumableArray(Array(this.getTasksWithLimits.length)).map(function () {
-            return _this.generateRandomColor();
+            return _this2.generateRandomColor(2);
           }),
-          data: this.infoChart
+          data: this.infoChart,
+          borderWidth: 2,
+          borderColor: "black",
+          hoverBorderWidth: 4
         }]
       };
     },
@@ -2085,57 +2105,61 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     // take away this logic after finish work on chart !!!
-    generateRandomColor: function generateRandomColor() {
-      return "#" + Math.floor(Math.random() * 16777215).toString(16);
+    generateRandomColor: function generateRandomColor(max) {
+      var colorArr = ["#FF4081", "#18FFFF"]; // return "#" + Math.floor(Math.random()*16777215).toString(16);
+
+      return colorArr[Math.floor(Math.random() * Math.floor(max))];
+    },
+    test: function test() {
+      this.UPDATE_ALL(this.getTasksWithLimits.map(function (element) {
+        return {
+          id: element.fullTaskData.id,
+          limit: element.timeLimit.format("HH:mm:ss")
+        };
+      }));
     }
   }),
-  watch: {},
+  watch: {
+    infoChart: function infoChart(newVal, oldVal) {
+      console.log(newVal, oldVal);
+    }
+  },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])), {}, {
     getDataLength: function getDataLength() {
       return this.infoChart.length;
     },
     getTasksWithLimits: function getTasksWithLimits() {
-      var _this2 = this;
+      var _this3 = this;
 
       return this.TASK_LIST.filter(function (el) {
         return el.time_to_complete !== null;
       }).map(function (item) {
         return {
           fullTaskData: item,
-          timeLimit: _this2.moment(item.time_to_complete, "HH:mm:ss")
+          timeLimit: _this3.moment(item.time_to_complete, "HH:mm:ss")
         };
       });
     }
   }),
   mounted: function mounted() {
-    var _this3 = this;
+    var _this4 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _this3.loaded = false;
+              _this4.loaded = false;
               _context.prev = 1;
               _context.next = 4;
-              return _this3.GET_ALL_TASKS().then(function () {
-                _this3.intervalForTasksLimits();
+              return _this4.GET_ALL_TASKS().then(function () {
+                _this4.intervalForTasksLimits();
 
-                _this3.fillChartData(); // this.getTasksWithLimits.map(element => {
-                //   let t = this
-                //   setInterval(function testInterval() {
-                //     if (element.timeLimit.format("HH:mm:ss") !== "00:00:00") {
-                //       t.fillChartData();
-                //     } else {
-                //       clearInterval(testInterval);
-                //     }
-                //   }, 1000);
-                // })
-
+                _this4.fillChartData();
               });
 
             case 4:
-              _this3.loaded = true;
+              _this4.loaded = true;
               _context.next = 10;
               break;
 
@@ -2151,7 +2175,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }, _callee, null, [[1, 7]]);
     }))();
-  }
+  } // beforeDestroy() {
+  //   this.UPDATE_ALL(this.getTasksWithLimits.map(element => element.timeLimit.format("HH:mm:ss")));
+  // },
+  // beforeDestroy cleaning memory cache !!!
+
 });
 
 /***/ }),
@@ -2216,6 +2244,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+// create time validation !!!
+// remake this with slots !!!
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     tooltip_text: {
@@ -2827,7 +2857,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js"
 Vue.use(vuex__WEBPACK_IMPORTED_MODULE_5__.default);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_5__.default.Store(_store_index__WEBPACK_IMPORTED_MODULE_3__.default);
 Vue.use(vuelidate__WEBPACK_IMPORTED_MODULE_6__.default);
-Vue.prototype.moment = (moment__WEBPACK_IMPORTED_MODULE_1___default()); // убрать в константы 
+Vue.prototype.moment = (moment__WEBPACK_IMPORTED_MODULE_1___default()); // убрать в константы
 
 window.moment_global = (moment__WEBPACK_IMPORTED_MODULE_1___default());
 moment__WEBPACK_IMPORTED_MODULE_1___default().updateLocale("en", {
@@ -2916,6 +2946,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   state: {
     TASK_LIST: [],
@@ -2941,7 +2974,7 @@ __webpack_require__.r(__webpack_exports__);
   actions: {
     GET_ALL_TASKS: function GET_ALL_TASKS(_ref) {
       var state = _ref.state;
-      return axios.get("api/tasks").then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().get("api/tasks").then(function (response) {
         return state.TASK_LIST = response.data.reverse();
       })["catch"](function (error) {
         return console.log(error);
@@ -2949,7 +2982,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     DELETE_TASK: function DELETE_TASK(_ref2, id) {
       var dispatch = _ref2.dispatch;
-      return axios["delete"]("api/task/".concat(id)).then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().delete("api/task/".concat(id)).then(function (response) {
         return response.status === 200 ? dispatch("GET_ALL_TASKS") : console.log(response.data);
       })["catch"](function (error) {
         return console.log(error);
@@ -2958,7 +2991,7 @@ __webpack_require__.r(__webpack_exports__);
     ADD_TASK: function ADD_TASK(_ref3, payload) {
       var dispatch = _ref3.dispatch,
           commit = _ref3.commit;
-      return axios.post("api/task/store", {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().post("api/task/store", {
         "task": {
           "description": payload.inputData,
           "timeLimit": payload.timeLimit
@@ -2974,7 +3007,7 @@ __webpack_require__.r(__webpack_exports__);
     EDIT_TASK: function EDIT_TASK(_ref4, payload) {
       var commit = _ref4.commit,
           dispatch = _ref4.dispatch;
-      return axios.patch("api/task/".concat(payload.id), {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().patch("api/task/".concat(payload.id), {
         "task": {
           "description": payload.inputData,
           "updated_at": moment_global().format("YYYY-MM-DD HH:mm:ss")
@@ -2990,7 +3023,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     COMPLETE_TASK: function COMPLETE_TASK(_ref5, id) {
       var dispatch = _ref5.dispatch;
-      return axios.put("api/task/".concat(id), {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().put("api/task/".concat(id), {
         "task": {
           "completed": true
         }
@@ -2998,6 +3031,12 @@ __webpack_require__.r(__webpack_exports__);
         return response.status === 200 ? dispatch("GET_ALL_TASKS") : console.log(response.data);
       })["catch"](function (error) {
         return console.log(error);
+      });
+    },
+    UPDATE_ALL: function UPDATE_ALL(_ref6, payload) {
+      var state = _ref6.state;
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().post("api/task/updateAll", {
+        data: payload
       });
     }
   },
@@ -79757,7 +79796,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var _App_Tooltip_vue_vue_type_template_id_06fd8d5b_lang_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App-Tooltip.vue?vue&type=template&id=06fd8d5b&lang=true& */ "./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&lang=true&");
+/* harmony import */ var _App_Tooltip_vue_vue_type_template_id_06fd8d5b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App-Tooltip.vue?vue&type=template&id=06fd8d5b& */ "./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&");
 /* harmony import */ var _App_Tooltip_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App-Tooltip.vue?vue&type=script&lang=js& */ "./resources/js/components/MainPage/App-Tooltip.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -79769,8 +79808,8 @@ __webpack_require__.r(__webpack_exports__);
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
   _App_Tooltip_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _App_Tooltip_vue_vue_type_template_id_06fd8d5b_lang_true___WEBPACK_IMPORTED_MODULE_0__.render,
-  _App_Tooltip_vue_vue_type_template_id_06fd8d5b_lang_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _App_Tooltip_vue_vue_type_template_id_06fd8d5b___WEBPACK_IMPORTED_MODULE_0__.render,
+  _App_Tooltip_vue_vue_type_template_id_06fd8d5b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -80237,19 +80276,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&lang=true&":
-/*!***************************************************************************************************!*\
-  !*** ./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&lang=true& ***!
-  \***************************************************************************************************/
+/***/ "./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b& ***!
+  \*****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Tooltip_vue_vue_type_template_id_06fd8d5b_lang_true___WEBPACK_IMPORTED_MODULE_0__.render,
-/* harmony export */   "staticRenderFns": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Tooltip_vue_vue_type_template_id_06fd8d5b_lang_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns
+/* harmony export */   "render": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Tooltip_vue_vue_type_template_id_06fd8d5b___WEBPACK_IMPORTED_MODULE_0__.render,
+/* harmony export */   "staticRenderFns": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Tooltip_vue_vue_type_template_id_06fd8d5b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Tooltip_vue_vue_type_template_id_06fd8d5b_lang_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Tooltip.vue?vue&type=template&id=06fd8d5b&lang=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&lang=true&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Tooltip_vue_vue_type_template_id_06fd8d5b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Tooltip.vue?vue&type=template&id=06fd8d5b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&");
 
 
 /***/ }),
@@ -81665,10 +81704,22 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    {
+      staticClass: "chart-sizer",
+      staticStyle: { position: "relative", width: "50%", height: "30%" }
+    },
     [
       _vm.loaded
-        ? _c("doughnut-chart", { attrs: { "chart-data": _vm.datacollection } })
-        : _vm._e()
+        ? _c("doughnut-chart", {
+            attrs: { "chart-data": _vm.datacollection, options: _vm.options }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "detail-target-info", on: { click: _vm.test } },
+        [_vm._v("\n    " + _vm._s(_vm.targetInfo) + "\n  ")]
+      )
     ],
     1
   )
@@ -81705,10 +81756,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&lang=true&":
-/*!******************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&lang=true& ***!
-  \******************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Tooltip.vue?vue&type=template&id=06fd8d5b& ***!
+  \********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default {
   state: {
   	TASK_LIST: [],
@@ -18,19 +20,19 @@ export default {
 	},
 
 	actions: {
-    GET_ALL_TASKS({state}) {
+    GET_ALL_TASKS({ state }) {
     	return axios.get("api/tasks")
         .then(response => state.TASK_LIST = response.data.reverse())
        	.catch(error => console.log(error));
     },
 
-    DELETE_TASK({dispatch}, id) {
+    DELETE_TASK({ dispatch }, id) {
     	return axios.delete(`api/task/${id}`)
         .then(response => response.status === 200 ? dispatch("GET_ALL_TASKS") : console.log(response.data))
         .catch((error) => console.log(error));
     },
 
-    ADD_TASK({dispatch, commit}, payload) {
+    ADD_TASK({ dispatch, commit }, payload) {
     	return axios.post("api/task/store", {
         "task": {
           "description": payload.inputData,
@@ -46,7 +48,7 @@ export default {
       	
     },
 
-    EDIT_TASK({commit, dispatch}, payload) {
+    EDIT_TASK({ commit, dispatch }, payload) {
 	    return axios.patch(`api/task/${payload.id}`, {
         "task": {
           "description": payload.inputData,
@@ -62,12 +64,18 @@ export default {
       	.catch(error => console.log(error));
     },
 
-    COMPLETE_TASK({dispatch}, id) {
+    COMPLETE_TASK({ dispatch }, id) {
       return axios.put(`api/task/${id}`, {
         "task": { "completed": true }
       })
       .then(response => response.status === 200 ? dispatch("GET_ALL_TASKS") : console.log(response.data))
       .catch(error => console.log(error));
+    },
+
+    UPDATE_ALL({ state }, payload) {
+      return axios.post("api/task/updateAll", {
+        data: payload
+      })
     }
 	},
 

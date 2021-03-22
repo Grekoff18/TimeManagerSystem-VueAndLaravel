@@ -85,6 +85,19 @@ class TaskController extends Controller
     return "Task not found.";
   }
 
+  public function updateAll(Request $request) {
+    $tasks = DB::table("tasks")->where([
+      ["completed", "!==", true],
+      ["time_to_complete", "!=", "00:00:00"]
+    ])->get();
+
+    if (count($tasks) > 0) {
+      foreach ($request->task["data"] as $item) {
+        return $item["id"];
+      }
+    }
+  }
+
   public function destroy($id) {
     $existing_task = Task::find($id);
     if (isset($existing_task)) {

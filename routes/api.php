@@ -23,6 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get("/tasks", [TaskController::class, "index"]);
 Route::prefix("task")->group(function () {
   Route::post("/store", [TaskController::class, "store"]);
+  Route::post("/updateAll", [TaskController::class, "updateAll"]);
   Route::put("/{id}", [TaskController::class, "update"]);
   Route::patch("/{id}", [TaskController::class, "edit"]);
   Route::delete("/{id}", [TaskController::class, "destroy"]);

@@ -1,4 +1,4 @@
-require('./bootstrap');  
+require('./bootstrap');
 window.Vue = require('vue').default;
 
 import Vuex          from 'vuex';
@@ -16,7 +16,7 @@ const store = new Vuex.Store(
 
 Vue.use(Vuelidate);
 Vue.prototype.moment = moment;
-// убрать в константы 
+// убрать в константы
 window.moment_global = moment;
 moment.updateLocale("en", {week: {dow: 1}});
 
