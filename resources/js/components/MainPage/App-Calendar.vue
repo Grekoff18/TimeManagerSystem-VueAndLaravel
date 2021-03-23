@@ -41,6 +41,12 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 
+/**
+ * 1. Create pulsing dots instead has task label
+ * 
+ * 
+ */
+
 export default {
   name: "AppCalendar",
   data() {

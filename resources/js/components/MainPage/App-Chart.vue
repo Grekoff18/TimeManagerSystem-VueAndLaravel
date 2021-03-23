@@ -5,7 +5,7 @@
       :chart-data="datacollection"
       :options="options"
     />
-    <div class="detail-target-info" @click="test">
+    <div class="detail-target-info">
       {{targetInfo}}
     </div>
   </div>
@@ -41,6 +41,17 @@ export default  {
       "GET_ALL_TASKS",
       "UPDATE_ALL"
     ]),
+
+    // test() {
+    //   let data = this.getTasksWithLimits.map(element => {
+    //     return {
+    //       id: element.fullTaskData.id,
+    //       limit: element.timeLimit.format("HH:mm:ss")
+    //     }
+    //   });
+    //   this.UPDATE_ALL(data);
+    // },
+
     fillChartData() {
       this.datacollection = {
         labels: this.TASK_LIST.map(item => item.description),
@@ -56,50 +67,44 @@ export default  {
         ]
       }
     },
+
     intervalForTasksLimits() {
-      let dataWhatINeed = this;
+      let t = this;
       this.getTasksWithLimits.forEach((element, index) => {
         (function(item) {
           setInterval(function test() {
             if (item.format("HH:mm:ss") !== "00:00:00") {
               item = item.subtract(1, "s");
-              dataWhatINeed.infoChart[index] = (((+item.format("H.ms") / 24.00) * 100) * 10).toFixed(2);
-              dataWhatINeed.fillChartData();
+              t.infoChart[index] = (((+item.format("H.ms") / 24.00) * 100) * 10).toFixed(2);
+              t.fillChartData();
             } else {
               clearInterval(test);
             }
           }, 1000)
-        })(element.timeLimit, index);
+        })(element.timeLimit);
       })
     },
+
     // take away this logic after finish work on chart !!!
     generateRandomColor(max) {
       let colorArr = ["#FF4081", "#18FFFF"];
       // return "#" + Math.floor(Math.random()*16777215).toString(16);
       return colorArr[Math.floor(Math.random() * Math.floor(max))];
     },
-    test() {
-      this.UPDATE_ALL(this.getTasksWithLimits.map(element => ({
-        id: element.fullTaskData.id,
-        limit: element.timeLimit.format("HH:mm:ss")
-      })))
-    }
   },
-  watch: {
-    infoChart(newVal, oldVal) {
-      console.log(newVal, oldVal);
-    }
-  },
+
   computed:{
     ...mapState([
       "TASK_LIST",
     ]),
+
     getDataLength() {
       return this.infoChart.length;
     },
+
     getTasksWithLimits() {
       return this.TASK_LIST
-        .filter(el => el.time_to_complete !== null)
+        .filter(el => el.time_to_complete !== null && el.time_to_complete != "00:00:00" && el.completed !== 1)
         .map(item => {
           return {
             fullTaskData: item,
@@ -116,16 +121,58 @@ export default  {
         .then(() => {
           this.intervalForTasksLimits();
           this.fillChartData();
+          console.log(this.getTasksWithLimits);
       });
-      this.loaded = true
+      this.loaded = true;
     } catch (e) {
       console.error(e)
     }
+
+    document.addEventListener('visibilitychange', () => {
+      let data = this.getTasksWithLimits.map(element => {
+        return {
+          id: element.fullTaskData.id,
+          limit: element.timeLimit.format("HH:mm:ss")
+        }
+      });
+      if (document.visibilityState == "hidden") {
+        this.UPDATE_ALL(data);
+      }
+    });
+
+    // window.addEventListener("unload", () => {
+    //   let data = this.getTasksWithLimits.map(element => {
+    //     return {
+    //       id: element.fullTaskData.id,
+    //       limit: element.timeLimit.format("HH:mm:ss")
+    //     }
+    //   });
+
+    //   navigator.sendBeacon("/api/task/updateAll", {
+    //     "task": {
+    //       "data": data
+    //     }
+    //   });
+    // });
+
+    // window.onunload = () => {
+    //   this.UPDATE_ALL(this.getTasksWithLimits.map(element => {
+    //     return {
+    //       id: element.fullTaskData.id,
+    //       limit: element.timeLimit.format("HH:mm:ss")
+    //     }
+    //   }))
+    // }
   },
 
-  // beforeDestroy() {
-  //   this.UPDATE_ALL(this.getTasksWithLimits.map(element => element.timeLimit.format("HH:mm:ss")));
-  // },
+  /**
+   * 1. In beforeUpdate hook we can create updating table with task description an him time limit 
+   * 
+   */
+  
+  beforeUpdate() {
+    // console.log("I'm updated");
+  }
   // beforeDestroy cleaning memory cache !!!
 }
 </script>

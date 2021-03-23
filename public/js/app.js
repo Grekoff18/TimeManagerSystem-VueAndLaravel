@@ -1943,6 +1943,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 
+/**
+ * 1. Create pulsing dots instead has task label
+ * 
+ * 
+ */
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AppCalendar",
   data: function data() {
@@ -2069,6 +2075,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS", "UPDATE_ALL"])), {}, {
+    // test() {
+    //   let data = this.getTasksWithLimits.map(element => {
+    //     return {
+    //       id: element.fullTaskData.id,
+    //       limit: element.timeLimit.format("HH:mm:ss")
+    //     }
+    //   });
+    //   this.UPDATE_ALL(data);
+    // },
     fillChartData: function fillChartData() {
       var _this2 = this;
 
@@ -2089,19 +2104,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       };
     },
     intervalForTasksLimits: function intervalForTasksLimits() {
-      var dataWhatINeed = this;
+      var t = this;
       this.getTasksWithLimits.forEach(function (element, index) {
         (function (item) {
           setInterval(function test() {
             if (item.format("HH:mm:ss") !== "00:00:00") {
               item = item.subtract(1, "s");
-              dataWhatINeed.infoChart[index] = (+item.format("H.ms") / 24.00 * 100 * 10).toFixed(2);
-              dataWhatINeed.fillChartData();
+              t.infoChart[index] = (+item.format("H.ms") / 24.00 * 100 * 10).toFixed(2);
+              t.fillChartData();
             } else {
               clearInterval(test);
             }
           }, 1000);
-        })(element.timeLimit, index);
+        })(element.timeLimit);
       });
     },
     // take away this logic after finish work on chart !!!
@@ -2109,21 +2124,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var colorArr = ["#FF4081", "#18FFFF"]; // return "#" + Math.floor(Math.random()*16777215).toString(16);
 
       return colorArr[Math.floor(Math.random() * Math.floor(max))];
-    },
-    test: function test() {
-      this.UPDATE_ALL(this.getTasksWithLimits.map(function (element) {
-        return {
-          id: element.fullTaskData.id,
-          limit: element.timeLimit.format("HH:mm:ss")
-        };
-      }));
     }
   }),
-  watch: {
-    infoChart: function infoChart(newVal, oldVal) {
-      console.log(newVal, oldVal);
-    }
-  },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(["TASK_LIST"])), {}, {
     getDataLength: function getDataLength() {
       return this.infoChart.length;
@@ -2132,7 +2134,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this3 = this;
 
       return this.TASK_LIST.filter(function (el) {
-        return el.time_to_complete !== null;
+        return el.time_to_complete !== null && el.time_to_complete != "00:00:00" && el.completed !== 1;
       }).map(function (item) {
         return {
           fullTaskData: item,
@@ -2156,6 +2158,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this4.intervalForTasksLimits();
 
                 _this4.fillChartData();
+
+                console.log(_this4.getTasksWithLimits);
               });
 
             case 4:
@@ -2169,16 +2173,54 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               console.error(_context.t0);
 
             case 10:
+              document.addEventListener('visibilitychange', function () {
+                var data = _this4.getTasksWithLimits.map(function (element) {
+                  return {
+                    id: element.fullTaskData.id,
+                    limit: element.timeLimit.format("HH:mm:ss")
+                  };
+                });
+
+                if (document.visibilityState == "hidden") {
+                  _this4.UPDATE_ALL(data);
+                }
+              }); // window.addEventListener("unload", () => {
+              //   let data = this.getTasksWithLimits.map(element => {
+              //     return {
+              //       id: element.fullTaskData.id,
+              //       limit: element.timeLimit.format("HH:mm:ss")
+              //     }
+              //   });
+              //   navigator.sendBeacon("/api/task/updateAll", {
+              //     "task": {
+              //       "data": data
+              //     }
+              //   });
+              // });
+              // window.onunload = () => {
+              //   this.UPDATE_ALL(this.getTasksWithLimits.map(element => {
+              //     return {
+              //       id: element.fullTaskData.id,
+              //       limit: element.timeLimit.format("HH:mm:ss")
+              //     }
+              //   }))
+              // }
+
+            case 11:
             case "end":
               return _context.stop();
           }
         }
       }, _callee, null, [[1, 7]]);
     }))();
-  } // beforeDestroy() {
-  //   this.UPDATE_ALL(this.getTasksWithLimits.map(element => element.timeLimit.format("HH:mm:ss")));
-  // },
-  // beforeDestroy cleaning memory cache !!!
+  },
+
+  /**
+   * 1. In beforeUpdate hook we can create updating table with task description an him time limit 
+   * 
+   */
+  beforeUpdate: function beforeUpdate() {// console.log("I'm updated");
+  } // beforeDestroy cleaning memory cache !!!
 
 });
 
@@ -3036,7 +3078,13 @@ __webpack_require__.r(__webpack_exports__);
     UPDATE_ALL: function UPDATE_ALL(_ref6, payload) {
       var state = _ref6.state;
       return axios__WEBPACK_IMPORTED_MODULE_0___default().post("api/task/updateAll", {
-        data: payload
+        "task": {
+          "data": payload
+        }
+      }).then(function (res) {
+        return console.log(res);
+      })["catch"](function (error) {
+        return console.error(error);
       });
     }
   },
@@ -81715,11 +81763,9 @@ var render = function() {
           })
         : _vm._e(),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "detail-target-info", on: { click: _vm.test } },
-        [_vm._v("\n    " + _vm._s(_vm.targetInfo) + "\n  ")]
-      )
+      _c("div", { staticClass: "detail-target-info" }, [
+        _vm._v("\n    " + _vm._s(_vm.targetInfo) + "\n  ")
+      ])
     ],
     1
   )

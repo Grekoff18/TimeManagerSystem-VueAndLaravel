@@ -74,8 +74,12 @@ export default {
 
     UPDATE_ALL({ state }, payload) {
       return axios.post("api/task/updateAll", {
-        data: payload
+        "task": {
+          "data": payload
+        }
       })
+        .then(res => console.log(res))
+        .catch(error => console.error(error));
     }
 	},
 

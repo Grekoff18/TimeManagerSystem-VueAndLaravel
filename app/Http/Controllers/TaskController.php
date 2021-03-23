@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
+
 class TaskController extends Controller
 {
   private $min_length_of_task = 4;
@@ -88,14 +90,18 @@ class TaskController extends Controller
   public function updateAll(Request $request) {
     $tasks = DB::table("tasks")->where([
       ["completed", "!==", true],
-      ["time_to_complete", "!=", "00:00:00"]
+      ["time_to_complete", "!=", "00:00:00"],
+      ["time_to_complete", "!=", null]
     ])->get();
 
     if (count($tasks) > 0) {
-      foreach ($request->task["data"] as $item) {
-        return $item["id"];
+      foreach ($request->task["data"] as $key => $value) {
+        Task::where("id", $value["id"])->update(["time_to_complete" => $value["limit"]]); 
       }
+    } else {
+      return "You have no task with for update time";
     }
+    return "Task updated";
   }
 
   public function destroy($id) {
