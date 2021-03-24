@@ -2075,15 +2075,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)(["GET_ALL_TASKS", "UPDATE_ALL"])), {}, {
-    // test() {
-    //   let data = this.getTasksWithLimits.map(element => {
-    //     return {
-    //       id: element.fullTaskData.id,
-    //       limit: element.timeLimit.format("HH:mm:ss")
-    //     }
-    //   });
-    //   this.UPDATE_ALL(data);
-    // },
     fillChartData: function fillChartData() {
       var _this2 = this;
 
@@ -2173,46 +2164,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               console.error(_context.t0);
 
             case 10:
-              document.addEventListener('visibilitychange', function () {
-                var data = _this4.getTasksWithLimits.map(function (element) {
-                  return {
-                    id: element.fullTaskData.id,
-                    limit: element.timeLimit.format("HH:mm:ss")
-                  };
-                });
-
-                if (document.visibilityState == "hidden") {
-                  _this4.UPDATE_ALL(data);
-                }
-              }); // window.addEventListener("unload", () => {
-              //   let data = this.getTasksWithLimits.map(element => {
-              //     return {
-              //       id: element.fullTaskData.id,
-              //       limit: element.timeLimit.format("HH:mm:ss")
-              //     }
-              //   });
-              //   navigator.sendBeacon("/api/task/updateAll", {
-              //     "task": {
-              //       "data": data
-              //     }
-              //   });
-              // });
-              // window.onunload = () => {
-              //   this.UPDATE_ALL(this.getTasksWithLimits.map(element => {
-              //     return {
-              //       id: element.fullTaskData.id,
-              //       limit: element.timeLimit.format("HH:mm:ss")
-              //     }
-              //   }))
-              // }
-
-            case 11:
             case "end":
               return _context.stop();
           }
         }
       }, _callee, null, [[1, 7]]);
     }))();
+  },
+  created: function created() {
+    var _this5 = this;
+
+    window.addEventListener('beforeunload', function () {
+      _this5.UPDATE_ALL(_this5.getTasksWithLimits.map(function (element) {
+        return {
+          id: element.fullTaskData.id,
+          limit: element.timeLimit.format("HH:mm:ss")
+        };
+      }));
+    }, false);
   },
 
   /**
@@ -3077,14 +3046,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     UPDATE_ALL: function UPDATE_ALL(_ref6, payload) {
       var state = _ref6.state;
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().post("api/task/updateAll", {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("api/task/updateAll", {
         "task": {
           "data": payload
         }
-      }).then(function (res) {
-        return console.log(res);
-      })["catch"](function (error) {
-        return console.error(error);
       });
     }
   },

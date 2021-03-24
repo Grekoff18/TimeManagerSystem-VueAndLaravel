@@ -42,16 +42,6 @@ export default  {
       "UPDATE_ALL"
     ]),
 
-    // test() {
-    //   let data = this.getTasksWithLimits.map(element => {
-    //     return {
-    //       id: element.fullTaskData.id,
-    //       limit: element.timeLimit.format("HH:mm:ss")
-    //     }
-    //   });
-    //   this.UPDATE_ALL(data);
-    // },
-
     fillChartData() {
       this.datacollection = {
         labels: this.TASK_LIST.map(item => item.description),
@@ -127,42 +117,17 @@ export default  {
     } catch (e) {
       console.error(e)
     }
+  },
 
-    document.addEventListener('visibilitychange', () => {
-      let data = this.getTasksWithLimits.map(element => {
+  created() {
+    window.addEventListener('beforeunload', () => {
+      this.UPDATE_ALL(this.getTasksWithLimits.map(element => {
         return {
           id: element.fullTaskData.id,
           limit: element.timeLimit.format("HH:mm:ss")
         }
-      });
-      if (document.visibilityState == "hidden") {
-        this.UPDATE_ALL(data);
-      }
-    });
-
-    // window.addEventListener("unload", () => {
-    //   let data = this.getTasksWithLimits.map(element => {
-    //     return {
-    //       id: element.fullTaskData.id,
-    //       limit: element.timeLimit.format("HH:mm:ss")
-    //     }
-    //   });
-
-    //   navigator.sendBeacon("/api/task/updateAll", {
-    //     "task": {
-    //       "data": data
-    //     }
-    //   });
-    // });
-
-    // window.onunload = () => {
-    //   this.UPDATE_ALL(this.getTasksWithLimits.map(element => {
-    //     return {
-    //       id: element.fullTaskData.id,
-    //       limit: element.timeLimit.format("HH:mm:ss")
-    //     }
-    //   }))
-    // }
+      }))
+    }, false) 
   },
 
   /**
