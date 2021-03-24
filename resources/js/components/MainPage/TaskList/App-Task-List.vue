@@ -65,6 +65,9 @@
 </template>
 
 <script>
+/**
+ * 1. ON remove or update or add need to update chart !!!
+ */
 import AppTaskListItem from "./App-Task-List-Item";
 import { mapMutations, mapActions, mapState } from 'vuex'
 import { minLength } from 'vuelidate/lib/validators'

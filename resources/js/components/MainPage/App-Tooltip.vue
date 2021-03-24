@@ -28,8 +28,11 @@
   </div>
 </template>
 <script>
-// create time validation !!!
-// remake this with slots !!!
+/**
+ * 1. create time validator;
+ * 2. remake this with slots;
+ * 3. destroy timepicker in beforeDestroy hook;
+ */
 
 export default {
   props: {

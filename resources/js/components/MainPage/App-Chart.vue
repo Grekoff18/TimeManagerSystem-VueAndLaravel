@@ -1,12 +1,14 @@
 <template>
-  <div class="chart-sizer" style="position: relative; width: 50%; height: 30%;">
-    <doughnut-chart
-      v-if="loaded"
-      :chart-data="datacollection"
-      :options="options"
-    />
-    <div class="detail-target-info">
-      {{targetInfo}}
+  <div class="chart-container">
+    <div class="chart-container_chart" style="position: relative; width: 100%;">
+      <doughnut-chart
+        v-if="loaded"
+        :chart-data="datacollection"
+        :options="options"
+      />
+      <span class="chart-container_chart-tooltip-info">
+        {{targetInfo}}
+      </span>
     </div>
   </div>
 </template>
@@ -21,6 +23,7 @@ export default  {
     return {
       loaded: false,
       targetInfo: "",
+      infoTask: [],
       datacollection: null,
       infoChart: [],
       options: {
@@ -30,7 +33,11 @@ export default  {
 
         onHover: (arr, target) => {
           if (target.length > 0) {
-            this.targetInfo = `${this.datacollection.labels[target[0]._index]} : ${this.infoChart[target[0]._datasetIndex]}`;
+            let numberForTooltip = String(this.infoChart[target[0]._index]);
+          
+            this.targetInfo = `#${target[0]._index} => ${this.moment(numberForTooltip, "H.mmss").format("HH:mm:ss")}`; 
+            // this.targetInfo = `${this.datacollection.labels[target[0]._index]} : ${this.infoChart[target[0]._datasetIndex]}%`;
+
           }
         }
       },
@@ -44,7 +51,7 @@ export default  {
 
     fillChartData() {
       this.datacollection = {
-        labels: this.TASK_LIST.map(item => item.description),
+        labels: this.getTasksWithLimits.map((item, index) => `Task №${index}`),
         datasets: [
           {
             label: 'Data One',
@@ -65,7 +72,8 @@ export default  {
           setInterval(function test() {
             if (item.format("HH:mm:ss") !== "00:00:00") {
               item = item.subtract(1, "s");
-              t.infoChart[index] = (((+item.format("H.ms") / 24.00) * 100) * 10).toFixed(2);
+              // t.infoChart[index] = (((+item.format("H.ms") / 24.00) * 100) * 10).toFixed(2);
+              t.infoChart[index] = +item.format("H.mmss")
               t.fillChartData();
             } else {
               clearInterval(test);
@@ -111,7 +119,6 @@ export default  {
         .then(() => {
           this.intervalForTasksLimits();
           this.fillChartData();
-          console.log(this.getTasksWithLimits);
       });
       this.loaded = true;
     } catch (e) {
@@ -136,9 +143,28 @@ export default  {
    */
   
   beforeUpdate() {
+    this.infoTask = this.getTasksWithLimits;
     // console.log("I'm updated");
   }
   // beforeDestroy cleaning memory cache !!!
 }
 </script>
+
+<style lang="sass">
+  .chart-container
+    width: 100%
+    display: flex
+    flex-direction: column
+
+    &_chart-tooltip-info
+      position: absolute
+      top: 50%
+      text-align: center
+      width: 100%  
+      color: white
+
+  
+    
+
+</style>
 
