@@ -16,8 +16,7 @@
       </div>
       <div class="right-side-container">
         <div class="right-side-container_clock-block">
-          <app-chart/>
-          <app-clock/>
+          <app-chart />
         </div>
         <app-footer/>
       </div>
@@ -86,7 +85,6 @@ import AppFooter    from "../../layout/App-Footer";
 import AppTaskList  from "../components/MainPage/TaskList/App-Task-List";
 import AppCalendar  from "../components/MainPage/App-Calendar";
 import AppChart     from "../components/MainPage/App-Chart";
-import AppClock     from "../components/MainPage/App-Clock";
 import AppTooltip   from '../components/MainPage/App-Tooltip';
 import { mapState } from 'vuex';
 
@@ -99,7 +97,6 @@ export default {
     AppFooter,
     AppCalendar,
     AppChart,
-    AppClock,
     AppTooltip
   },
 
@@ -151,7 +148,7 @@ export default {
     taskAdded(date) {
       this.time_limit = "";
       this.parseInfo(date);
-    }
+    },
   },
 }
 </script>

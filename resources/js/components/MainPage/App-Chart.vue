@@ -1,14 +1,13 @@
 <template>
   <div class="chart-container">
-    <div class="chart-container_chart" style="position: relative; width: 100%;">
+    <div class="chart-container_chart" style="position: relative; max-width: 50vw;">
       <doughnut-chart
         v-if="loaded"
         :chart-data="datacollection"
         :options="options"
+        ref="chart"
       />
-      <span class="chart-container_chart-tooltip-info">
-        {{targetInfo}}
-      </span>
+      <app-clock :radius="chartRadius"/>
     </div>
   </div>
 </template>
@@ -16,14 +15,15 @@
 <script>
 import DoughnutChart from "../../charts/Doughnut";
 import { mapActions, mapState } from 'vuex';
+import AppClock from "../MainPage/App-Clock";
 
 export default  {
-  components: {DoughnutChart},
+  components: {DoughnutChart, AppClock},
   data() {
     return {
       loaded: false,
+      chartRadius: 0,
       targetInfo: "",
-      infoTask: [],
       datacollection: null,
       infoChart: [],
       options: {
@@ -34,11 +34,12 @@ export default  {
         onHover: (arr, target) => {
           if (target.length > 0) {
             let numberForTooltip = String(this.infoChart[target[0]._index]);
-          
             this.targetInfo = `#${target[0]._index} => ${this.moment(numberForTooltip, "H.mmss").format("HH:mm:ss")}`; 
-            // this.targetInfo = `${this.datacollection.labels[target[0]._index]} : ${this.infoChart[target[0]._datasetIndex]}%`;
-
           }
+        },
+
+        legend: {
+          position: "bottom",
         }
       },
     }
@@ -135,6 +136,10 @@ export default  {
         }
       }))
     }, false) 
+    // if (this.$refs.chart !== undefined) {
+    //   this.chartRadius = this.$refs.chart._data._chart.innerRadius;
+    // }
+    this.chartRadius = 90;
   },
 
   /**
@@ -143,8 +148,9 @@ export default  {
    */
   
   beforeUpdate() {
-    this.infoTask = this.getTasksWithLimits;
-    // console.log("I'm updated");
+    if (this.$refs.chart !== undefined) {
+      this.chartRadius = this.$refs.chart._data._chart.innerRadius;
+    }
   }
   // beforeDestroy cleaning memory cache !!!
 }
@@ -153,15 +159,14 @@ export default  {
 <style lang="sass">
   .chart-container
     width: 100%
+    height: auto
     display: flex
     flex-direction: column
+    align-items: center
 
-    &_chart-tooltip-info
-      position: absolute
-      top: 50%
-      text-align: center
-      width: 100%  
-      color: white
+  #doughnut-chart
+    z-index: 1000
+    position: absolute
 
   
     

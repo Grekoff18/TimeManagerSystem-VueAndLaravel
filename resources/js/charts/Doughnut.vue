@@ -16,4 +16,6 @@ export default {
   },
 
 }
+
+window
 </script>
