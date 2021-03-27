@@ -1,11 +1,11 @@
 <template>
   <div class="canvas-clock_container">
-    <canvas id="canvas" width="300" height="300" ref="canvasClock"></canvas>
+    <canvas id="canvas" ref="canvasClock"></canvas>
   </div>
 </template>
 <script>
 export default {
-  props: ["radius"],
+  props: ["radius", "chartWidth", "chartHeight"],
 
   data() {
     return {
@@ -22,15 +22,26 @@ export default {
       if (canvas.getContext) {
         return canvas.getContext("2d");
       } 
-    }
+    },
+  },
+
+  watch: {
+    chartWidth() {
+      this.ctx.canvas.width = this.chartWidth;
+      this.ctx.canvas.height = this.chartHeight;
+      this.drawClock();
+    },
   },
 
   methods: {
     drawClock() {
+      /**
+       * 1. Made dynamic color rendering width random color funciton 
+       */
       this.ctx.strokeStyle = '#00ffff';
-      this.ctx.lineWidth = 17;
+      this.ctx.lineWidth = 15;
       this.ctx.shadowBlur= 15;
-      this.ctx.shadowColor = '#00ffff'
+      this.ctx.shadowColor = '#00ffff';
 
       setInterval(this.renderTime, 40);
     },
@@ -47,38 +58,40 @@ export default {
       let millisecond = this.moment().millisecond();
       let smoothsec   = second+(millisecond/1000);
       let smoothmin   = minute+(smoothsec/60);
-
+      
       //Background
       // gradient = ctx.createRadialGradient(250, 250, 5, 250, 250, 300);
       // gradient.addColorStop(0, "#03303a");
       // gradient.addColorStop(1, "black");
-      this.ctx.fillStyle = "#27363B";
       // this.ctx.fillStyle = 'rgba(00 ,00 , 00, 1)';
-      this.ctx.fillRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.fillRect(0, 0, this.chartWidth, this.chartHeight);
+      this.ctx.fillStyle = "#27363B";
       //Hours
       this.ctx.beginPath();
       this.ctx.arc(
-        this.canvas.clientWidth / 2,
-        this.canvas.clientHeight / 2,
-        this.radius - 5,
+        this.canvas.width / 2,
+        this.canvas.height / 2,
+        this.radius - 25,
         this.degToRad(270),
         this.degToRad((hours*30)-90)
       );
       this.ctx.stroke();
       //Minutes
       this.ctx.beginPath();
-      this.ctx.arc(this.canvas.clientWidth / 2,
-        this.canvas.clientHeight / 2,
-        this.radius - 35,
+      this.ctx.arc(
+        this.canvas.width / 2,
+        this.canvas.height / 2,
+        this.radius - 55,
         this.degToRad(270),
         this.degToRad((smoothmin*6)-90)
       );
       this.ctx.stroke();
       //Seconds
       this.ctx.beginPath();
-      this.ctx.arc(this.canvas.clientWidth / 2,
-        this.canvas.clientHeight / 2,
-        this.radius - 65,
+      this.ctx.arc(
+        this.canvas.width / 2,
+        this.canvas.height / 2,
+        this.radius - 85,
         this.degToRad(270),
         this.degToRad((smoothsec*6)-90)
       );
@@ -86,15 +99,9 @@ export default {
     }
   },
 
-  watch: {
-    radius() {
-      console.log(this.radius);
-    }
-  },
-
   mounted() {
     setTimeout(() => {
-      console.log(this.radius);
+      console.log(this.canvas.width);
       this.drawClock();
     }, 1000);
   },
@@ -103,5 +110,14 @@ export default {
 <style lang="sass">
   .canvas-clock_container
     width: 100%
-    text-align: center
+    height: 100%
+    position: absolute
+    top: -1.5vh
+    left: 0
+    display: flex
+    align-items: center
+    justify-content: center
+
+    #canvas
+      
 </style>

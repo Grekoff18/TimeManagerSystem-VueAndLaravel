@@ -1,13 +1,17 @@
 <template>
   <div class="chart-container">
-    <div class="chart-container_chart" style="position: relative; max-width: 50vw;">
+    <div class="chart-container_chart" style="position: relative; width: 70%;">
       <doughnut-chart
         v-if="loaded"
         :chart-data="datacollection"
         :options="options"
         ref="chart"
       />
-      <app-clock :radius="chartRadius"/>
+      <app-clock
+        :radius="chartRadius"
+        :chartWidth="chartWidth"
+        :chartHeight="chartHeight"
+      />
     </div>
   </div>
 </template>
@@ -23,6 +27,8 @@ export default  {
     return {
       loaded: false,
       chartRadius: 0,
+      chartWidth: 0,
+      chartHeight: 0,
       targetInfo: "",
       datacollection: null,
       infoChart: [],
@@ -139,7 +145,10 @@ export default  {
     // if (this.$refs.chart !== undefined) {
     //   this.chartRadius = this.$refs.chart._data._chart.innerRadius;
     // }
-    this.chartRadius = 90;
+    // Take away this logic in future !!!!
+    // this.chartRadius = 90;
+    // this.chartWidth  = 500;
+    // this.chartHeight = 500;
   },
 
   /**
@@ -148,7 +157,10 @@ export default  {
    */
   
   beforeUpdate() {
+    // Remake this logic in future !!!
     if (this.$refs.chart !== undefined) {
+      this.chartWidth  = this.$refs.chart._data._chart.width;
+      this.chartHeight = this.$refs.chart._data._chart.height;
       this.chartRadius = this.$refs.chart._data._chart.innerRadius;
     }
   }
@@ -159,14 +171,13 @@ export default  {
 <style lang="sass">
   .chart-container
     width: 100%
-    height: auto
     display: flex
     flex-direction: column
     align-items: center
 
   #doughnut-chart
     z-index: 1000
-    position: absolute
+    position: relative
 
   
     

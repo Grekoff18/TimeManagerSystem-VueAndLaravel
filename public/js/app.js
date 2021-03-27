@@ -2052,6 +2052,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2066,6 +2070,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       loaded: false,
       chartRadius: 0,
+      chartWidth: 0,
+      chartHeight: 0,
       targetInfo: "",
       datacollection: null,
       infoChart: [],
@@ -2194,8 +2200,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }, false); // if (this.$refs.chart !== undefined) {
     //   this.chartRadius = this.$refs.chart._data._chart.innerRadius;
     // }
-
-    this.chartRadius = 90;
+    // Take away this logic in future !!!!
+    // this.chartRadius = 90;
+    // this.chartWidth  = 500;
+    // this.chartHeight = 500;
   },
 
   /**
@@ -2203,7 +2211,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
    * 
    */
   beforeUpdate: function beforeUpdate() {
+    // Remake this logic in future !!!
     if (this.$refs.chart !== undefined) {
+      this.chartWidth = this.$refs.chart._data._chart.width;
+      this.chartHeight = this.$refs.chart._data._chart.height;
       this.chartRadius = this.$refs.chart._data._chart.innerRadius;
     }
   } // beforeDestroy cleaning memory cache !!!
@@ -2229,7 +2240,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["radius"],
+  props: ["radius", "chartWidth", "chartHeight"],
   data: function data() {
     return {};
   },
@@ -2243,10 +2254,20 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  watch: {
+    chartWidth: function chartWidth() {
+      this.ctx.canvas.width = this.chartWidth;
+      this.ctx.canvas.height = this.chartHeight;
+      this.drawClock();
+    }
+  },
   methods: {
     drawClock: function drawClock() {
+      /**
+       * 1. Made dynamic color rendering width random color funciton 
+       */
       this.ctx.strokeStyle = '#00ffff';
-      this.ctx.lineWidth = 17;
+      this.ctx.lineWidth = 15;
       this.ctx.shadowBlur = 15;
       this.ctx.shadowColor = '#00ffff';
       setInterval(this.renderTime, 40);
@@ -2265,34 +2286,29 @@ __webpack_require__.r(__webpack_exports__);
       // gradient = ctx.createRadialGradient(250, 250, 5, 250, 250, 300);
       // gradient.addColorStop(0, "#03303a");
       // gradient.addColorStop(1, "black");
+      // this.ctx.fillStyle = 'rgba(00 ,00 , 00, 1)';
 
-      this.ctx.fillStyle = "#27363B"; // this.ctx.fillStyle = 'rgba(00 ,00 , 00, 1)';
-
-      this.ctx.fillRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight); //Hours
+      this.ctx.fillRect(0, 0, this.chartWidth, this.chartHeight);
+      this.ctx.fillStyle = "#27363B"; //Hours
 
       this.ctx.beginPath();
-      this.ctx.arc(this.canvas.clientWidth / 2, this.canvas.clientHeight / 2, this.radius - 5, this.degToRad(270), this.degToRad(hours * 30 - 90));
+      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 25, this.degToRad(270), this.degToRad(hours * 30 - 90));
       this.ctx.stroke(); //Minutes
 
       this.ctx.beginPath();
-      this.ctx.arc(this.canvas.clientWidth / 2, this.canvas.clientHeight / 2, this.radius - 35, this.degToRad(270), this.degToRad(smoothmin * 6 - 90));
+      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 55, this.degToRad(270), this.degToRad(smoothmin * 6 - 90));
       this.ctx.stroke(); //Seconds
 
       this.ctx.beginPath();
-      this.ctx.arc(this.canvas.clientWidth / 2, this.canvas.clientHeight / 2, this.radius - 65, this.degToRad(270), this.degToRad(smoothsec * 6 - 90));
+      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 85, this.degToRad(270), this.degToRad(smoothsec * 6 - 90));
       this.ctx.stroke();
-    }
-  },
-  watch: {
-    radius: function radius() {
-      console.log(this.radius);
     }
   },
   mounted: function mounted() {
     var _this = this;
 
     setTimeout(function () {
-      console.log(_this.radius);
+      console.log(_this.canvas.width);
 
       _this.drawClock();
     }, 1000);
@@ -23831,7 +23847,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".chart-container {\n  width: 100%;\n  height: auto;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n#doughnut-chart {\n  z-index: 1000;\n  position: absolute;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".chart-container {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n#doughnut-chart {\n  z-index: 1000;\n  position: relative;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -23855,7 +23871,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".canvas-clock_container {\n  width: 100%;\n  text-align: center;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".canvas-clock_container {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: -1.5vh;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -81948,7 +81964,7 @@ var render = function() {
       "div",
       {
         staticClass: "chart-container_chart",
-        staticStyle: { position: "relative", "max-width": "50vw" }
+        staticStyle: { position: "relative", width: "70%" }
       },
       [
         _vm.loaded
@@ -81958,7 +81974,13 @@ var render = function() {
             })
           : _vm._e(),
         _vm._v(" "),
-        _c("app-clock", { attrs: { radius: _vm.chartRadius } })
+        _c("app-clock", {
+          attrs: {
+            radius: _vm.chartRadius,
+            chartWidth: _vm.chartWidth,
+            chartHeight: _vm.chartHeight
+          }
+        })
       ],
       1
     )
@@ -81988,10 +82010,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "canvas-clock_container" }, [
-    _c("canvas", {
-      ref: "canvasClock",
-      attrs: { id: "canvas", width: "300", height: "300" }
-    })
+    _c("canvas", { ref: "canvasClock", attrs: { id: "canvas" } })
   ])
 }
 var staticRenderFns = []
