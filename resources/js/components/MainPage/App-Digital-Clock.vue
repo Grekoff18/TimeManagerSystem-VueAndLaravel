@@ -9,7 +9,7 @@ export default {
 
   data() {
     return {
-      
+
     }
   },
 
@@ -21,7 +21,7 @@ export default {
     ctx() {
       if (canvas.getContext) {
         return canvas.getContext("2d");
-      } 
+      }
     },
   },
 
@@ -36,12 +36,13 @@ export default {
   methods: {
     drawClock() {
       /**
-       * 1. Made dynamic color rendering width random color funciton 
+       * 1. Made dynamic color rendering width random color funciton
        */
       this.ctx.strokeStyle = '#00ffff';
       this.ctx.lineWidth = 15;
       this.ctx.shadowBlur= 15;
       this.ctx.shadowColor = '#00ffff';
+      this.ctx.fillStyle = "#27363B";
 
       setInterval(this.renderTime, 40);
     },
@@ -58,20 +59,19 @@ export default {
       let millisecond = this.moment().millisecond();
       let smoothsec   = second+(millisecond/1000);
       let smoothmin   = minute+(smoothsec/60);
-      
+
       //Background
       // gradient = ctx.createRadialGradient(250, 250, 5, 250, 250, 300);
       // gradient.addColorStop(0, "#03303a");
       // gradient.addColorStop(1, "black");
       // this.ctx.fillStyle = 'rgba(00 ,00 , 00, 1)';
       this.ctx.fillRect(0, 0, this.chartWidth, this.chartHeight);
-      this.ctx.fillStyle = "#27363B";
       //Hours
       this.ctx.beginPath();
       this.ctx.arc(
         this.canvas.width / 2,
         this.canvas.height / 2,
-        this.radius - 25,
+        (this.radius - 20) > 0 ? this.radius - 20 : false,
         this.degToRad(270),
         this.degToRad((hours*30)-90)
       );
@@ -81,7 +81,7 @@ export default {
       this.ctx.arc(
         this.canvas.width / 2,
         this.canvas.height / 2,
-        this.radius - 55,
+        (this.radius - 50) > 0 ? this.radius - 50 : false,
         this.degToRad(270),
         this.degToRad((smoothmin*6)-90)
       );
@@ -91,7 +91,7 @@ export default {
       this.ctx.arc(
         this.canvas.width / 2,
         this.canvas.height / 2,
-        this.radius - 85,
+        (this.radius - 80) > 0 ? this.radius - 80 : false,
         this.degToRad(270),
         this.degToRad((smoothsec*6)-90)
       );
@@ -101,7 +101,6 @@ export default {
 
   mounted() {
     setTimeout(() => {
-      console.log(this.canvas.width);
       this.drawClock();
     }, 1000);
   },
@@ -112,12 +111,10 @@ export default {
     width: 100%
     height: 100%
     position: absolute
-    top: -1.5vh
+    top: 0
     left: 0
     display: flex
     align-items: center
     justify-content: center
 
-    #canvas
-      
 </style>

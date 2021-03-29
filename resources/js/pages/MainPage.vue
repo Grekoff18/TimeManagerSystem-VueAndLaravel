@@ -16,7 +16,14 @@
       </div>
       <div class="right-side-container">
         <div class="right-side-container_clock-block">
-          <app-chart />
+          <app-text-clock
+            :tooltipTaskNumber="tooltipTaskNumber"
+            :tooltipTaskLimit="tooltipTaskLimit"
+            v-on:clear-tooltip-info="clearInfoFromChartTooltip"
+          />
+          <app-chart
+            v-on:hover-on-chart-element="setInfoFromChartTooltip($event)"
+          />
         </div>
         <app-footer/>
       </div>
@@ -85,8 +92,9 @@ import AppFooter    from "../../layout/App-Footer";
 import AppTaskList  from "../components/MainPage/TaskList/App-Task-List";
 import AppCalendar  from "../components/MainPage/App-Calendar";
 import AppChart     from "../components/MainPage/App-Chart";
-import AppTooltip   from '../components/MainPage/App-Tooltip';
-import { mapState } from 'vuex';
+import AppTooltip   from "../components/MainPage/App-Tooltip";
+import AppTextClock from "../components/App-Text-Clock";
+import { mapState } from "vuex";
 
 export default {
   name: "MainPage",
@@ -97,7 +105,8 @@ export default {
     AppFooter,
     AppCalendar,
     AppChart,
-    AppTooltip
+    AppTooltip,
+    AppTextClock
   },
 
   data() {
@@ -105,6 +114,8 @@ export default {
       selectedDate: "",
       currentArr: [],
       time_limit: "",
+      tooltipTaskNumber: "",
+      tooltipTaskLimit: "",
     }
   },
 
@@ -149,6 +160,16 @@ export default {
       this.time_limit = "";
       this.parseInfo(date);
     },
+
+    setInfoFromChartTooltip(data) {
+      this.tooltipTaskNumber = `Task №${data.taskNumber}`;
+      this.tooltipTaskLimit = data.taskTimeLimit;
+    },
+
+    clearInfoFromChartTooltip() {
+      this.tooltipTaskNumber = "";
+      this.tooltipTaskLimit = "";
+    }
   },
 }
 </script>

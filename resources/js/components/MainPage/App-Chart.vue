@@ -7,7 +7,7 @@
         :options="options"
         ref="chart"
       />
-      <app-clock
+      <app-digital-clock
         :radius="chartRadius"
         :chartWidth="chartWidth"
         :chartHeight="chartHeight"
@@ -19,17 +19,17 @@
 <script>
 import DoughnutChart from "../../charts/Doughnut";
 import { mapActions, mapState } from 'vuex';
-import AppClock from "../MainPage/App-Clock";
+import AppDigitalClock from "../MainPage/App-Digital-Clock";
 
 export default  {
-  components: {DoughnutChart, AppClock},
+  components: {DoughnutChart, AppDigitalClock},
   data() {
     return {
       loaded: false,
       chartRadius: 0,
       chartWidth: 0,
       chartHeight: 0,
-      targetInfo: "",
+      targetInfo: {},
       datacollection: null,
       infoChart: [],
       options: {
@@ -37,15 +37,19 @@ export default  {
           enabled: false,
         },
 
-        onHover: (arr, target) => {
+        onClick: (arr, target) => {
           if (target.length > 0) {
             let numberForTooltip = String(this.infoChart[target[0]._index]);
-            this.targetInfo = `#${target[0]._index} => ${this.moment(numberForTooltip, "H.mmss").format("HH:mm:ss")}`; 
+            this.targetInfo = {
+              taskNumber: target[0]._index,
+              taskTimeLimit: this.moment(numberForTooltip, "H.mmss").format("HH:mm:ss")
+            };
+            this.$emit("hover-on-chart-element", this.targetInfo);
           }
         },
 
         legend: {
-          position: "bottom",
+          display: false,
         }
       },
     }
@@ -79,7 +83,6 @@ export default  {
           setInterval(function test() {
             if (item.format("HH:mm:ss") !== "00:00:00") {
               item = item.subtract(1, "s");
-              // t.infoChart[index] = (((+item.format("H.ms") / 24.00) * 100) * 10).toFixed(2);
               t.infoChart[index] = +item.format("H.mmss")
               t.fillChartData();
             } else {
@@ -141,7 +144,7 @@ export default  {
           limit: element.timeLimit.format("HH:mm:ss")
         }
       }))
-    }, false) 
+    }, false)
     // if (this.$refs.chart !== undefined) {
     //   this.chartRadius = this.$refs.chart._data._chart.innerRadius;
     // }
@@ -152,10 +155,10 @@ export default  {
   },
 
   /**
-   * 1. In beforeUpdate hook we can create updating table with task description an him time limit 
-   * 
+   * 1. In beforeUpdate hook we can create updating table with task description an him time limit
+   *
    */
-  
+
   beforeUpdate() {
     // Remake this logic in future !!!
     if (this.$refs.chart !== undefined) {
@@ -178,9 +181,6 @@ export default  {
   #doughnut-chart
     z-index: 1000
     position: relative
-
-  
-    
 
 </style>
 

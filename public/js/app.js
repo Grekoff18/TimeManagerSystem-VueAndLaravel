@@ -1874,6 +1874,110 @@ window;
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    tooltipTaskNumber: {
+      type: String
+    },
+    tooltipTaskLimit: {
+      type: String
+    }
+  },
+  data: function data() {
+    return {
+      time: "",
+      data: "",
+      showTooltipInfo: false,
+      showCloseBtn: false,
+      timeInterval: null
+    };
+  },
+  methods: {
+    showTime: function showTime() {
+      this.$emit("clear-tooltip-info");
+    }
+  },
+  computed: {
+    timeData: function timeData() {
+      return this.showTooltipInfo === false ? this.time : "Time to complete: ".concat(this.tooltipTaskLimit);
+    },
+    showData: function showData() {
+      return this.showTooltipInfo === false ? this.data : this.tooltipTaskNumber;
+    },
+    styleObject: function styleObject() {
+      return {
+        textAlign: this.showTooltipInfo === false ? "center" : "left",
+        padding: this.showTooltipInfo === true ? "10px 0" : "0"
+      };
+    }
+  },
+  watch: {
+    tooltipTaskNumber: function tooltipTaskNumber() {
+      if (this.tooltipTaskNumber !== "") {
+        this.showTooltipInfo = true;
+        this.showCloseBtn = true;
+      } else {
+        this.showTooltipInfo = false;
+        this.showCloseBtn = false;
+      }
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    this.data = this.moment().format("YYYY-MM-DD ddd");
+    this.timeInterval = setInterval(function () {
+      _this.time = _this.moment().format("HH:mm:ss");
+    }, 1000);
+  },
+  beforeDestroy: function beforeDestroy() {
+    clearInterval(this.timeInterval);
+    this.data = null;
+    this.time = null;
+    this.showTime();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Calendar.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Calendar.vue?vue&type=script&lang=js& ***!
@@ -2013,7 +2117,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _charts_Doughnut__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../charts/Doughnut */ "./resources/js/charts/Doughnut.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _MainPage_App_Clock__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../MainPage/App-Clock */ "./resources/js/components/MainPage/App-Clock.vue");
+/* harmony import */ var _MainPage_App_Digital_Clock__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../MainPage/App-Digital-Clock */ "./resources/js/components/MainPage/App-Digital-Clock.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2062,7 +2166,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     DoughnutChart: _charts_Doughnut__WEBPACK_IMPORTED_MODULE_1__.default,
-    AppClock: _MainPage_App_Clock__WEBPACK_IMPORTED_MODULE_2__.default
+    AppDigitalClock: _MainPage_App_Digital_Clock__WEBPACK_IMPORTED_MODULE_2__.default
   },
   data: function data() {
     var _this = this;
@@ -2072,21 +2176,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       chartRadius: 0,
       chartWidth: 0,
       chartHeight: 0,
-      targetInfo: "",
+      targetInfo: {},
       datacollection: null,
       infoChart: [],
       options: {
         tooltips: {
           enabled: false
         },
-        onHover: function onHover(arr, target) {
+        onClick: function onClick(arr, target) {
           if (target.length > 0) {
             var numberForTooltip = String(_this.infoChart[target[0]._index]);
-            _this.targetInfo = "#".concat(target[0]._index, " => ").concat(_this.moment(numberForTooltip, "H.mmss").format("HH:mm:ss"));
+            _this.targetInfo = {
+              taskNumber: target[0]._index,
+              taskTimeLimit: _this.moment(numberForTooltip, "H.mmss").format("HH:mm:ss")
+            };
+
+            _this.$emit("hover-on-chart-element", _this.targetInfo);
           }
         },
         legend: {
-          position: "bottom"
+          display: false
         }
       }
     };
@@ -2117,8 +2226,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         (function (item) {
           setInterval(function test() {
             if (item.format("HH:mm:ss") !== "00:00:00") {
-              item = item.subtract(1, "s"); // t.infoChart[index] = (((+item.format("H.ms") / 24.00) * 100) * 10).toFixed(2);
-
+              item = item.subtract(1, "s");
               t.infoChart[index] = +item.format("H.mmss");
               t.fillChartData();
             } else {
@@ -2207,8 +2315,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
 
   /**
-   * 1. In beforeUpdate hook we can create updating table with task description an him time limit 
-   * 
+   * 1. In beforeUpdate hook we can create updating table with task description an him time limit
+   *
    */
   beforeUpdate: function beforeUpdate() {
     // Remake this logic in future !!!
@@ -2223,10 +2331,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2264,12 +2372,13 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     drawClock: function drawClock() {
       /**
-       * 1. Made dynamic color rendering width random color funciton 
+       * 1. Made dynamic color rendering width random color funciton
        */
       this.ctx.strokeStyle = '#00ffff';
       this.ctx.lineWidth = 15;
       this.ctx.shadowBlur = 15;
       this.ctx.shadowColor = '#00ffff';
+      this.ctx.fillStyle = "#27363B";
       setInterval(this.renderTime, 40);
     },
     degToRad: function degToRad(degree) {
@@ -2288,19 +2397,18 @@ __webpack_require__.r(__webpack_exports__);
       // gradient.addColorStop(1, "black");
       // this.ctx.fillStyle = 'rgba(00 ,00 , 00, 1)';
 
-      this.ctx.fillRect(0, 0, this.chartWidth, this.chartHeight);
-      this.ctx.fillStyle = "#27363B"; //Hours
+      this.ctx.fillRect(0, 0, this.chartWidth, this.chartHeight); //Hours
 
       this.ctx.beginPath();
-      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 25, this.degToRad(270), this.degToRad(hours * 30 - 90));
+      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 20 > 0 ? this.radius - 20 : false, this.degToRad(270), this.degToRad(hours * 30 - 90));
       this.ctx.stroke(); //Minutes
 
       this.ctx.beginPath();
-      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 55, this.degToRad(270), this.degToRad(smoothmin * 6 - 90));
+      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 50 > 0 ? this.radius - 50 : false, this.degToRad(270), this.degToRad(smoothmin * 6 - 90));
       this.ctx.stroke(); //Seconds
 
       this.ctx.beginPath();
-      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 85, this.degToRad(270), this.degToRad(smoothsec * 6 - 90));
+      this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.radius - 80 > 0 ? this.radius - 80 : false, this.degToRad(270), this.degToRad(smoothsec * 6 - 90));
       this.ctx.stroke();
     }
   },
@@ -2308,8 +2416,6 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     setTimeout(function () {
-      console.log(_this.canvas.width);
-
       _this.drawClock();
     }, 1000);
   }
@@ -2676,7 +2782,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_MainPage_App_Calendar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/MainPage/App-Calendar */ "./resources/js/components/MainPage/App-Calendar.vue");
 /* harmony import */ var _components_MainPage_App_Chart__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/MainPage/App-Chart */ "./resources/js/components/MainPage/App-Chart.vue");
 /* harmony import */ var _components_MainPage_App_Tooltip__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/MainPage/App-Tooltip */ "./resources/js/components/MainPage/App-Tooltip.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_App_Text_Clock__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/App-Text-Clock */ "./resources/js/components/App-Text-Clock.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2766,6 +2873,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2781,16 +2896,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     AppFooter: _layout_App_Footer__WEBPACK_IMPORTED_MODULE_1__.default,
     AppCalendar: _components_MainPage_App_Calendar__WEBPACK_IMPORTED_MODULE_3__.default,
     AppChart: _components_MainPage_App_Chart__WEBPACK_IMPORTED_MODULE_4__.default,
-    AppTooltip: _components_MainPage_App_Tooltip__WEBPACK_IMPORTED_MODULE_5__.default
+    AppTooltip: _components_MainPage_App_Tooltip__WEBPACK_IMPORTED_MODULE_5__.default,
+    AppTextClock: _components_App_Text_Clock__WEBPACK_IMPORTED_MODULE_6__.default
   },
   data: function data() {
     return {
       selectedDate: "",
       currentArr: [],
-      time_limit: ""
+      time_limit: "",
+      tooltipTaskNumber: "",
+      tooltipTaskLimit: ""
     };
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapState)(["TASK_LIST", "SHOW_TOOLTIP", "TOOLTIP_TEXT"])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapState)(["TASK_LIST", "SHOW_TOOLTIP", "TOOLTIP_TEXT"])), {}, {
     getCountOfTask: function getCountOfTask() {
       return this.currentArr.length;
     },
@@ -2827,6 +2945,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     taskAdded: function taskAdded(date) {
       this.time_limit = "";
       this.parseInfo(date);
+    },
+    setInfoFromChartTooltip: function setInfoFromChartTooltip(data) {
+      this.tooltipTaskNumber = "Task \u2116".concat(data.taskNumber);
+      this.tooltipTaskLimit = data.taskTimeLimit;
+    },
+    clearInfoFromChartTooltip: function clearInfoFromChartTooltip() {
+      this.tooltipTaskNumber = "";
+      this.tooltipTaskLimit = "";
     }
   }
 });
@@ -23830,6 +23956,30 @@ return src;
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".text-clock {\n  width: 100%;\n  padding: 10px;\n}\n.text-clock_data-section {\n  font-size: 15px;\n  color: #daf6ff;\n  text-shadow: 0 0 10px #00ffff;\n}\n.text-clock_time-section {\n  font-size: 35px;\n  color: #daf6ff;\n  text-shadow: 0 0 10px #00ffff;\n}\n.show-time-btn > button {\n  width: 100%;\n  color: #27363B;\n  background-color: #daf6ff;\n  box-shadow: 0 0 10px #00ffff;\n  padding: 5px 0;\n}\n.change-time-font {\n  font-size: 15px;\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Chart.vue?vue&type=style&index=0&lang=sass&":
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Chart.vue?vue&type=style&index=0&lang=sass& ***!
@@ -23854,10 +24004,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".chart-container {\n  width: 100%;\n  
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass&":
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass& ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -23871,7 +24021,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".canvas-clock_container {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: -1.5vh;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".canvas-clock_container {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -77079,6 +77229,36 @@ try {
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Text-Clock.vue?vue&type=style&index=0&lang=sass& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__.default, options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Chart.vue?vue&type=style&index=0&lang=sass&":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Chart.vue?vue&type=style&index=0&lang=sass& ***!
@@ -77109,10 +77289,10 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass&":
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -77122,7 +77302,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Clock.vue?vue&type=style&index=0&lang=sass& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass&");
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Digital-Clock.vue?vue&type=style&index=0&lang=sass& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass&");
 
             
 
@@ -77131,11 +77311,11 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__.default, options);
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__.default, options);
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
 
 /***/ }),
 
@@ -79895,6 +80075,47 @@ component.options.__file = "resources/js/charts/Doughnut.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/App-Text-Clock.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/App-Text-Clock.vue ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _App_Text_Clock_vue_vue_type_template_id_3ccd4676___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App-Text-Clock.vue?vue&type=template&id=3ccd4676& */ "./resources/js/components/App-Text-Clock.vue?vue&type=template&id=3ccd4676&");
+/* harmony import */ var _App_Text_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App-Text-Clock.vue?vue&type=script&lang=js& */ "./resources/js/components/App-Text-Clock.vue?vue&type=script&lang=js&");
+/* harmony import */ var _App_Text_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App-Text-Clock.vue?vue&type=style&index=0&lang=sass& */ "./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
+  _App_Text_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _App_Text_Clock_vue_vue_type_template_id_3ccd4676___WEBPACK_IMPORTED_MODULE_0__.render,
+  _App_Text_Clock_vue_vue_type_template_id_3ccd4676___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/App-Text-Clock.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/MainPage/App-Calendar.vue":
 /*!***********************************************************!*\
   !*** ./resources/js/components/MainPage/App-Calendar.vue ***!
@@ -79975,10 +80196,10 @@ component.options.__file = "resources/js/components/MainPage/App-Chart.vue"
 
 /***/ }),
 
-/***/ "./resources/js/components/MainPage/App-Clock.vue":
-/*!********************************************************!*\
-  !*** ./resources/js/components/MainPage/App-Clock.vue ***!
-  \********************************************************/
+/***/ "./resources/js/components/MainPage/App-Digital-Clock.vue":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/MainPage/App-Digital-Clock.vue ***!
+  \****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -79986,9 +80207,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var _App_Clock_vue_vue_type_template_id_2d9ea834___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App-Clock.vue?vue&type=template&id=2d9ea834& */ "./resources/js/components/MainPage/App-Clock.vue?vue&type=template&id=2d9ea834&");
-/* harmony import */ var _App_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App-Clock.vue?vue&type=script&lang=js& */ "./resources/js/components/MainPage/App-Clock.vue?vue&type=script&lang=js&");
-/* harmony import */ var _App_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App-Clock.vue?vue&type=style&index=0&lang=sass& */ "./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass&");
+/* harmony import */ var _App_Digital_Clock_vue_vue_type_template_id_19a8c35e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App-Digital-Clock.vue?vue&type=template&id=19a8c35e& */ "./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=template&id=19a8c35e&");
+/* harmony import */ var _App_Digital_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App-Digital-Clock.vue?vue&type=script&lang=js& */ "./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=script&lang=js&");
+/* harmony import */ var _App_Digital_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App-Digital-Clock.vue?vue&type=style&index=0&lang=sass& */ "./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -79999,9 +80220,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
-  _App_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _App_Clock_vue_vue_type_template_id_2d9ea834___WEBPACK_IMPORTED_MODULE_0__.render,
-  _App_Clock_vue_vue_type_template_id_2d9ea834___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _App_Digital_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _App_Digital_Clock_vue_vue_type_template_id_19a8c35e___WEBPACK_IMPORTED_MODULE_0__.render,
+  _App_Digital_Clock_vue_vue_type_template_id_19a8c35e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -80011,7 +80232,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/MainPage/App-Clock.vue"
+component.options.__file = "resources/js/components/MainPage/App-Digital-Clock.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -80266,6 +80487,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/App-Text-Clock.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/App-Text-Clock.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Text-Clock.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/MainPage/App-Calendar.vue?vue&type=script&lang=js&":
 /*!************************************************************************************!*\
   !*** ./resources/js/components/MainPage/App-Calendar.vue?vue&type=script&lang=js& ***!
@@ -80298,10 +80535,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/MainPage/App-Clock.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************!*\
-  !*** ./resources/js/components/MainPage/App-Clock.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************/
+/***/ "./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -80309,8 +80546,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Clock.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Digital-Clock.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -80410,6 +80647,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Text-Clock.vue?vue&type=style&index=0&lang=sass& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=style&index=0&lang=sass&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/MainPage/App-Chart.vue?vue&type=style&index=0&lang=sass&":
 /*!******************************************************************************************!*\
   !*** ./resources/js/components/MainPage/App-Chart.vue?vue&type=style&index=0&lang=sass& ***!
@@ -80423,15 +80673,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass& ***!
-  \******************************************************************************************/
+/***/ "./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass& ***!
+  \**************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Clock.vue?vue&type=style&index=0&lang=sass& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=style&index=0&lang=sass&");
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_15_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_style_index_0_lang_sass___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Digital-Clock.vue?vue&type=style&index=0&lang=sass& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-15[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=style&index=0&lang=sass&");
 
 
 /***/ }),
@@ -80482,6 +80732,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/App-Text-Clock.vue?vue&type=template&id=3ccd4676&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/App-Text-Clock.vue?vue&type=template&id=3ccd4676& ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_template_id_3ccd4676___WEBPACK_IMPORTED_MODULE_0__.render,
+/* harmony export */   "staticRenderFns": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_template_id_3ccd4676___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Text_Clock_vue_vue_type_template_id_3ccd4676___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Text-Clock.vue?vue&type=template&id=3ccd4676& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=template&id=3ccd4676&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/MainPage/App-Calendar.vue?vue&type=template&id=8e2cbad4&":
 /*!******************************************************************************************!*\
   !*** ./resources/js/components/MainPage/App-Calendar.vue?vue&type=template&id=8e2cbad4& ***!
@@ -80516,19 +80783,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/MainPage/App-Clock.vue?vue&type=template&id=2d9ea834&":
-/*!***************************************************************************************!*\
-  !*** ./resources/js/components/MainPage/App-Clock.vue?vue&type=template&id=2d9ea834& ***!
-  \***************************************************************************************/
+/***/ "./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=template&id=19a8c35e&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=template&id=19a8c35e& ***!
+  \***********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_template_id_2d9ea834___WEBPACK_IMPORTED_MODULE_0__.render,
-/* harmony export */   "staticRenderFns": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_template_id_2d9ea834___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns
+/* harmony export */   "render": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_template_id_19a8c35e___WEBPACK_IMPORTED_MODULE_0__.render,
+/* harmony export */   "staticRenderFns": () => /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_template_id_19a8c35e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Clock_vue_vue_type_template_id_2d9ea834___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Clock.vue?vue&type=template&id=2d9ea834& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=template&id=2d9ea834&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_Digital_Clock_vue_vue_type_template_id_19a8c35e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App-Digital-Clock.vue?vue&type=template&id=19a8c35e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=template&id=19a8c35e&");
 
 
 /***/ }),
@@ -81857,6 +82124,57 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=template&id=3ccd4676&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/App-Text-Clock.vue?vue&type=template&id=3ccd4676& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => /* binding */ render,
+/* harmony export */   "staticRenderFns": () => /* binding */ staticRenderFns
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "text-clock" }, [
+    _c("div", { staticClass: "text-clock_container" }, [
+      _c(
+        "div",
+        { staticClass: "text-clock_data-section", style: _vm.styleObject },
+        [_vm._v("\n      " + _vm._s(_vm.showData) + "\n    ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "text-clock_time-section",
+          class: { "change-time-font": this.showTooltipInfo === true },
+          style: _vm.styleObject
+        },
+        [_vm._v("\n      " + _vm._s(_vm.timeData) + "\n    ")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "show-time-btn" }, [
+        _vm.showCloseBtn
+          ? _c("button", { on: { click: _vm.showTime } }, [
+              _vm._v("\n        Back to clock\n      ")
+            ])
+          : _vm._e()
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Calendar.vue?vue&type=template&id=8e2cbad4&":
 /*!*********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Calendar.vue?vue&type=template&id=8e2cbad4& ***!
@@ -81974,7 +82292,7 @@ var render = function() {
             })
           : _vm._e(),
         _vm._v(" "),
-        _c("app-clock", {
+        _c("app-digital-clock", {
           attrs: {
             radius: _vm.chartRadius,
             chartWidth: _vm.chartWidth,
@@ -81993,10 +82311,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=template&id=2d9ea834&":
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Clock.vue?vue&type=template&id=2d9ea834& ***!
-  \******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=template&id=19a8c35e&":
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MainPage/App-Digital-Clock.vue?vue&type=template&id=19a8c35e& ***!
+  \**************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -82403,7 +82721,23 @@ var render = function() {
             _c(
               "div",
               { staticClass: "right-side-container_clock-block" },
-              [_c("app-chart")],
+              [
+                _c("app-text-clock", {
+                  attrs: {
+                    tooltipTaskNumber: _vm.tooltipTaskNumber,
+                    tooltipTaskLimit: _vm.tooltipTaskLimit
+                  },
+                  on: { "clear-tooltip-info": _vm.clearInfoFromChartTooltip }
+                }),
+                _vm._v(" "),
+                _c("app-chart", {
+                  on: {
+                    "hover-on-chart-element": function($event) {
+                      return _vm.setInfoFromChartTooltip($event)
+                    }
+                  }
+                })
+              ],
               1
             ),
             _vm._v(" "),
